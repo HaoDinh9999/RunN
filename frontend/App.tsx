@@ -1,4 +1,10 @@
-import { StyleSheet, Text, View, Button } from 'react-native';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Button as RNButton,
+} from 'react-native';
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
@@ -6,32 +12,48 @@ import {
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
+import { Box, Button, NativeBaseProvider, useToast } from 'native-base';
 
 function App(): JSX.Element {
   const connector = useWalletConnect();
-  if (!connector.connected) {
-    /**
-     *  Connect! 🎉
-     */
-    return <Button title='Connect' onPress={() => connector.connect()} />;
-  }
+  const toast = useToast();
+
+  React.useEffect(() => {
+    if (connector.connected) {
+    console.log('thanh cong')
+
+      toast.show({ description: 'Connect successfully!' });
+    }
+  }, [connector.connected]);
+
+  toast.show({ description: 'Connect successfully!' });
+  
+
   return (
-    <>
-      {connector.accounts?.map((account) => (
-        <Text key={account}>{account}</Text>
-      ))}
-      <Button title='Kill Session' onPress={() => connector.killSession()} />
-    </>
+    // <SafeAreaView>
+    <NativeBaseProvider>
+      <View style={styles.container}>
+        <Text style={{ color: 'red' }}>dcm gi v</Text>
+        {!connector.connected ? (
+          <Button title='Connect' onPress={() => connector.connect()}>Connect</Button>
+        ) : (
+          <>
+            {connector.accounts?.map((account) => (
+              <Text key={account}>{account}</Text>
+            ))}
+            <Button
+              title='Kill session'
+              onPress={() => connector.killSession()}
+            >Kill session</Button>
+          </>
+        )}
+      </View>
+    </NativeBaseProvider>
+    // </SafeAreaView>
   );
 }
 
-export default withWalletConnect(App, {
-  redirectUrl:
-    Platform.OS === 'web' ? window.location.origin : 'yourappscheme://',
-  storageOptions: {
-    asyncStorage: AsyncStorage,
-  },
-});
+export default App;
 
 const styles = StyleSheet.create({
   container: {
