@@ -13,13 +13,7 @@
     "hardhat.config.js",
     "__tests__/contracts"
   ],
-  "plugins": [
-    "import",
-    "eslint-comments",
-    "functional",
-    "react",
-    "react-native"
-  ],
+  "plugins": ["import", "eslint-comments", "functional", "react", "react-native"],
   "extends": [
     "eslint:recommended",
     "plugin:eslint-comments/recommended",
@@ -34,6 +28,12 @@
     "__DEV__": true
   },
   "rules": {
+    "react/jsx-filename-extension": [
+      1,
+      {
+        "extensions": [".tsx"]
+      }
+    ],
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "eslint-comments/disable-enable-pair": [
       "error",
