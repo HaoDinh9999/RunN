@@ -2,15 +2,23 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import HomeScreen from '../screens/Home/Home.screen';
-
+import LoginScreen from '../screens/Login/Login.screen';
+import LoginVertifyScreen from '../screens/LoginVertify/LoginVertify.screen';
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerShown: false
+        }}
+        initialRouteName={'loginVertify'}>
         <Stack.Screen name="home" component={HomeScreen} />
+        <Stack.Screen name="login" component={LoginScreen} />
+        <Stack.Screen name="loginVertify" component={LoginVertifyScreen} />
       </Stack.Navigator>
+
     </NavigationContainer>
   );
 };

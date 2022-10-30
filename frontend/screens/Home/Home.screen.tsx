@@ -4,7 +4,7 @@ import { Text, View } from 'react-native';
 
 import styles from './Home.style';
 
-const HomeScreen = (props) => {
+const HomeScreen = ({navigation} ) => {
   const connector = useWalletConnect();
   const toast = useToast();
 
