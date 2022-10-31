@@ -12,6 +12,7 @@ import {
 } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
 import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox,Image } from 'native-base';
+import colors from '../../themes/colors';
 
 function LoginVertifyScreen(props) {
   const [isVertify, setIsVertify] = React.useState(true);
@@ -21,34 +22,32 @@ function LoginVertifyScreen(props) {
   return (
     <NativeBaseProvider>
       <View style={styles.container}>
-        <Image
-          style={{
-            flex: 1, position: 'absolute', resizeMode: 'contain', height: Dimensions.get('window').height
-            , width: Dimensions.get('window').width
-          }}
-          source={{ uri: 'https://t3.ftcdn.net/jpg/02/60/67/54/240_F_260675400_Dk3xroh2EeEPNml0M4A3ziaLTZNnJyrN.jpg' }}
-        />
+      <Image
+          style={{ flex: 1,position:'absolute', resizeMode: 'cover',height: Dimensions.get('window').height
+          , width:Dimensions.get('window').width}}
+          source={{uri: 'https://cdn.shopify.com/s/files/1/0059/0056/6597/products/photo-id-4620761661509-muscular-athlete-working-out-on-orange-background.jpg?v=1606202737'}}
+         />
         <View>
-          <Text bold fontSize="xl" style={styles.titleText}>RunN</Text>
+          <Text bold fontSize="2xl" style={styles.titleText}>RunN</Text>
 
         </View>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text bold fontSize="lg" style={styles.titleText}>Login</Text>
+            <Text bold fontSize="2xl" style={styles.titleText}>Login</Text>
 
-            <View style={styles.input}>
-              <Input variant="rounded" placeholder="Email address" />
+            <View style={styles.inputView}>
+              <Input variant="rounded" placeholder="Email address" style={styles.input} />
             </View>
-            <View style={styles.input}>
-              <Input variant="rounded" placeholder="Email vertification code" InputRightElement={<Text style={styles.sendText}>Send code</Text>} />
+            <View style={styles.inputView}>
+              <Input variant="rounded" placeholder="Email vertification code" style={styles.input} InputRightElement={<Text style={styles.sendText}>Send code</Text>} />
             </View>
-            <View style={styles.checkboxView}>
+            {/* <View style={styles.checkboxView}>
               <Checkbox value="Checkbox" size="sm" style={styles.checkbox}>
                 <Text italic style={styles.hintText}>
                   Agree with <Text style={styles.redText}>Terms of Use</Text> & <Text style={styles.redText}>Privacy Policy</Text>
                 </Text>
               </Checkbox>
-            </View>
+            </View> */}
             {/* <Text style={styles.hintText} italic fontSize="xs">Account will be automatically registed</Text> */}
             <View style={styles.buttonView}>
               <Button style={styles.button}>
@@ -90,7 +89,7 @@ const styles = StyleSheet.create({
   modalView: {
     margin: 20,
     marginBottom: 100,
-    backgroundColor: "#fff",
+    backgroundColor: colors.background.primary,
     borderRadius: 10,
     padding: 35,
     shadowColor: "gray",
@@ -106,13 +105,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     elevation: 2,
     width: "60%",
-    fontSize: 18
-  },
-  buttonOpen: {
-    backgroundColor: "#F194FF",
-  },
-  buttonClose: {
-    backgroundColor: "#2196F3",
+    fontSize: 18,
+    backgroundColor: colors.button.primary,
   },
   buttonView: {
     alignItems: "center",
@@ -125,19 +119,30 @@ const styles = StyleSheet.create({
   },
   titleText: {
     textAlign: "center",
-    marginBottom: 10
+    marginBottom: 10,
+    color:colors.text.white
   },
   buttonText: {
-    color: "#fff",
+    color: colors.text.white,
+    fontWeight:"600"
   },
   sendText: {
     fontSize: 10,
     padding: 10,
     fontWeight: "bold",
-    color: "#0891B2"
+    color: colors.button.primary,    
+    backgroundColor:colors.background.primary
+
   },
   input: {
+    color:colors.text.white,
+    borderColor:colors.text.white,
+    padding: 10,
+    backgroundColor:colors.background.primary
+  },
+  inputView:{
     margin: 10,
+
   },
   checkbox: {
     margin: 0
@@ -156,7 +161,8 @@ const styles = StyleSheet.create({
   },
   underlineText: {
     marginTop: 12,
-    textAlign: "center"
+    textAlign: "center",
+    color:colors.text.link
   }
 });
 

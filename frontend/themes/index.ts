@@ -1,2 +1,4 @@
 import colors from './colors';
-export { colors };
+import sizes from './sizes';
+import fonts from './fonts';
+export { colors, sizes ,fonts};
