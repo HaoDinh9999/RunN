@@ -22,7 +22,9 @@ const colors = {
     link:'#329DB9'
   },
   background:{
-    primary:'#1B2030'
+    primary:'#1B2030',
+    mainColor:'#101222',
+    tabBar:'#1B2030'
   }
 };
 
