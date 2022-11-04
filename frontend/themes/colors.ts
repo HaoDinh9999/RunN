@@ -19,7 +19,8 @@ const colors = {
   text:{
     white:'#fff',
     black:'#000',
-    link:'#329DB9'
+    link:'#329DB9',
+    primaryTitle:'#CFDDFF'
   },
   background:{
     primary:'#1B2030',
