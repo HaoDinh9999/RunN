@@ -7,13 +7,11 @@ const ComboBoxComponent = (props) => {
   return (
   <View>
       <Box maxW="200">
-        <Select selectedValue={service} minWidth="120" accessibilityLabel={props?.label} placeholder={props?.placeholder}
-        borderColor={colors.background.tabBar} 
+        <Select selectedValue={service} minWidth={props?.minWidth ? props.minWidth : "140"} accessibilityLabel={props?.label} placeholder={props?.placeholder} borderWidth={props?.borderWidth}
         _selectedItem={{
-        // bg: colors.background.tabBar,
         color:colors.white,
         endIcon: <CheckIcon size="5"/>
-      }} mt={1} onValueChange={itemValue => setService(itemValue)} color={colors.white} placeholderTextColor={colors.white} >
+      }} onValueChange={itemValue => setService(itemValue)} color={colors.white} placeholderTextColor={colors.white} fontWeight="bold" style={{...props.style}}>
          {props?.data.map(itemData => 
               <Select.Item label={itemData.label} value={itemData.value} />
          )}

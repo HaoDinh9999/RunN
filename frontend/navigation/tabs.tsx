@@ -87,6 +87,7 @@ import MoveScreen from '../screens/Move/Move.screen';
 import BagScreen from '../screens/Bag/Bag.screen';
 import ChallengeScreen from '../screens/Challenge/Challenge.screen';
 import MarketScreen from '../screens/Market/Market.screen';
+import Header from './header';
 
 // ------------------------------------------------------------------
 
@@ -100,6 +101,7 @@ const Tabs = () => {
   return (
     <>
       <StatusBar barStyle="light-content" />
+      <Header/>
       <Tab.Navigator
         tabBar={(props) => <AnimatedTabBar {...props} />}
         initialRouteName="Home"

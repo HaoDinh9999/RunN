@@ -11,11 +11,13 @@ const styles = StyleSheet.create({
   },
   tabTop:{
    backgroundColor: colors.background.tabBar,
-   marginTop: 10,
    borderRadius:20,
    width:"100%",
    alignItems: 'center',
-   padding:8
+   padding:10,
+   borderColor:colors.boderColor,
+   borderWidth:1
+
 },
   textTapTop:{
     color: colors.white
@@ -30,9 +32,12 @@ const styles = StyleSheet.create({
     flexDirection:"row",
     justifyContent:"space-between",
     alignItems:"center"
-
-
-
+  },
+  spacing:{
+    flex:1,
+    paddingVertical:5,
+    paddingHorizontal:3
+    // backgroundColor:"#f99"
   }
 });
 
