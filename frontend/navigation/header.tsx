@@ -2,15 +2,18 @@ import { View, Text, Avatar, Image, Badge, Button } from "native-base";
 import React from "react";
 import { colors } from "../themes";
 import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import ProfileScreen from "../screens/Profile/Profile.screen";
 
-const Header = () => {
+const Header = (props) => {
+    const navigation = useNavigation();
     return (
         <View style={styles.headerContainer}>
-            <View style={styles.avatarContainer}>
+            <View style={styles.avatarContainer} onTouchStart={()=>{navigation.navigate('profile')}}>
                 <Avatar bg="amber.500" source={{
                     uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
                 }} ml={3} mb={-2} zIndex={1} />
-                <Text style={styles.textKm} bold> 20.00 km</Text>
+                <Text style={styles.textKm} bold > 20.00 km</Text>
             </View>
             <View style={styles.walletContainer}>
                 <View style={styles.tokenContainer}>

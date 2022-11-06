@@ -22,7 +22,8 @@ const colors = {
     black:'#000',
     link:'#329DB9',
     primaryTitle:'#CFDDFF',
-    secondaryText:'#9CFFBE'
+    secondaryText:'#9CFFBE',
+    thirdText:'#0696C9'
   },
   background:{
     primary:'#1B2030',
