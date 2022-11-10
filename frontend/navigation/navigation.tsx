@@ -1,5 +1,6 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import DetailProductScreen from '../screens/DetailProduct/DetailProduct.screen';
 
 import HomeScreen from '../screens/Home/Home.screen';
 import LoginScreen from '../screens/Login/Login.screen';
@@ -20,6 +21,7 @@ const MainNavigation = () => {
         <Stack.Screen name="loginVertify" component={LoginVertifyScreen} />
         <Stack.Screen name="home" component={Tabs} />
         <Stack.Screen name="profile" component={ProfileScreen}/>
+        <Stack.Screen name="detailProduct" component={DetailProductScreen}/>
       </Stack.Navigator>
 
     </NavigationContainer>

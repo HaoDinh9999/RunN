@@ -7,8 +7,11 @@ import { colors } from '../../themes';
 import { Icon } from 'native-base';
 import { ColorSpace } from 'react-native-reanimated';
 // import Ionicons from '@expo/vector-icons/Ionicons';
+import { useNavigation } from '@react-navigation/native';
 
 const CardItem = () => {
+    const navigation = useNavigation();
+
   return (
     <Box
       bg={colors.background.tabBar}
@@ -25,7 +28,7 @@ const CardItem = () => {
         <Text color={colors.text.secondaryText} bold>{'>>'}</Text>
         <Text fontSize='sm' color={colors.text.secondaryText} ml={2} bold>Runner</Text>
       </View>
-      <View style={styles.productContainer}>
+      <View style={styles.productContainer}  onTouchStart={()=>{navigation.navigate('detailProduct')}}>
         <Image source={{
           uri: "https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png"
         }} alt="Alternate Text" size="xl" resizeMode="contain" />
