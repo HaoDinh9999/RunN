@@ -28,6 +28,12 @@ const styles = StyleSheet.create({
     alignItems:'center',
     textAlign:'center',
     borderRadius:25,
+  },
+  lifeTime:{
+    marginTop:12
+  },
+  mint:{
+    marginTop:12
   }
 });
 

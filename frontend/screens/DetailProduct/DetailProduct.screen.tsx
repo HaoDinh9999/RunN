@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import styles from './DetailProduct.style';
-import { Text, Box, AspectRatio, Image } from 'native-base';
+import { Text, Box, AspectRatio, Image, Progress } from 'native-base';
 import Header from '../../navigation/header';
 import { colors } from '../../themes';
 const DetailProductScreen = () => {
@@ -19,7 +19,7 @@ const DetailProductScreen = () => {
             shadow: 2,
             borderWidth: 0,
           }}
-            backgroundColor="#2C053B"
+          backgroundColor="#2C053B"
         >
           <Box style={styles.modalBackground}>
             <AspectRatio w="100%" ratio={16 / 9} marginTop={-5}>
@@ -38,23 +38,82 @@ const DetailProductScreen = () => {
               width={200}
               height={100}
               resizeMode="contain"
-              style={{marginTop:-90}}
+              style={{ marginTop: -90 }}
             />
 
             <View style={styles.shoesBackground}>
-                <Text color="#C7D5F7" bold style={{fontSize:14, textAlign:'center'}}>{"#923478729"}</Text>
-
-                <View style={styles.barShoes}>
-                <Text color="#2C053B" bold style={{width:"33.33%", textAlign:'center',backgroundColor:'#CFDDFF',  borderBottomLeftRadius:20}}>LV 5</Text>
-                <Text color="#C7D5F7" bold style={{width:"33.33%", textAlign:'center', borderRightWidth:1}}>{">> Runner"}</Text>
-                <Text color="#2C053B"  style={{width:"33.33%", textAlign:'center', backgroundColor:'#CFDDFF', borderTopRightRadius:20}}>100 / 100</Text>
-                </View>
-
-
+              <Text color="#C7D5F7" bold style={{ fontSize: 14, textAlign: 'center' }}>
+                {'#923478729'}
+              </Text>
+              <View style={styles.barShoes}>
+                <Text
+                  color="#2C053B"
+                  bold
+                  style={{
+                    width: '33.33%',
+                    textAlign: 'center',
+                    backgroundColor: '#CFDDFF',
+                    borderBottomLeftRadius: 20,
+                  }}
+                >
+                  LV 5
+                </Text>
+                <Text
+                  color="#C7D5F7"
+                  bold
+                  style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
+                >
+                  {'>> Runner'}
+                </Text>
+                <Text
+                  color="#2C053B"
+                  style={{
+                    width: '33.33%',
+                    textAlign: 'center',
+                    backgroundColor: '#CFDDFF',
+                    borderTopRightRadius: 20,
+                  }}
+                >
+                  100 / 100
+                </Text>
+              </View>
             </View>
           </Box>
         </Box>
       </View>
+      <View style={styles.lifeTime}>
+        <View
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text bold color={colors.white}>
+            Lifetime
+          </Text>
+          <Text fontSize={'lg'} bold color={colors.white}>
+            1000
+            <Text bold color="#CFDDFF">
+              /1000
+            </Text>
+          </Text>
+        </View>
+        <Box w="100%" marginTop={1}>
+          <Progress
+            value={45} bg={colors.background.progress} _filledTrack={{ bg: colors.progress,}}
+          />
+        </Box>
+      </View>
+      <View style={styles.mint}>
+        <View
+          style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Text bold color={colors.white}>
+            Mint 2/7
+          </Text>
+        </View>
+        <Box w="100%" marginTop={1}>
+          <Progress
+            value={15} bg={colors.background.progress} _filledTrack={{ bg: "#CFDDFF",}}
+          />
+        </Box>
+      </View>
+      <Text fontSize="lg" bold color={colors.white} style={styles.mint}>Attribute</Text>
     </View>
   );
 };
