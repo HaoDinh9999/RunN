@@ -33,6 +33,7 @@ const colors = {
   },
   boderColor:'#26314B',
   progress:'#12FFE6',
+  progress2:'#9FBCFF'
 };
 
 export default colors;

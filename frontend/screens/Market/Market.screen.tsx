@@ -5,8 +5,11 @@ import ComboBoxComponent from "../../components/Combobox/Combobox";
 import { colors } from "../../themes";
 import styles from './Market.style';
 import CardItem from "../../components/CardItem/CardItem";
+import { useNavigation } from "@react-navigation/native";
 
 const MarketScreen = () => {
+    const navigation = useNavigation();
+
     const _renderItem = ({ item }) => {
 
         return (
@@ -27,7 +30,7 @@ const MarketScreen = () => {
             </View>
             <View style={styles.filter}>
                 <ComboBoxComponent label="Sort Price" placeholder="Sort Price" data={dataComboBox} borderWidth={0} style={{ marginLeft: -2, color: colors.white, marginTop: 1 }} />
-                <Text fontSize="xs" color={colors.white} bold>Filter</Text>
+                <Text fontSize="xs" color={colors.white} bold onPress={() => navigation.navigate('filter')}>Filter</Text>
             </View>
             {/* <ScrollView> */}
             <FlatList data={["1", "2", "3", "4"]} numColumns={2} renderItem={_renderItem} style={{flex: 1}} />

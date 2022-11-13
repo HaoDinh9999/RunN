@@ -25,7 +25,7 @@ import {
         <Image
             style={{ flex: 1,position:'absolute', resizeMode: 'cover',height: Dimensions.get('window').height
             , width:Dimensions.get('window').width}}
-            source={{uri: 'https://cdn.shopify.com/s/files/1/0059/0056/6597/products/photo-id-4620761661509-muscular-athlete-working-out-on-orange-background.jpg?v=1606202737'}}
+            source={{uri: 'https://cdn.shopify.com/s/files/1/0059/0056/6597/products/photo-id-4620761661509-muscular-athlete-working-out-on-orange-background.jpg?v=1606202737'}}  alt="Image"
            />
           <View>
             <Text bold fontSize="2xl" style={styles.titleText}>RunN</Text>
