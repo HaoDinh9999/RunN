@@ -4,6 +4,7 @@ import { colors } from "../themes";
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ProfileScreen from "../screens/Profile/Profile.screen";
+import imagePath from "../constant/imagePath";
 
 const Header = (props) => {
     const navigation = useNavigation();
@@ -31,9 +32,7 @@ const Header = (props) => {
                     </View>
                 </View>
                 <View style={styles.notification} onTouchStart={() => navigation.navigate('budget')}>
-                    <Avatar bg="lightBlue.400" source={{
-                        uri: "https://images.unsplash.com/photo-1603415526960-f7e0328c63b1?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                    }} size={6}>
+                    <Avatar bg="lightBlue.400" source={imagePath.wallet} size={6} backgroundColor="#fff">
                         NB
                         <Avatar.Badge bg={colors.red} borderColor={colors.red} mb={5} mr={-3}/>
                     </Avatar>

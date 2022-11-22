@@ -5,6 +5,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import styles from './Move.style';
 import { colors } from '../../themes';
+import imagePath from '../../constant/imagePath';
 
 const MoveScreen = () => {
 
@@ -105,17 +106,18 @@ const MoveScreen = () => {
                     </View>
                     <View style={styles.energyContainer}>
                         <View
-                            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                <Image size={5} borderRadius={100} source={imagePath.energy} alt="Alternate Text" />
                             <Text fontSize={'sm'} bold color={colors.white}>
-                                1.0
+                                1.0{' '}
                                 <Text bold color={colors.gray}>
-                                    /2.0
+                                    / 2.0
                                 </Text>
                             </Text>
                         </View>
                         <Box w="100%" marginTop={1}>
                             <Progress
-                                value={15} bg={colors.background.progress} _filledTrack={{ bg: "#CFDDFF", }}
+                                value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.primary, }}
                             />
                             <View
                                 style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -131,7 +133,9 @@ const MoveScreen = () => {
                 </View>
                 <View style={{marginTop:30, paddingHorizontal:80}}>
 
-                <Button style={styles.button} onPress={()=> navigation.navigate('startRunning')}>
+                <Button style={styles.button} onPress={()=> navigation.navigate('startRunning',{
+                    start:true, minutes:0, seconds: 120, limitSpeed:100,
+                })}>
                     <Text color={colors.white} bold fontSize="sm">START</Text>
                 </Button>
                 </View>
