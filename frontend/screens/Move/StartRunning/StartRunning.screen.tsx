@@ -23,7 +23,7 @@ const StartRunningScreen = ({ navigation }) => {
   const [speed, setSpeed] = useState();
   const [totalDistance, setTotalDistance] = useState(0);
   const [start, setStart] = useState(false);
-  const [seconds, setSeconds] = useState(30);
+  const [seconds, setSeconds] = useState(90);
   const [minutes, setMinutes] = useState(0);
   const [limitSpeed, setLimitSpeed] = useState(40);
   const mapRef = useRef(null)
@@ -124,11 +124,11 @@ const StartRunningScreen = ({ navigation }) => {
   }
 
   // This function will get your current location
+  var idGeo;
   const getlocation = (enable) => {
     console.log("enable", enable === true)
     if (enable == true) {
-      const idGeo = Geolocation.watchPosition(showLoc);
-      // Geolocation.clearWatch(idGeo)
+    idGeo = Geolocation.watchPosition(showLoc);
     }
   }
 
@@ -156,6 +156,8 @@ const StartRunningScreen = ({ navigation }) => {
     else {
       console.log("Eo tinh khoang cach nha con");
     }
+    Geolocation.clearWatch(idGeo);
+
     console.log("arrDistances: ", arrDistances.length);
 
     // }
@@ -185,15 +187,14 @@ const StartRunningScreen = ({ navigation }) => {
   }
   const checkTimeOut = () => {
     if (start) {
-      console.log("checkTimeOut", minutes + "--" + seconds)
       if (minutes === 0 && seconds === 0) {
         console.log("Dung lai cho bo may, lam on")
         getlocation(false);
+        setStart(false);
 
       }
       else {
         console.log("dang chay bo")
-
         getlocation(true);
       }
     }
@@ -227,13 +228,15 @@ const StartRunningScreen = ({ navigation }) => {
             coordinate={coordinate}
           >
             <Image
-              source={imagePath.icBike}
+              source={imagePath.running}
               style={{
-                width: 60,
-                height: 40,
-                transform: [{ rotate: `${heading}deg` }],
-                marginTop: 15,
-              }}
+                width: 110,
+                height: 30,
+                transform: [{ rotate: `${heading+120}deg` }],
+                marginTop: 25,
+                justifyContent:'center',
+                alignItems:'center'
+            }}
               resizeMode="contain"
               alt="Alternate Text"
             />
@@ -278,7 +281,7 @@ const StartRunningScreen = ({ navigation }) => {
             coordinates={[...arrDistances]}
             strokeColor="#f99" // fallback for when `strokeColors` is not supported by the map-provider
             strokeColors={['#f99']}
-            strokeWidth={3}
+            strokeWidth={5}
           />
         </MapView>
         <TouchableOpacity
