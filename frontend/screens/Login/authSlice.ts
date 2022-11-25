@@ -1,5 +1,10 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import { User } from "../../@core/model/user";
+import { api } from "../../services/api";
+import { userApi } from "../../services/modules/users";
+
+//Create the thunk
+
 
 export interface LoginPayload {
     username: string;
@@ -16,6 +21,7 @@ const initialState : AuthState = {
     logging:false,
     currentUser:undefined,
 }
+
 
 const authSlice = createSlice({
     name:'auth',
@@ -38,6 +44,12 @@ const authSlice = createSlice({
             state.currentUser = undefined;
         }
 
+    },
+    extraReducers: (builder) =>{
+        builder.addMatcher(userApi.endpoints.login.matchFulfilled,(state,action:PayloadAction<User>) => {
+            state.currentUser = action.payload
+            console.log("stateAuthSlice: ",state)
+        })
     }
 });
 

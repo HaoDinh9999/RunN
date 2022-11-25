@@ -2,7 +2,6 @@ import {
     Dimensions,
     SafeAreaView,
     StyleSheet,
-    View,
   } from 'react-native';
   
   import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,17 +10,33 @@ import {
     withWalletConnect,
   } from '@walletconnect/react-native-dapp';
   import * as React from 'react';
-  import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox,Image } from 'native-base';
+  import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox,Image, View } from 'native-base';
   import colors from '../../themes/colors';
+import { useLoginMutation } from '../../services/modules/users';
   
   function Login(props) {
     const [isVertify, setIsVertify] = React.useState(true);
+    const [username, setUsername] = React.useState<string>();
+    const [password, setPassword] = React.useState<string>();
+    const [login,{isLoading, data, error}] =  useLoginMutation();
+
     const handleNavigate = (route: string) => {
       props?.navigation.navigate(route);
+    }
+    const handleLogin = () => {
+      if(username && password){
+        login({username,password});
+      }
     }
     return (
       <NativeBaseProvider>
         <View style={styles.container}>
+        {console.log("Login", data)}
+        {console.log("LoginIsLogin", isLoading)}
+        {console.log("LoginError", error)}
+
+
+
         <Image
             style={{ flex: 1,position:'absolute', resizeMode: 'cover',height: Dimensions.get('window').height
             , width:Dimensions.get('window').width}}
@@ -36,10 +51,10 @@ import {
               <Text bold fontSize="2xl" style={styles.titleText}>Login</Text>
   
               <View style={styles.inputView}>
-                <Input variant="rounded" placeholder="Email address" style={styles.input} />
+                <Input variant="rounded" placeholder="Email address" style={styles.input} onChangeText={newText => setUsername(newText)}/>
               </View>
               <View style={styles.inputView}>
-                <Input variant="rounded" placeholder="Password" style={styles.input} InputRightElement={<Text style={styles.sendText}>Show</Text>} />
+                <Input variant="rounded" placeholder="Password" style={styles.input} onChangeText={newText => setPassword(newText)} InputRightElement={<Text style={styles.sendText}>Show</Text>} />
               </View>
               {/* <View style={styles.checkboxView}>
                 <Checkbox value="Checkbox" size="sm" style={styles.checkbox}>
@@ -51,7 +66,7 @@ import {
               {/* <Text style={styles.hintText} italic fontSize="xs">Account will be automatically registed</Text> */}
               <View style={styles.buttonView}>
                 <Button style={styles.button}>
-                  <Text style={styles.buttonText} onPress={() => handleNavigate("home")}>LOGIN</Text>
+                  <Text style={styles.buttonText} onPress={handleLogin}>LOGIN</Text>
                 </Button>
               </View>
               <Text fontSize="xs" style={styles.underlineText} underline onPress={() => handleNavigate("loginVertify")}>Email Vertify Code</Text>
