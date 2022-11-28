@@ -7,7 +7,7 @@ export const userApi = api.injectEndpoints({
     fetchOne: fetchOne(builder),
     login: builder.mutation({
       query: (credentials) => ({
-        url:'login',
+        url:'/users/login',
         method:'POST',
         body: credentials
       })

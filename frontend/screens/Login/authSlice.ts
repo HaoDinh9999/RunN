@@ -7,7 +7,7 @@ import { userApi } from "../../services/modules/users";
 
 
 export interface LoginPayload {
-    username: string;
+    email: string;
     password: string;
 }
 export interface AuthState {
@@ -33,7 +33,10 @@ const authSlice = createSlice({
         loginSuccess(state, action: PayloadAction<User>){
             state.logging = false;
             state.isLoggedIn = true;
-            state.currentUser = action.payload
+            state.currentUser = action.payload;
+            
+            console.log("loginSuccess: ",state );
+
         },
         loginFailed(state, action: PayloadAction<string>){
             state.logging = false;
@@ -42,13 +45,19 @@ const authSlice = createSlice({
         logout(state){
             state.isLoggedIn = false;
             state.currentUser = undefined;
+        },
+
+        updateCurrentUser(state, action: PayloadAction<User>){
+            state.currentUser = action.payload;
+            console.log("updateCurrentUser: ",state.currentUser );
+
         }
 
     },
     extraReducers: (builder) =>{
         builder.addMatcher(userApi.endpoints.login.matchFulfilled,(state,action:PayloadAction<User>) => {
-            state.currentUser = action.payload
-            console.log("stateAuthSlice: ",state)
+            // state.currentUser = action.payload
+            // console.log("stateAuthSlice: ",state)
         })
     }
 });
@@ -59,6 +68,7 @@ export const authActions = authSlice.actions;
 //Selectors
 export const selectIsLoggedIn = state => state.auth.isLoggedIn;
 export const selectLogging = state => state.auth.logging;
+export const currentUser = state => state.auth.currentUser;
 
 //Reducer
 const authReducer = authSlice.reducer;

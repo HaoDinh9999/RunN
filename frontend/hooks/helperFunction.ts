@@ -17,7 +17,7 @@ export const getCurrentLocation = () =>
             error => {
                 reject(error.message);
             },
-            { enableHighAccuracy: true, timeout: 2000, maximumAge: 10000 },
+            { enableHighAccuracy: true, timeout: 3000, maximumAge: 10000 },
         )
     })
 

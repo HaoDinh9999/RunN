@@ -112,9 +112,11 @@ const StartRunningScreen = (props) => {
 
   // This function will get your current location
   var idGeo;
-  const getlocation = (enable) => {
+  const getlocation = (enable:boolean) => {
     if (enable == true) {
       idGeo = Geolocation.watchPosition(showLoc);
+      console.log("vo chua1",start)
+
     }
   };
 
@@ -124,13 +126,19 @@ const StartRunningScreen = (props) => {
     // else{
     // console.log("Beforeeeee",minutes +"--" + seconds)
     // console.log("POSSsSS:", pos);
+    console.log("vo chua24232222222",start)
+
     setSpeed(pos?.coords?.speed.toFixed(2));
+
     if (pos?.coords.speed < limitSpeed) {
+
       if (start) {
+
         if (
           parseFloat(arrDistances[arrDistances.length - 1]?.latitude) !=
           parseFloat(pos?.coords?.latitude) && start
         ) {
+
           arrDistances?.length > 1 &&
             setTotalDistance(
               Number(
@@ -157,7 +165,7 @@ const StartRunningScreen = (props) => {
       }
     } else {
       console.log('Eo tinh khoang cach nha con');
-    }
+    }   
     Geolocation.clearWatch(idGeo);
 
     console.log('arrDistances: ', arrDistances.length);
