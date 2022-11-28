@@ -13,9 +13,9 @@ import * as React from 'react';
 import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox, Image, View } from 'native-base';
 import colors from '../../themes/colors';
 import { useLoginMutation } from '../../services/modules/users';
-import LoadingComponent from '../../components/Loading/Loading';
 import { authActions } from './authSlice';
 import { useDispatch } from 'react-redux';
+import LoadingComponent from '../../components/Loading/Loading';
 
 function Login(props) {
   const [isVertify, setIsVertify] = React.useState(true);

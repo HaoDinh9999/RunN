@@ -107,7 +107,7 @@ const MoveScreen = () => {
                     <View style={styles.energyContainer}>
                         <View
                             style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                <Image size={5} borderRadius={100} source={imagePath.energy} alt="Alternate Text" />
+                                <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />
                             <Text fontSize={'sm'} bold color={colors.white}>
                                 1.0{' '}
                                 <Text bold color={colors.gray}>

@@ -19,6 +19,7 @@ import { Avatar } from 'native-base';
 import styles from './StartRunning.style';
 import { colors } from '../../../themes';
 import { useNavigation } from '@react-navigation/native';
+import ProgressCircle from 'react-native-progress-circle';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -86,9 +87,11 @@ const StartRunningScreen = (props) => {
     return () => clearInterval(interval);
   }, []);
 
-  useEffect (() => {
+  useEffect(() => {
     startTimer(minutes * 60 + seconds);
-  },[]);
+  }, []);
+
+
 
   const fetchValue = (data) => {
     updateState({
@@ -112,33 +115,26 @@ const StartRunningScreen = (props) => {
 
   // This function will get your current location
   var idGeo;
-  const getlocation = (enable:boolean) => {
+  const getlocation = (enable: boolean) => {
     if (enable == true) {
       idGeo = Geolocation.watchPosition(showLoc);
-      console.log("vo chua1",start)
-
+      console.log('vo chua1', start);
     }
   };
 
   // This function will show your current location
   const showLoc = (pos) => {
-    // if(minutes==0 && seconds==0) {console.log("Dung lai"); return;}
-    // else{
-    // console.log("Beforeeeee",minutes +"--" + seconds)
-    // console.log("POSSsSS:", pos);
-    console.log("vo chua24232222222",start)
+    console.log('vo chua24232222222', start);
 
     setSpeed(pos?.coords?.speed.toFixed(2));
 
     if (pos?.coords.speed < limitSpeed) {
-
       if (start) {
-
         if (
           parseFloat(arrDistances[arrDistances.length - 1]?.latitude) !=
-          parseFloat(pos?.coords?.latitude) && start
+            parseFloat(pos?.coords?.latitude) &&
+          start
         ) {
-
           arrDistances?.length > 1 &&
             setTotalDistance(
               Number(
@@ -165,7 +161,7 @@ const StartRunningScreen = (props) => {
       }
     } else {
       console.log('Eo tinh khoang cach nha con');
-    }   
+    }
     Geolocation.clearWatch(idGeo);
 
     console.log('arrDistances: ', arrDistances.length);
@@ -213,12 +209,27 @@ const StartRunningScreen = (props) => {
 
   return (
     <View style={styles.container}>
-      {      
+      {
         checkTimeOut()
       }
-      <View style={{flexDirection:'row', justifyContent:'center', alignItems:'center',padding:12}}>
-      <Image size={5} borderRadius={100} source={imagePath.running_white} alt="running man" resizeMode="stretch"/>
-        <Text bold fontSize="xl" color={colors.white} marginLeft={2} >Walking </Text>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'center',
+          alignItems: 'center',
+          padding: 12,
+        }}
+      >
+        <Image
+          size={5}
+          borderRadius={100}
+          source={imagePath.running_white}
+          alt="running man"
+          resizeMode="stretch"
+        />
+        <Text bold fontSize="xl" color={colors.white} marginLeft={2}>
+          Walking{' '}
+        </Text>
       </View>
       {showMap ? (
         <>
@@ -261,7 +272,7 @@ const StartRunningScreen = (props) => {
             <TouchableOpacity
               style={{
                 position: 'absolute',
-                top:  8,
+                top: 8,
                 left: 8,
                 zIndex: 10,
               }}
@@ -269,7 +280,13 @@ const StartRunningScreen = (props) => {
                 setShowMap(false);
               }}
             >
-              <Image source={imagePath.close} size={8}  borderRadius={20} style={{padding:5}}  alt="Alternate Text" />
+              <Image
+                source={imagePath.close}
+                size={8}
+                borderRadius={20}
+                style={{ padding: 5 }}
+                alt="Alternate Text"
+              />
             </TouchableOpacity>
             <TouchableOpacity
               style={{
@@ -279,32 +296,22 @@ const StartRunningScreen = (props) => {
               }}
               onPress={onCenter}
             >
-              <Image source={imagePath.greenIndicator}  alt="Alternate Text" />
+              <Image source={imagePath.greenIndicator} alt="Alternate Text" />
             </TouchableOpacity>
           </View>
           <View style={{ padding: 12, marginTop: 5 }}>
             <View style={styles.bottomCard}>
               <View style={styles.propertyContainer}>
                 <View style={styles.properyCricle}>
-                  <Image
-                    size={5}
-                    borderRadius={100}
-                    source={imagePath.running}
-                    alt="distance"
-                  />
+                  <Image size={5} borderRadius={100} source={imagePath.running} alt="distance" />
                   <Text color={colors.white} bold style={{ marginTop: 5, marginLeft: -2 }}>
                     {totalDistance}km
                   </Text>
                 </View>
                 <View style={styles.properyCricle}>
-                  <Image
-                    size={5}
-                    borderRadius={100}
-                    source={imagePath.speed}
-                    alt="Speed"
-                  />
+                  <Image size={5} borderRadius={100} source={imagePath.speed} alt="Speed" />
                   <Text color={colors.white} bold style={{ marginTop: 5, marginLeft: -2 }}>
-                    {speed ? speed : "0.0"}
+                    {speed ? speed : '0.0'}
                   </Text>
                 </View>
                 <View style={styles.properyCricle}>
@@ -333,65 +340,94 @@ const StartRunningScreen = (props) => {
           </View>
         </>
       ) : (
-        <View style={styles.bodyMainContainer}>
-          <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-            <Text bold fontSize={70} color={colors.white}>
-              {totalDistance === 0 ? '00.00' : totalDistance}
-            </Text>
-            <Text fontSize="sm" bold color={colors.gray} marginTop={-4}>
-              km
-            </Text>
-          </View>
+        <View style={{flex:1}}>
           <View
             style={{
               flexDirection: 'row',
+              justifyContent: 'space-between',
               width: '100%',
-              justifyContent: 'space-around',
-              marginTop: 15,
-              paddingHorizontal: 50,
+              paddingHorizontal: 40,
+              paddingTop:10
             }}
           >
-            {/* <View style={styles.properyCricle}>
-              <Image
-                size={5}
-                borderRadius={100}
-                source={{
-                  uri: 'https://wallpaperaccess.com/full/317501.jpg',
-                }}
-                alt="Alternate Text"
-              />
-              <Text color={colors.white} bold style={{ marginTop: 5, marginLeft: -2 }}>
-                {totalDistance}km
-              </Text>
-            </View> */}
-            <View style={styles.properyCricle}>
-              <Image
-                size={5}
-                borderRadius={100}
-                source={imagePath.speed}
-                alt="Speed"
-              />
-              <Text color={colors.white} bold style={{ marginTop: 5, marginLeft: -2 }}>
-                {speed ? speed : "0.0"}
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+              <ProgressCircle
+                percent={100}
+                radius={30}
+                borderWidth={8}
+                color={colors.primary}
+                shadowColor="#999"
+                bgColor={colors.background.mainColor}
+              >
+                <Image size={6} borderRadius={100} source={imagePath.energy} alt="Energy" />
+              </ProgressCircle>
+              <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
+                + 0.0{' '}
               </Text>
             </View>
-            <View style={styles.properyCricle}>
-              <Image
-                size={5}
-                borderRadius={100}
-                source={imagePath.alarmClock}
-                alt="Alarm clock"
-              />
-              {start ? (
-                <Text color={colors.white} bold style={{ marginTop: 5 }}>
-                  {minutes < 10 ? '0' + minutes : minutes} :{' '}
-                  {seconds < 10 ? '0' + seconds : seconds}{' '}
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
+              <ProgressCircle
+                percent={30}
+                radius={30}
+                borderWidth={8}
+                color={colors.primary}
+                shadowColor="#999"
+                bgColor={colors.background.mainColor}
+              >
+                <Image size={6} borderRadius={100} source={imagePath.energy} alt="Energy" />
+              </ProgressCircle>
+              <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
+                1.0{' '}
+                <Text bold color={colors.gray}>
+                  / 2.0
                 </Text>
-              ) : (
-                <Text color={colors.white} bold style={{ marginTop: 5 }}>
-                  00 : 00
+              </Text>
+            </View>
+          </View>
+          <View style={styles.bodyMainContainer}>
+            {/* // Card nang luonggggggggggggggggggggggg */}
+
+            <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+              <Text bold fontSize={70} color={colors.white}>
+                {totalDistance === 0 ? '00.00' : totalDistance}
+              </Text>
+              <Text fontSize="sm" bold color={colors.gray} marginTop={-4}>
+                km
+              </Text>
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                width: '100%',
+                justifyContent: 'space-around',
+                marginTop: 15,
+                paddingHorizontal: 50,
+              }}
+            >
+              <View style={styles.properyCricle}>
+                <Image size={5} borderRadius={100} source={imagePath.speed} alt="Speed" />
+                <Text color={colors.white} bold style={{ marginTop: 5, marginLeft: -2 }}>
+                  {speed ? speed : '0.0'}
                 </Text>
-              )}
+              </View>
+              <View style={styles.properyCricle}>
+                <Image
+                  size={5}
+                  borderRadius={100}
+                  source={imagePath.alarmClock}
+                  alt="Alarm clock"
+                />
+                {start ? (
+                  <Text color={colors.white} bold style={{ marginTop: 5 }}>
+                    {minutes < 10 ? '0' + minutes : minutes} :{' '}
+                    {seconds < 10 ? '0' + seconds : seconds}{' '}
+                  </Text>
+                ) : (
+                  <Text color={colors.white} bold style={{ marginTop: 5 }}>
+                    00 : 00
+                  </Text>
+                )}
+              </View>
             </View>
           </View>
         </View>
@@ -401,30 +437,13 @@ const StartRunningScreen = (props) => {
           <View style={styles.bottomCard}>
             <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
               <View style={styles.circleButton} onTouchStart={() => setShowMap(true)}>
-                <Image
-                  size={10}
-                  borderRadius={100}
-                  source={imagePath.map}
-                  alt="Map"
-                />
+                <Image size={10} borderRadius={100} source={imagePath.map} alt="Map" />
               </View>
-              <View style={styles.circleButton} onTouchStart={()=>navigation.goBack()}>
-              <Image
-                  size={10}
-                  borderRadius={100}
-                  source={imagePath.closeWhite}
-
-                  alt="Close out"
-                />
+              <View style={styles.circleButton} onTouchStart={() => navigation.goBack()}>
+                <Image size={10} borderRadius={100} source={imagePath.closeWhite} alt="Close out" />
               </View>
               <View style={styles.circleButton}>
-                <Image
-                  size={10}
-                  borderRadius={100}
-                  source={imagePath.help}
-
-                  alt="Alternate Text"
-                />
+                <Image size={10} borderRadius={100} source={imagePath.help} alt="Alternate Text" />
               </View>
             </View>
           </View>
