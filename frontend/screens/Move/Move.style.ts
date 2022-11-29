@@ -8,7 +8,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12
   },
-  bodyContainer:{
+  shoesContainer:{
     borderWidth:3,
     borderRadius:12,
     borderColor:"#2C3C6F",

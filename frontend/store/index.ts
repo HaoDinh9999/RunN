@@ -1,5 +1,6 @@
 import { combineReducers, configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 import authReducer from '../screens/Login/authSlice';
+import moveReducer from '../screens/Move/moveSlice';
 
 import { api } from '../services/api';
 
@@ -7,7 +8,8 @@ import { api } from '../services/api';
 // const sagaMiddleware = createSagaMiddleware();
 const reducers = combineReducers({
   api: api.reducer,
-  auth: authReducer
+  auth: authReducer,
+  move: moveReducer
 });
 
 export const store = configureStore({
