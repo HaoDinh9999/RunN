@@ -44,20 +44,20 @@ const MoveScreen = () => {
       setMinutes(Math.floor((timer / 60) % 60));
       setSeconds(Number(timer % 60));
       if (--timer < 0) {
-        console.log("Timeout", energyReducer.maxEnergy)
-        if (energyRef.current >= energyReducer.maxEnergy) {
+        console.log("Het gio: ",energyRef.current)
+        if (energyRef.current  >= energyReducer.maxEnergy) {
+          console.log("Vao roi thi phai dung chu")
             clearInterval(countDown);
             return;
         }
         else {
           clearInterval(countDown);
-          console.log("Timeout2", energy)
-
-          dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyRef.current}))
+          dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyRef.current + energyReducer.maxEnergy * 0.25}))
+          setEnergy((energy) => energy + energyReducer.maxEnergy * 0.25);
+          console.log('ALo energy', energyRef.current);
           startTimer(timeRefill);
         }
-        setEnergy((energy) => energy + energyReducer.maxEnergy * 0.25);
-        console.log('ALo energy', energyRef.current);
+
       }
     }, 1000);
   }

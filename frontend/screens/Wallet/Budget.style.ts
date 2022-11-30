@@ -35,6 +35,45 @@ const styles = StyleSheet.create({
     borderTopLeftRadius:0,
     borderBottomLeftRadius:0
   },
+  addressContain:{
+    marginTop:15,
+    backgroundColor:"#aaaaaa",
+    paddingHorizontal:15,
+    paddingVertical:10,
+    borderRadius:10,
+    flexDirection:'row',
+    alignItems:'center',
+    borderColor:colors.boderColor,
+    justifyContent:'center',
+    borderWidth:2
+
+  },
+  coinContain:{
+    marginTop:30,
+    backgroundColor:"#161827",
+    paddingHorizontal:15,
+    paddingVertical:10,
+    borderRadius:10,
+    flexDirection:'row',
+    alignItems:'center',
+    borderColor:colors.boderColor,
+    justifyContent:'space-between',
+    borderWidth:2
+
+  },
+  boxContain:{
+    marginTop:10,
+    backgroundColor:"#161827",
+    paddingHorizontal:15,
+    paddingVertical:10,
+    borderRadius:10,
+    flexDirection:'row',
+    alignItems:'center',
+    borderColor:colors.boderColor,
+    justifyContent:'space-between',
+    borderWidth:2
+
+  },
 });
 
 export default styles;

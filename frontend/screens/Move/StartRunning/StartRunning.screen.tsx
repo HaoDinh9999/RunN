@@ -32,8 +32,8 @@ const StartRunningScreen = (props) => {
   const [speed, setSpeed] = useState(0);
   const [totalDistance, setTotalDistance] = useState<number>(0);
   const [start, setStart] = useState<boolean>(props.route.params?.start);
-  const [seconds, setSeconds] = useState<number>(props.route.params?.seconds);
-  const [minutes, setMinutes] = useState<number>(props.route.params?.minutes);
+  const [seconds, setSeconds] = useState<number>(0);
+  const [minutes, setMinutes] = useState<number>(0);
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
@@ -181,31 +181,53 @@ const StartRunningScreen = (props) => {
     startTimer(minutes * 60 + seconds);
   };
   var timer: number;
+  // function startTimer(duration) {
+  //   (timer = duration), minutes, seconds;
+  //   var countDown = setInterval(function () {
+  //     setMinutes(Math.floor(Number(timer / 60)));
+  //     setSeconds(Number(timer % 60));
+  //     if (--timer < 0) {
+  //       clearInterval(countDown);
+  //       setTimeout(true);
+  //     }
+  //   }, 1000);
+  // }
   function startTimer(duration) {
     (timer = duration), minutes, seconds;
-    var countDown = setInterval(function () {
+    var countUp = setInterval(function () {
+      ++timer;
       setMinutes(Math.floor(Number(timer / 60)));
       setSeconds(Number(timer % 60));
-      if (--timer < 0) {
-        clearInterval(countDown);
-        setTimeout(true);
-      }
+      // if (--timer < 0) {
+      //   clearInterval(countUp);
+      //   setTimeout(true);
+      // }
     }, 1000);
   }
   const checkTimeOut = () => {
     if (start) {
       console.log('minutes-- ' + minutes + '-seconds -- ' + seconds);
-      if (timeout) {
-        console.log('Dung lai cho bo may, lam on');
-        getlocation(false);
-        setStart(false);
-        setSpeed(0);
-      } else {
-        console.log('dang chay bo');
-        getlocation(true);
-      }
+      getlocation(true);
+      // if (timeout) {
+      //   console.log('Dung lai cho bo may, lam on');
+      //   getlocation(false);
+      //   setStart(false);
+      //   setSpeed(0);
+      // } else {
+      //   console.log('dang chay bo');
+      //   getlocation(true);
+      // }
     }
   };
+
+  const handleExit = () => {
+    console.log('Dung lai cho bo may, lam on');
+    getlocation(false);
+    setStart(false);
+    setSpeed(0);
+        setTimeout(true);
+    navigation.goBack();
+  }
 
   return (
     <View style={styles.container}>
@@ -439,7 +461,7 @@ const StartRunningScreen = (props) => {
               <View style={styles.circleButton} onTouchStart={() => setShowMap(true)}>
                 <Image size={10} borderRadius={100} source={imagePath.map} alt="Map" />
               </View>
-              <View style={styles.circleButton} onTouchStart={() => navigation.goBack()}>
+              <View style={styles.circleButton} onTouchStart={handleExit}>
                 <Image size={10} borderRadius={100} source={imagePath.closeWhite} alt="Close out" />
               </View>
               <View style={styles.circleButton}>
