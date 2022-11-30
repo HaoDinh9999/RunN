@@ -9,6 +9,7 @@ import imagePath from '../../constant/imagePath';
 import { useDispatch, useSelector } from 'react-redux';
 import { moveActions } from './moveSlice';
 import { EnergyProps } from '../../@core/model/move';
+import CardSneakersRun from '../../components/CardSneakersRun/CardSneakersRun';
 
 const MoveScreen = () => {
   const navigation = useNavigation();
@@ -64,79 +65,7 @@ const MoveScreen = () => {
   return (
     <>
       <View style={styles.container}>
-        <View style={styles.shoesContainer}>
-          <Box
-            //   maxW="80"
-            rounded="lg"
-            overflow="hidden"
-            //   borderColor="coolGray.200"
-            borderWidth="1"
-            _web={{
-              shadow: 2,
-              borderWidth: 0,
-            }}
-            backgroundColor="#2C053B"
-          >
-            <Box style={styles.modalBackground}>
-              <AspectRatio w="100%" ratio={16 / 9} marginTop={-5}>
-                <Image
-                  source={{
-                    uri: 'https://i.pinimg.com/originals/74/2c/02/742c02a5aaa6c201bd4c16bd8b915bba.png',
-                  }}
-                  alt="image"
-                />
-              </AspectRatio>
-              <Image
-                source={{
-                  uri: 'https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png',
-                }}
-                alt="Alternate Text"
-                width={200}
-                height={100}
-                resizeMode="contain"
-                style={{ marginTop: -90 }}
-              />
-
-              <View style={styles.shoesBackground}>
-                <Text color="#C7D5F7" bold style={{ fontSize: 14, textAlign: 'center' }}>
-                  {'#923478729'}
-                </Text>
-                <View style={styles.barShoes}>
-                  <Text
-                    color="#2C053B"
-                    bold
-                    style={{
-                      width: '33.33%',
-                      textAlign: 'center',
-                      backgroundColor: '#CFDDFF',
-                      borderBottomLeftRadius: 20,
-                    }}
-                  >
-                    LV 5
-                  </Text>
-                  <Text
-                    color="#C7D5F7"
-                    bold
-                    style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
-                  >
-                    {'>> Runner'}
-                  </Text>
-                  <Text
-                    color="#2C053B"
-                    style={{
-                      width: '33.33%',
-                      textAlign: 'center',
-                      backgroundColor: '#CFDDFF',
-                      borderTopRightRadius: 20,
-                    }}
-                  >
-                    100 / 100
-                  </Text>
-                </View>
-              </View>
-            </Box>
-          </Box>
-        </View>
+        <CardSneakersRun/>
         <View style={styles.containerBody}>
           <Text
             fontSize="2xl"
@@ -165,7 +94,7 @@ const MoveScreen = () => {
               <Progress
                 value={45}
                 bg={colors.background.progress}
-                _filledTrack={{ bg: colors.progress }}
+                _filledTrack={{ bg: colors.coin }}
               />
             </Box>
           </View>
@@ -185,7 +114,7 @@ const MoveScreen = () => {
               <Progress
                 value={handleCalEnergy()}
                 bg={colors.background.progress}
-                _filledTrack={{ bg: colors.primary }}
+                _filledTrack={{ bg: colors.energy }}
               />
               <View
                 style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}

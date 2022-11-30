@@ -14,4 +14,9 @@ export default {
     running_white: require("../../assets/image/running_52px.png"),
     energy : require("../../assets/image/energy_50px.png"),
     wallet: require("../../assets/image/wallet_26px.png"),
+    coin: require("../../assets/image/coin_30px.png"),
+    sneakers: require("../../assets/image/sneakers_100px.png"),
+    back: require("../../assets/image/back_24px.png"),
+    runningWhite: require("../../assets/image/runningWhite_52px.png"),
+    sneakersWhite: require("../../assets/image/sneakersWhite_100px.png")
 }

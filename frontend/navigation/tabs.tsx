@@ -88,6 +88,8 @@ import BagScreen from '../screens/Bag/Bag.screen';
 import ChallengeScreen from '../screens/Challenge/Challenge.screen';
 import MarketScreen from '../screens/Market/Market.screen';
 import Header from './header';
+import imagePath from '../constant/imagePath';
+import { Image } from 'native-base';
 
 // ------------------------------------------------------------------
 
@@ -104,10 +106,10 @@ const Tabs = () => {
       <Header/>
       <Tab.Navigator
         tabBar={(props) => <AnimatedTabBar {...props} />}
-        initialRouteName="Home"
+        initialRouteName="Move"
         screenOptions={{ headerShown: false, tabBarActiveTintColor: '#e91e63' }}
       >
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Home"
           component={HomeScreen}
           options={{
@@ -116,19 +118,22 @@ const Tabs = () => {
               <MaterialCommunityIcons name="home" color={color} size={size} />
             ),
           }}
-        />
+        /> */}
 
         <Tab.Screen
           name="Move"
           options={
             {
               // @ts-ignore
-              //   tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./src/assets/lottie/upload.icon.json')} style={styles.icon} />,
+                // tabBarIcon: ({ ref }) => <Image ref={ref} loop={false} source={imagePath.runningWhite} style={styles.icon} />,
+                tabBarIcon: ({ color, size }) => (
+                  <Image source={imagePath.runningWhite}  size={7} alt="move"/>
+                ),
             }
           }
           component={MoveScreen}
         />
-        <Tab.Screen
+        {/* <Tab.Screen
           name="Bag"
           options={
             {
@@ -137,13 +142,16 @@ const Tabs = () => {
             }
           }
           component={BagScreen}
-        />
+        /> */}
         <Tab.Screen
           name="Market"
           options={
             {
               // @ts-ignore
               //   tabBarIcon: ({ ref }) => <Lottie ref={ref} loop={false} source={require('./src/assets/lottie/settings.icon.json')} style={styles.icon} />,
+              tabBarIcon: ({ color, size }) => (
+                <Image source={imagePath.sneakersWhite}  size={7} alt="move"/>
+              ),
             }
           }
           component={MarketScreen}
@@ -308,7 +316,7 @@ const styles = StyleSheet.create({
   componentCircle: {
     flex: 1,
     borderRadius: 30,
-    backgroundColor: 'white',
+    backgroundColor: colors.background.mainColor,
   },
   iconContainer: {
     position: 'absolute',

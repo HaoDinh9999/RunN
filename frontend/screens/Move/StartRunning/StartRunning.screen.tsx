@@ -377,11 +377,11 @@ const StartRunningScreen = (props) => {
                 percent={100}
                 radius={30}
                 borderWidth={8}
-                color={colors.primary}
+                color={colors.coin}
                 shadowColor="#999"
                 bgColor={colors.background.mainColor}
               >
-                <Image size={6} borderRadius={100} source={imagePath.energy} alt="Energy" />
+                <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
               </ProgressCircle>
               <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
                 + 0.0{' '}
@@ -392,11 +392,11 @@ const StartRunningScreen = (props) => {
                 percent={30}
                 radius={30}
                 borderWidth={8}
-                color={colors.primary}
+                color={colors.energy}
                 shadowColor="#999"
                 bgColor={colors.background.mainColor}
               >
-                <Image size={6} borderRadius={100} source={imagePath.energy} alt="Energy" />
+                <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />
               </ProgressCircle>
               <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
                 1.0{' '}

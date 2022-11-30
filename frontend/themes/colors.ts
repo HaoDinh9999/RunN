@@ -10,7 +10,8 @@ const colors = {
   lightGray2: '#707070',
   lightGray3: '#f0f0f0',
   red:'#FF5E61',
-  coin:"#FFD300",
+  coin:"#FFD600",
+  energy:"#00E0FF",
   neutral: {
     black: '#000',
     white: '#fff',

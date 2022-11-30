@@ -7,6 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import SpendingScreen from "./Spending/Spending.screen";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
 import Web3 from "web3";
+import imagePath from "../../constant/imagePath";
 
 const BudgetScreen = () => {
     const navigation = useNavigation();
@@ -32,9 +33,7 @@ const BudgetScreen = () => {
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableHighlight onPress={() => navigation.goBack()}>
-                    <Image size={5} borderRadius={100} source={{
-                        uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="Alternate Text" />
+                    <Image size={7} borderRadius={100} source={imagePath.back} alt="Alternate Text" />
                 </TouchableHighlight>
                 <View style={styles.containTab}>
                     <Text color={colors.white} bold fontSize="xl" style={{ paddingHorizontal: 0 }}>Wallet</Text>
@@ -50,10 +49,8 @@ const BudgetScreen = () => {
 
             </View>
             <View style={styles.coinContain}>
-                <View style={{ flexDirection: 'row' }}>
-                    <Image size={5} borderRadius={100} source={{
-                        uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="Alternate Text" />
+                <View style={{ flexDirection: 'row', alignItems:'center' }}>
+                    <Image size={7} borderRadius={100} source={imagePath.coin} alt="Alternate Text" />
                     <Text color={colors.coin} bold fontSize="md" marginLeft={4}>Earned AMT</Text>
 
                 </View>
@@ -62,9 +59,7 @@ const BudgetScreen = () => {
             </View>
             <View style={styles.boxContain}>
                 <View style={{ flexDirection: 'row' }}>
-                    <Image size={5} borderRadius={100} source={{
-                        uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="Alternate Text" />
+                    <Image size={5} borderRadius={100} source={imagePath.sneakers} alt="Alternate Text" />
                     <Text color={colors.white} bold fontSize="md" marginLeft={4}>Sneakers</Text>
 
                 </View>

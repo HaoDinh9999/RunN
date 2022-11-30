@@ -5,9 +5,13 @@ import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ProfileScreen from "../screens/Profile/Profile.screen";
 import imagePath from "../constant/imagePath";
+import { EnergyProps } from "../@core/model/move";
+import { useSelector } from "react-redux";
 
 const Header = (props) => {
     const navigation = useNavigation();
+    const energyReducer: EnergyProps= useSelector((state:any) => state.move.energy);
+
     return (
         <View style={styles.headerContainer}>
             <View style={styles.avatarContainer} onTouchStart={()=>{navigation.navigate('profile')}}>
@@ -19,16 +23,12 @@ const Header = (props) => {
             <View style={styles.walletContainer}>
                 <View style={styles.tokenContainer}>
                     <View style={styles.mainToken}>
-                        <Image size={5} borderRadius={100} source={{
-                            uri: "https://wallpaperaccess.com/full/317501.jpg"
-                        }} alt="Alternate Text" />
+                        <Image size={6} borderRadius={100} source={imagePath.coin} alt="Coin" />
                         <Text color={colors.white} bold ml={1}>100</Text>
                     </View>
                     <View style={styles.secondToken}>
-                        <Image size={5} borderRadius={100} source={{
-                            uri: "https://wallpaperaccess.com/full/317501.jpg"
-                        }} alt="Alternate Text" />
-                        <Text color={colors.white} bold ml={1}>123</Text>
+                    <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />
+                        <Text color={colors.white} bold ml={1}>{energyReducer.currentEnergy}</Text>
                     </View>
                 </View>
                 <View style={styles.notification} onTouchStart={() => navigation.navigate('budget')}>
