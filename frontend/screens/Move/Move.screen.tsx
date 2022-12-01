@@ -22,7 +22,7 @@ const MoveScreen = () => {
   const [minutes, setMinutes] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [isfillEnergy, setIsFillEnergy] = useState<boolean>(true);
-  const [timeRefill, setTimeRefill] = useState<number>(20);
+  const [timeRefill, setTimeRefill] = useState<number>(120);
 
   const handleCalEnergy = (): number => {
     return Number((energyReducer.currentEnergy / energyReducer.maxEnergy) * 100);

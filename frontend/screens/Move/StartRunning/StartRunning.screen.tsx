@@ -42,6 +42,7 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
+  const [timeReward,setTimeReward] = useState<number>(30);// seconds
   const mapRef = useRef(null);
   const markerRef = useRef(null);
 
@@ -204,7 +205,7 @@ const StartRunningScreen = (props) => {
       ++timer;
       setMinutes(Math.floor(Number(timer / 60)));
       setSeconds(Number(timer % 60));
-      if(timer===30) 
+      if(timer%timeReward === 0 ) 
       {
         dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyReducer.currentEnergy - 1}))
 
@@ -233,11 +234,11 @@ const StartRunningScreen = (props) => {
 
   const handleExit = () => {
     console.log('Dung lai cho bo may, lam on');
+    clearInterval(countUp);
     getlocation(false);
     setStart(false);
     setSpeed(0);
-        setTimeout(true);
-        clearInterval(countUp);
+    setTimeout(true);
     navigation.goBack();
   }
 
