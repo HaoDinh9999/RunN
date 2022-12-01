@@ -20,6 +20,9 @@ import styles from './StartRunning.style';
 import { colors } from '../../../themes';
 import { useNavigation } from '@react-navigation/native';
 import ProgressCircle from 'react-native-progress-circle';
+import { useDispatch, useSelector } from 'react-redux';
+import { EnergyProps } from '../../../@core/model/move';
+import { moveActions } from '../moveSlice';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -28,6 +31,8 @@ const LONGITUDE_DELTA = 0.0121;
 
 const StartRunningScreen = (props) => {
   const navigation = useNavigation();
+  const energyReducer: EnergyProps= useSelector((state:any) => state.move.energy);
+  const dispatch = useDispatch();
   const [arrDistances, setArrDistances] = useState([]);
   const [speed, setSpeed] = useState(0);
   const [totalDistance, setTotalDistance] = useState<number>(0);
@@ -118,7 +123,7 @@ const StartRunningScreen = (props) => {
   const getlocation = (enable: boolean) => {
     if (enable == true) {
       idGeo = Geolocation.watchPosition(showLoc);
-      console.log('vo chua1', start);
+      // console.log('vo chua1', start);
     }
   };
 
@@ -192,12 +197,18 @@ const StartRunningScreen = (props) => {
   //     }
   //   }, 1000);
   // }
+  var countUp :any
   function startTimer(duration) {
     (timer = duration), minutes, seconds;
-    var countUp = setInterval(function () {
+     countUp = setInterval(function () {
       ++timer;
       setMinutes(Math.floor(Number(timer / 60)));
       setSeconds(Number(timer % 60));
+      if(timer===30) 
+      {
+        dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyReducer.currentEnergy - 1}))
+
+      }
       // if (--timer < 0) {
       //   clearInterval(countUp);
       //   setTimeout(true);
@@ -206,7 +217,7 @@ const StartRunningScreen = (props) => {
   }
   const checkTimeOut = () => {
     if (start) {
-      console.log('minutes-- ' + minutes + '-seconds -- ' + seconds);
+      // console.log('minutes-- ' + minutes + '-seconds -- ' + seconds);
       getlocation(true);
       // if (timeout) {
       //   console.log('Dung lai cho bo may, lam on');
@@ -226,6 +237,7 @@ const StartRunningScreen = (props) => {
     setStart(false);
     setSpeed(0);
         setTimeout(true);
+        clearInterval(countUp);
     navigation.goBack();
   }
 
@@ -389,7 +401,7 @@ const StartRunningScreen = (props) => {
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
               <ProgressCircle
-                percent={30}
+                percent={(energyReducer.currentEnergy/energyReducer.maxEnergy)*100}
                 radius={30}
                 borderWidth={8}
                 color={colors.energy}
@@ -399,9 +411,9 @@ const StartRunningScreen = (props) => {
                 <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />
               </ProgressCircle>
               <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
-                1.0{' '}
+                {energyReducer.currentEnergy}.0{' '}
                 <Text bold color={colors.gray}>
-                  / 2.0
+                  / {energyReducer.maxEnergy}.0
                 </Text>
               </Text>
             </View>

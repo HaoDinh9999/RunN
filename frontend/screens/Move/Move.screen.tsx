@@ -18,45 +18,41 @@ const MoveScreen = () => {
 //    const maxEnergy = useSelector((state:any) => state.move.energy.maxEnergy);
    const dispatch = useDispatch();
 
-   
-  const [energy, setEnergy] = useState<number>(energyReducer.currentEnergy);
-  const [seconds, setSeconds] = useState<number>(0);
+     const [seconds, setSeconds] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [isfillEnergy, setIsFillEnergy] = useState<boolean>(true);
   const [timeRefill, setTimeRefill] = useState<number>(20);
-  const energyRef = useRef(energy);
 
   const handleCalEnergy = (): number => {
     return Number((energyReducer.currentEnergy / energyReducer.maxEnergy) * 100);
   };
   useEffect(() => {
     startTimer(timeRefill);
-  }, []);
-  useEffect(() => {
-    energyRef.current = energy;
-  });
+    console.log("Tai sao ko phai vao day chuuuuuuuuuuuuu: ",energyReducer)
+  }, [energyReducer]);
+  // useEffect(() => {
+  //   energyRef.current = energy;
+  // });
   var timer: number;
   var countDown: any;
   function startTimer(duration) {
+    console.log("Tai sao 1");
     (timer = duration), minutes, seconds;
     countDown = setInterval(function () {
       setHours(Math.floor(timer / (60 * 60)));
       setMinutes(Math.floor((timer / 60) % 60));
       setSeconds(Number(timer % 60));
       if (--timer < 0) {
-        console.log("Het gio: ",energyRef.current)
-        if (energyRef.current  >= energyReducer.maxEnergy) {
+        if (energyReducer.currentEnergy  >= energyReducer.maxEnergy) {
           console.log("Vao roi thi phai dung chu")
             clearInterval(countDown);
             return;
         }
         else {
           clearInterval(countDown);
-          dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyRef.current + energyReducer.maxEnergy * 0.25}))
-          setEnergy((energy) => energy + energyReducer.maxEnergy * 0.25);
-          console.log('ALo energy', energyRef.current);
-          startTimer(timeRefill);
+          dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25}))
+          // startTimer(timeRefill);
         }
 
       }
