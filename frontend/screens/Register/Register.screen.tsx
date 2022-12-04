@@ -14,7 +14,7 @@ import * as React from 'react';
 import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox,Image } from 'native-base';
 import colors from '../../themes/colors';
 
-function LoginVertifyScreen(props) {
+function RegisterScreen(props) {
   const [isVertify, setIsVertify] = React.useState(true);
   const handleNavigate = (route: string) => {
     props?.navigation.navigate(route);
@@ -33,7 +33,7 @@ function LoginVertifyScreen(props) {
         </View>
         <View style={styles.modalContainer}>
           <View style={styles.modalView}>
-            <Text bold fontSize="2xl" style={styles.titleText}>Login</Text>
+            <Text bold fontSize="2xl" style={styles.titleText}>Register</Text>
 
             <View style={styles.inputView}>
               <Input variant="rounded" placeholder="Email address" style={styles.input} />
@@ -51,7 +51,7 @@ function LoginVertifyScreen(props) {
             {/* <Text style={styles.hintText} italic fontSize="xs">Account will be automatically registed</Text> */}
             <View style={styles.buttonView}>
               <Button style={styles.button}>
-                <Text style={styles.buttonText} onPress={() => handleNavigate("home")}>LOGIN</Text>
+                <Text style={styles.buttonText} onPress={() => handleNavigate("home")}>Register</Text>
               </Button>
             </View>
             <Text fontSize="xs" style={styles.underlineText} underline onPress={() => handleNavigate("login")}>Login with password</Text>
@@ -64,7 +64,7 @@ function LoginVertifyScreen(props) {
   );
 }
 
-export default LoginVertifyScreen;
+export default RegisterScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,

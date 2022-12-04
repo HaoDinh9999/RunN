@@ -6,7 +6,7 @@ import {
   Platform,
   PermissionsAndroid,
 } from 'react-native';
-import { View, Text, Image } from 'native-base';
+import { View, Text, Image, Modal, Button } from 'native-base';
 import MapView, { MarkerAnimated, AnimatedRegion, Polyline } from 'react-native-maps';
 import { GOOGLE_MAP_KEY } from '../../../constant/googleMapKey';
 import MapViewDirections from 'react-native-maps-directions';
@@ -22,7 +22,7 @@ import { useNavigation } from '@react-navigation/native';
 import ProgressCircle from 'react-native-progress-circle';
 import { useDispatch, useSelector } from 'react-redux';
 import { EnergyProps } from '../../../@core/model/move';
-import { moveActions } from '../moveSlice';
+import { moveActions, selectEnergy } from '../moveSlice';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -31,8 +31,12 @@ const LONGITUDE_DELTA = 0.0121;
 
 const StartRunningScreen = (props) => {
   const navigation = useNavigation();
-  const energyReducer: EnergyProps= useSelector((state:any) => state.move.energy);
+  const energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
+  const timingReducer: boolean = useSelector((state: any) => state.move.timing);
+  const coinRewardReducer:number = useSelector((state: any) => state.move.coinReward);
+
   const dispatch = useDispatch();
+  const [isShowModal, setIsShowModal] = useState(false);
   const [arrDistances, setArrDistances] = useState([]);
   const [speed, setSpeed] = useState(0);
   const [totalDistance, setTotalDistance] = useState<number>(0);
@@ -42,7 +46,8 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [timeReward,setTimeReward] = useState<number>(30);// seconds
+  const [timeReward, setTimeReward] = useState<number>(120);// seconds
+  const [coinReward, setCoinReward] = useState<number>(0);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
 
@@ -92,11 +97,44 @@ const StartRunningScreen = (props) => {
     }, 3000);
     return () => clearInterval(interval);
   }, []);
+  var timer = 0;
 
   useEffect(() => {
-    startTimer(minutes * 60 + seconds);
-  }, []);
+    if (energyReducer.currentEnergy < 1) {
+      if (timingReducer === false) {
+        dispatch(moveActions.updateTiming(true));
+      }
+      setIsShowModal(true);
+      getlocation(false);
+      setStart(false);
+      setSpeed(0);
+      setTimeout(true);
+    }
+    if (timeout === false) {
+      var countUp = setInterval(function () {
+        ++timer;
+        if (timer % timeReward === 0 && energyReducer.currentEnergy > 0) {
+          dispatch(moveActions.updateEnergy({ ...energyReducer, currentEnergy: energyReducer.currentEnergy - 1 }))
+          dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
+        }
+      }, 1000);
+      return () => clearInterval(countUp);
+    }
 
+  }, [timeout, energyReducer,coinRewardReducer]);
+  useEffect(() => {
+    var tiktak: number = 0;
+    var timeUp = setInterval(function () {
+      ++tiktak;
+      setMinutes(Math.floor(Number(tiktak / 60)));
+      setSeconds(Number(tiktak % 60));
+    }, 1000);
+    return () => clearInterval(timeUp);
+
+  }, []);
+  useEffect(() => {
+
+  }, [energyReducer]);
 
 
   const fetchValue = (data) => {
@@ -138,7 +176,7 @@ const StartRunningScreen = (props) => {
       if (start) {
         if (
           parseFloat(arrDistances[arrDistances.length - 1]?.latitude) !=
-            parseFloat(pos?.coords?.latitude) &&
+          parseFloat(pos?.coords?.latitude) &&
           start
         ) {
           arrDistances?.length > 1 &&
@@ -150,7 +188,7 @@ const StartRunningScreen = (props) => {
                     latitude: pos?.coords?.latitude,
                     longitude: pos?.coords?.longitude,
                   }) /
-                    1000
+                  1000
                 ).toFixed(2)
               )
             );
@@ -184,9 +222,8 @@ const StartRunningScreen = (props) => {
   };
   const onPressStart = () => {
     setStart((start) => (start = true));
-    startTimer(minutes * 60 + seconds);
+    // startTimer(minutes * 60 + seconds);
   };
-  var timer: number;
   // function startTimer(duration) {
   //   (timer = duration), minutes, seconds;
   //   var countDown = setInterval(function () {
@@ -198,24 +235,7 @@ const StartRunningScreen = (props) => {
   //     }
   //   }, 1000);
   // }
-  var countUp :any
-  function startTimer(duration) {
-    (timer = duration), minutes, seconds;
-     countUp = setInterval(function () {
-      ++timer;
-      setMinutes(Math.floor(Number(timer / 60)));
-      setSeconds(Number(timer % 60));
-      if(timer%timeReward === 0 ) 
-      {
-        dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyReducer.currentEnergy - 1}))
 
-      }
-      // if (--timer < 0) {
-      //   clearInterval(countUp);
-      //   setTimeout(true);
-      // }
-    }, 1000);
-  }
   const checkTimeOut = () => {
     if (start) {
       // console.log('minutes-- ' + minutes + '-seconds -- ' + seconds);
@@ -233,13 +253,14 @@ const StartRunningScreen = (props) => {
   };
 
   const handleExit = () => {
-    console.log('Dung lai cho bo may, lam on');
-    clearInterval(countUp);
+    console.log('Dung lai cho bo may, va get out');
     getlocation(false);
     setStart(false);
     setSpeed(0);
     setTimeout(true);
+    dispatch(moveActions.updateCoinReward(0));
     navigation.goBack();
+    setIsShowModal(false);
   }
 
   return (
@@ -375,14 +396,14 @@ const StartRunningScreen = (props) => {
           </View>
         </>
       ) : (
-        <View style={{flex:1}}>
+        <View style={{ flex: 1 }}>
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
               width: '100%',
               paddingHorizontal: 40,
-              paddingTop:10
+              paddingTop: 10
             }}
           >
             <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -397,12 +418,12 @@ const StartRunningScreen = (props) => {
                 <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
               </ProgressCircle>
               <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
-                + 0.0{' '}
+                + {coinRewardReducer}.0{' '}
               </Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
               <ProgressCircle
-                percent={(energyReducer.currentEnergy/energyReducer.maxEnergy)*100}
+                percent={(energyReducer.currentEnergy / energyReducer.maxEnergy) * 100}
                 radius={30}
                 borderWidth={8}
                 color={colors.energy}
@@ -484,6 +505,41 @@ const StartRunningScreen = (props) => {
           </View>
         </View>
       )}
+      <Modal isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' }} fontSize={20} fontWeight={"bold"}>
+          <Text fontSize={17} bold  color={colors.black} marginLeft={0}>
+          Notification
+              </Text>
+          </Modal.Header>
+          <Modal.Body>
+            <View>
+            <Text fontSize={13} bold  color={colors.gray1} marginLeft={0}>
+            You don't have enough energy to run. Please wait or get new shoes.
+              </Text>
+            </View>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop:15 }}>
+              <ProgressCircle
+                percent={100}
+                radius={25}
+                borderWidth={8}
+                color={colors.coin}
+                shadowColor="#999"
+                bgColor={colors.white}
+              >
+                <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
+              </ProgressCircle>
+              <Text fontSize={'xl'} bold color={colors.coin} marginLeft={2}>
+                + {coinRewardReducer}{'.0 '}
+              </Text>
+            </View>
+            <Button style={styles.button} onPress={handleExit} marginTop={15}>
+              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>OK</Text>
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
     </View>
   );
 };

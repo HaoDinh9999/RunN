@@ -21,6 +21,7 @@ function Login(props) {
   const [isVertify, setIsVertify] = React.useState(true);
   const [username, setUsername] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
+  const [show, setShow] = React.useState<boolean>(false);
   const [login, { isLoading, data, error }] = useLoginMutation();
   const dispatch = useDispatch();
   const handleNavigate = (route: string) => {
@@ -31,6 +32,9 @@ function Login(props) {
       console.log("Dang login")
       login({ email: username, password: password });
     }
+  }
+  const handleShowPassword = () => {
+    setShow(!show);
   }
   React.useEffect(() => {
     if (data) {
@@ -65,7 +69,7 @@ function Login(props) {
                 <Input variant="rounded" placeholder="Email address" style={styles.input} onChangeText={newText => setUsername(newText)} />
               </View>
               <View style={styles.inputView}>
-                <Input variant="rounded" placeholder="Password" style={styles.input} onChangeText={newText => setPassword(newText)} InputRightElement={<Text style={styles.sendText}>Show</Text>} />
+                <Input variant="rounded" placeholder="Password" type={show ? "text" : "password"} style={styles.input} onChangeText={newText => setPassword(newText)} InputRightElement={<Text style={styles.sendText} onPress={handleShowPassword}>Show</Text>} />
               </View>
               {/* <View style={styles.checkboxView}>
                         <Checkbox value="Checkbox" size="sm" style={styles.checkbox}>
@@ -80,7 +84,7 @@ function Login(props) {
                   <Text style={styles.buttonText} onPress={handleLogin}>LOGIN</Text>
                 </Button>
               </View>
-              <Text fontSize="xs" style={styles.underlineText} underline onPress={() => handleNavigate("loginVertify")}>Email Vertify Code</Text>
+              <Text fontSize="xs" style={styles.underlineText} underline onPress={() => handleNavigate("register")}>Create a new account</Text>
 
             </View>
 

@@ -62,7 +62,7 @@ const ProfileScreen = () => {
                 </View>
             </View>
             <View style={{justifyContent:'flex-end', flex:1, paddingHorizontal:80, paddingBottom:10}}>
-                <Button style={styles.button} onPress={()=>navigation.navigate('loginVertify')}>LOG OUT</Button>
+                <Button style={styles.button} onPress={()=>navigation.navigate('login')}>LOG OUT</Button>
             </View>
         </View>
     )

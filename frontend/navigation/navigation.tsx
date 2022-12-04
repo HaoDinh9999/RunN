@@ -4,13 +4,13 @@ import DetailProductScreen from '../screens/Market/DetailProduct/DetailProduct.s
 
 import HomeScreen from '../screens/Home/Home.screen';
 import LoginScreen from '../screens/Login/Login.screen';
-import LoginVertifyScreen from '../screens/LoginVertify/LoginVertify.screen';
 import ProfileScreen from '../screens/Profile/Profile.screen';
 import Tabs from './tabs';
 import FilterScreen from '../screens/Market/Filter/Filter.screen';
 import BudgetScreen from '../screens/Wallet/Budget.screen';
 import MoveScreen from '../screens/Move/Move.screen';
 import StartRunningScreen from '../screens/Move/StartRunning/StartRunning.screen'
+import RegisterScreen from '../screens/Register/Register.screen';
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
@@ -20,9 +20,9 @@ const MainNavigation = () => {
         screenOptions={{
           headerShown: false
         }}
-        initialRouteName={'loginVertify'}>
+        initialRouteName={'login'}>
         <Stack.Screen name="login" component={LoginScreen} />
-        <Stack.Screen name="loginVertify" component={LoginVertifyScreen} />
+        <Stack.Screen name="register" component={RegisterScreen} />
         <Stack.Screen name="home" component={Tabs} />
         <Stack.Screen name="profile" component={ProfileScreen}/>
         <Stack.Screen name="detailProduct" component={DetailProductScreen}/>

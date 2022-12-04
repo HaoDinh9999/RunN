@@ -73,6 +73,11 @@ const styles = StyleSheet.create({
     alignItems:"center",
     justifyContent:'center',
     flexDirection:'column'
+  },
+  button:{
+    backgroundColor: colors.background.mainColor,
+    borderRadius:30,  
+    alignItems:'center',
   }
 });
 

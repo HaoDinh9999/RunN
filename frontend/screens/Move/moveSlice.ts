@@ -11,7 +11,9 @@ export interface LoginPayload {
 }
 export interface MoveState {
     energy ?: EnergyProps;
-    isFillEnergy: boolean;
+    isFillEnergy?: boolean;
+    timing?: boolean;
+    coinReward?: number;
 }
 
 const initialState : MoveState = {
@@ -20,6 +22,8 @@ const initialState : MoveState = {
         maxEnergy:2
     },
     isFillEnergy: false,
+    timing: false,
+    coinReward:0
 }
 const checkFillEnergy = (state) =>{
     if(state.energy.currentEnergy >= state.energy.maxEnergy){
@@ -44,6 +48,19 @@ const moveSlice = createSlice({
             checkFillEnergy(state);
         },
 
+        updateTiming(state, action:PayloadAction<boolean>){
+            state.timing = action.payload;
+            console.log("updateTiming",state.timing)
+
+        },
+
+        updateCoinReward(state, action: PayloadAction<number>){
+            state.coinReward = action.payload;
+            console.log("updateCoinReward",state.coinReward)
+
+        }
+
+
     },
     // extraReducers: (builder) =>{
     //     builder.addMatcher(userApi.endpoints.login.matchFulfilled,(state,action:PayloadAction<User>) => {
@@ -59,6 +76,7 @@ export const moveActions = moveSlice.actions;
 //Selectors
 export const selectEnergy = state => state.move.energy;
 export const selectIsFillEnergy = state => state.move.isFillEnergy;
+export const selectTiming = state => state.move.timing;
 
 //Reducer
 const moveReducer = moveSlice.reducer;

@@ -1,67 +1,103 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { View } from 'react-native';
-import { Text, Box, AspectRatio, Image, Progress, Button } from 'native-base';
+import { Text, Box, AspectRatio, Image, Progress, Button, View } from 'native-base';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import styles from './Move.style';
 import { colors } from '../../themes';
 import imagePath from '../../constant/imagePath';
 import { useDispatch, useSelector } from 'react-redux';
-import { moveActions } from './moveSlice';
+import { moveActions, selectEnergy } from './moveSlice';
 import { EnergyProps } from '../../@core/model/move';
 import CardSneakersRun from '../../components/CardSneakersRun/CardSneakersRun';
 
 const MoveScreen = () => {
   const navigation = useNavigation();
-  const energyReducer: EnergyProps= useSelector((state:any) => state.move.energy);
-//   const currentEnergy = useSelector((state:any) => state.move.energy.currentEnergy);
-//    const maxEnergy = useSelector((state:any) => state.move.energy.maxEnergy);
-   const dispatch = useDispatch();
+  var energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
+  var timingReducer: boolean = useSelector((state: any) => state.move.timing);
 
-     const [seconds, setSeconds] = useState<number>(0);
+  // const currentEnergy = useSelector((state:any) => state.move.energy.currentEnergy);
+  // const maxEnergy = useSelector((state:any) => state.move.energy.maxEnergy);
+  const dispatch = useDispatch();
+
+  const [seconds, setSeconds] = useState<number>(0);
   const [minutes, setMinutes] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [isfillEnergy, setIsFillEnergy] = useState<boolean>(true);
-  const [timeRefill, setTimeRefill] = useState<number>(120);
+  const [timeRefill, setTimeRefill] = useState<number>(180);
+  const [timeCount, setTimeCount] = useState<number>(0);
+  const [timeout,setTimeout] = useState<boolean>(false);
+  // const [currentEnergy, setCurrentEnergy] = useState<number>(energyReducer.currentEnergy);
+  // const [maxEnergy, setMaxEnergy] = useState<number>(energyReducer.maxEnergy);
+
+  var timer: number;
 
   const handleCalEnergy = (): number => {
     return Number((energyReducer.currentEnergy / energyReducer.maxEnergy) * 100);
   };
   useEffect(() => {
-    startTimer(timeRefill);
-    console.log("Tai sao ko phai vao day chuuuuuuuuuuuuu: ",energyReducer)
-  }, [energyReducer]);
+    if (energyReducer.currentEnergy < energyReducer.maxEnergy) {
+      dispatch(moveActions.updateTiming(true))
+    }
+    else if (energyReducer.currentEnergy = energyReducer.maxEnergy) {
+      dispatch(moveActions.updateTiming(false));
+    }
+    if (timingReducer === true && energyReducer.currentEnergy < energyReducer.maxEnergy)
+      startTimer(timeRefill)
+  }, [timingReducer]);
+ 
+  useEffect(()=>{
+    if(timeout === true){
+      handleTimeOut();
+    }
+},[timeout]);
+
   // useEffect(() => {
   //   energyRef.current = energy;
   // });
-  var timer: number;
+  const handleTimeOut = () => {
+    console.log("handleTimeout",energyReducer);
+    dispatch(moveActions.updateTiming(false));
+    if (energyReducer.currentEnergy >= energyReducer.maxEnergy) {
+      console.log("Vao roi thi phai dung chu");
+      dispatch(moveActions.updateTiming(false));
+      return;
+
+    }
+    else {
+      dispatch(moveActions.updateEnergy({ ...energyReducer, currentEnergy: energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25 }))
+      if ( energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25  < energyReducer.maxEnergy)
+      dispatch(moveActions.updateTiming(true));
+      else
+      dispatch(moveActions.updateTiming(false));
+
+    }
+    setTimeout(false);
+  }
   var countDown: any;
   function startTimer(duration) {
     console.log("Tai sao 1");
-    (timer = duration), minutes, seconds;
-    countDown = setInterval(function () {
-      setHours(Math.floor(timer / (60 * 60)));
-      setMinutes(Math.floor((timer / 60) % 60));
-      setSeconds(Number(timer % 60));
-      if (--timer < 0) {
-        if (energyReducer.currentEnergy  >= energyReducer.maxEnergy) {
-          console.log("Vao roi thi phai dung chu")
-            clearInterval(countDown);
-            return;
-        }
-        else {
+      (timer = duration), minutes, seconds;
+      countDown = setInterval(function () {
+        setHours(Math.floor(timer / (60 * 60)));
+        setMinutes(Math.floor((timer / 60) % 60));
+        setSeconds(Number(timer % 60));
+        setTimeout(false);
+        if (--timer < 0) {
+          // console.log("Result", energyReducer);
+          dispatch(moveActions.updateTiming(false));
+          setTimeout(true);
           clearInterval(countDown);
-          dispatch(moveActions.updateEnergy({...energyReducer,currentEnergy: energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25}))
-          // startTimer(timeRefill);
+  
         }
-
-      }
-    }, 1000);
+      }, 1000);
+      return () => clearInterval(countDown);
+  
+   
   }
   return (
     <>
       <View style={styles.container}>
-        <CardSneakersRun/>
+        <CardSneakersRun />
         <View style={styles.containerBody}>
           <Text
             fontSize="2xl"
@@ -130,7 +166,7 @@ const MoveScreen = () => {
           <Button
             style={styles.button}
             onPress={() =>
-              navigation.navigate('startRunning', {
+              energyReducer.currentEnergy >= 1 &&  navigation.navigate('startRunning', {
                 start: true,
                 minutes: 0,
                 seconds: 120,

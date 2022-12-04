@@ -139,7 +139,7 @@ const DetailProductScreen = () => {
               uri: "https://wallpaperaccess.com/full/317501.jpg"
             }} alt="Alternate Text" marginTop={5} />
             <View style={{ width: '85%' }}>
-              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Speed</Text>
+              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Joy</Text>
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm" value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.progress2, }}
@@ -153,7 +153,7 @@ const DetailProductScreen = () => {
               uri: "https://wallpaperaccess.com/full/317501.jpg"
             }} alt="Alternate Text" marginTop={5} />
             <View style={{ width: '85%' }}>
-              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Recovery</Text>
+              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Durability</Text>
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm" value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.progress2, }}
@@ -166,9 +166,9 @@ const DetailProductScreen = () => {
       </View>
       <View style={styles.bottom}>
         <Text fontSize={"xl"} bold color={colors.white} marginLeft={2}>334 FIT</Text>
-        <Button style={styles.button}>
+        {/* <Button style={styles.button}>
           <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>BUY NOW</Text>
-        </Button>
+        </Button> */}
       </View>
     </>
   );
