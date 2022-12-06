@@ -1,7 +1,7 @@
 import React from "react";
 import { TouchableHighlight } from "react-native";
 import { Heading, Text, Image, Avatar, Button, Spinner, View } from "native-base";
-import { colors } from "../../themes";
+import { colors } from "../../constant/themes";
 
 const LoadingComponent = (props) => {
     return (

@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import styles from './Spending.style';
 import { Text, Image, Divider } from "native-base";
-import { colors } from "../../../themes";
+import { colors } from "../../../constant/themes";
 const SpendingScreen = () => {
     return (
         <View style={styles.spendContainer}>

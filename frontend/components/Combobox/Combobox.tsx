@@ -1,6 +1,6 @@
 import { Box, Center, CheckIcon, Select, View } from "native-base";
 import React from "react";
-import colors from "../../themes/colors";
+import colors from "../../constant/themes/colors";
 
 const ComboBoxComponent = (props) => {
   const [service, setService] = React.useState("");

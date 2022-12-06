@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { TouchableHighlight } from "react-native";
 import { Text, Image, Button, Divider, Modal, View } from "native-base";
 import styles from './Budget.style';
-import { colors } from "../../themes";
+import { colors } from "../../constant/themes";
 import { useNavigation } from "@react-navigation/native";
 import SpendingScreen from "./Spending/Spending.screen";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";

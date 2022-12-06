@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { Text, Image, Button } from "native-base";
 import styles from "./Filter.style";
-import { colors } from "../../../themes";
+import { colors } from "../../../constant/themes";
 
 const FilterScreen = () => {
     return (

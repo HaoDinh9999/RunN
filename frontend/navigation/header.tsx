@@ -1,6 +1,6 @@
 import { View, Text, Avatar, Image, Badge, Button } from "native-base";
 import React from "react";
-import { colors } from "../themes";
+import { colors } from "../constant/themes";
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ProfileScreen from "../screens/Profile/Profile.screen";

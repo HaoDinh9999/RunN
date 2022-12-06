@@ -81,7 +81,7 @@ import HomeScreen from '../screens/Home/Home.screen';
 // lottie
 // import Lottie from 'lottie-react-native'
 import Icon from 'react-native-vector-icons/Ionicons';
-import { colors } from '../themes';
+import { colors } from '../constant/themes';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MoveScreen from '../screens/Move/Move.screen';
 import BagScreen from '../screens/Bag/Bag.screen';

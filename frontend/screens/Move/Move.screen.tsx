@@ -3,7 +3,7 @@ import { Text, Box, AspectRatio, Image, Progress, Button, View } from 'native-ba
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 import styles from './Move.style';
-import { colors } from '../../themes';
+import { colors } from '../../constant/themes';
 import imagePath from '../../constant/imagePath';
 import { useDispatch, useSelector } from 'react-redux';
 import { moveActions, selectEnergy } from './moveSlice';

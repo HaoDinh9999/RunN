@@ -3,7 +3,7 @@ import { TouchableHighlight, View } from "react-native";
 import { Heading, Text, Image, Avatar, Button } from "native-base";
 import styles from './Profile.style';
 import { useNavigation } from "@react-navigation/native";
-import { colors } from "../../themes";
+import { colors } from "../../constant/themes";
 
 const ProfileScreen = () => {
     const navigation = useNavigation();

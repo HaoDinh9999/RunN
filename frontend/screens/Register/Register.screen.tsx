@@ -12,7 +12,7 @@ import {
 } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
 import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox,Image } from 'native-base';
-import colors from '../../themes/colors';
+import colors from '../../constant/themes/colors';
 
 function RegisterScreen(props) {
   const [isVertify, setIsVertify] = React.useState(true);

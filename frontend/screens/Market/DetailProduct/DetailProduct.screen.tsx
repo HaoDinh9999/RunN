@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import styles from './DetailProduct.style';
 import { Text, Box, AspectRatio, Image, Progress, Button } from 'native-base';
 import Header from '../../../navigation/header';
-import { colors } from '../../../themes';
+import { colors } from '../../../constant/themes';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
 

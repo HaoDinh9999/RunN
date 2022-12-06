@@ -2,10 +2,10 @@ import React from "react";
 import { View, FlatList } from "react-native";
 import { Button, useToast, Text, HStack, Center, Container, Stack, VStack, Heading, ScrollView } from 'native-base';
 import ComboBoxComponent from "../../components/Combobox/Combobox";
-import { colors } from "../../themes";
 import styles from './Market.style';
 import CardItem from "../../components/CardItem/CardItem";
 import { useNavigation } from "@react-navigation/native";
+import colors from "../../constant/themes/colors";
 
 const MarketScreen = () => {
     const navigation = useNavigation();

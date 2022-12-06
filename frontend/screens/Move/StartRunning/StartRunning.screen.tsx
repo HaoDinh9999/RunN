@@ -17,7 +17,7 @@ import { CurrentLocation } from '../../../@core/model/location';
 import imagePath from '../../../constant/imagePath';
 import { Avatar } from 'native-base';
 import styles from './StartRunning.style';
-import { colors } from '../../../themes';
+import { colors } from '../../../constant/themes';
 import { useNavigation } from '@react-navigation/native';
 import ProgressCircle from 'react-native-progress-circle';
 import { useDispatch, useSelector } from 'react-redux';

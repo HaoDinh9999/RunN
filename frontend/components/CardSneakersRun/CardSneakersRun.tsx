@@ -3,7 +3,7 @@ import { View } from 'react-native';
 import { Box, Text, Image, Button, Progress, AspectRatio } from 'native-base';
 import { Platform } from 'react-native';
 import styles from './CardSneakersRun.style';
-import { colors } from '../../themes';
+import { colors } from '../../constant/themes';
 import { Icon } from 'native-base';
 import { ColorSpace } from 'react-native-reanimated';
 // import Ionicons from '@expo/vector-icons/Ionicons';

@@ -11,7 +11,7 @@ import {
 } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
 import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox, Image, View } from 'native-base';
-import colors from '../../themes/colors';
+import colors from '../../constant/themes/colors';
 import { useLoginMutation } from '../../services/modules/users';
 import { authActions } from './authSlice';
 import { useDispatch } from 'react-redux';
