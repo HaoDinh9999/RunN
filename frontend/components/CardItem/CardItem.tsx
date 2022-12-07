@@ -13,76 +13,114 @@ import { formatUnits, parseEther } from 'ethers/lib/utils';
 import { RunnMarketplaceABI } from '../../constant/RunnMarketplaceABI';
 import {RunnSneakerABI} from '../../constant/RunnSneakerABI';
 import { mapTokenDataToSneakerInDetail } from '../../utils/formatTokenData';
+import detectEthereumProvider from '@metamask/detect-provider';
+import Web3 from 'web3';
+import  { useWalletConnect } from '@walletconnect/react-native-dapp';
+
 // import WalletConnectProvider from '@walletconnect/react-native-dapp';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 
-import { providers } from "ethers";
-import { useWalletConnect } from '@walletconnect/react-native-dapp';
+// import { providers } from "ethers";
+// import { useWalletConnect } from '@walletconnect/react-native-dapp';
 
 const CardItem = () => {
     const navigation = useNavigation();
     const [sneakers, setSneakers] = useState([]);
-    useEffect (()=>{
-      fetchAllSneakers();
-    },[])
+    // const web3 = React.useMemo(
+    //   () => new Web3(new Web3.providers.HttpProvider(`http://${localhost}:${HARDHAT_PORT}`)),
+    //   [HARDHAT_PORT]
+    // );
+    const connector = useWalletConnect();
     const fetchAllSneakers = async () => {
       
       try {
-        // // const ethereum  = this.provider.ethereum;
+        // const ethereum  = this.provider.ethereum;
         // const provider = new WalletConnectProvider({
         //   infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
         // });
-        // await provider.enable();
-        // const ethers = new providers.Web3Provider(provider);
+      //   const ethereumProvider = new WalletConnectProvider({
+      //     rpc: {
+      //         56: 'https://bsc-dataseed1.binance.org:443',
+      //     },
+      //     chainId: 56,
+      //     connector: connector,
+      //     qrcode: false,
+      // });
+        // const ethereumProvider = new WalletConnectProvider({
+        //   rpc: {
+        //     11155111: "https://rpc.sepolia.dev",
+        //     3: "https://ropsten.mycustomnode.com",
+        //     100: "https://dai.poa.network",
+        //     // ...
+        //   },
+        // });
+     const ethereumProvider = new WalletConnectProvider({
+      rpc: {
+            11155111: "https://rpc.sepolia.dev",
+          },
+          chainId: 11155111,
+          connector: connector,
+          qrcode: false,
+      });
+        const provider = new ethers.providers.Web3Provider(ethereumProvider);
         
           
-        //   const signer = ethers.getSigner();
-        //   const marketplaceContract = new Contract(
-        //     '0xb8f25b2ed468d2144B2Dcf75D5db7400728AE4e2',
-        //     RunnMarketplaceABI,
-        //     signer
-        //   );
-        //   const nftContract = new Contract(
-        //     '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998',
-        //     RunnSneakerABI,
-        //     signer
-        //   );
-        //   const res =
-        //     await marketplaceContract.functions.sellInfoActiveByContract(
-        //       '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998'
-        //     );
-        //   const allSellInfos = res[0];
+          const signer = provider.getSigner();
+          console.log("Signer", signer)
+          const marketplaceContract = new Contract(
+            '0xb8f25b2ed468d2144B2Dcf75D5db7400728AE4e2',
+            RunnMarketplaceABI,
+            signer
+          );
+          const nftContract = new Contract(
+            '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998',
+            RunnSneakerABI,
+            signer
+          );
+          const res =
+            await marketplaceContract.functions.sellInfoActiveByContract(
+              '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998'
+            );
+          const allSellInfos = res[0];
   
-        //   const formattedSneakers = allSellInfos.map(async (sellInfo) => {
-        //     const { price, tokenId, saleId, seller } = sellInfo;
+          const formattedSneakers = allSellInfos.map(async (sellInfo) => {
+            const { price, tokenId, saleId, seller } = sellInfo;
   
-        //     const tokenData = await nftContract.tokenData(tokenId);
-        //     return {
-        //       ...mapTokenDataToSneakerInDetail(tokenData),
-        //       id: tokenId,
-        //       saleId,
-        //       seller,
-        //       price,
-        //     };
-        //   });
-        //   const resultSneakers = await Promise.all(formattedSneakers);
-        //   setSneakers(resultSneakers);
-        //   console.log("resultSneakers",resultSneakers)
+            const tokenData = await nftContract.tokenData(tokenId);
+            return {
+              ...mapTokenDataToSneakerInDetail(tokenData),
+              id: tokenId,
+              saleId,
+              seller,
+              price,
+            };
+          });
+          const resultSneakers = await Promise.all(formattedSneakers);
+          setSneakers(resultSneakers);
+          console.log("resultSneakers",resultSneakers)
 
-        const connector = useWalletConnect();
-        const provider = new WalletConnectProvider({
-        rpc: {
-            56: 'https://bsc-dataseed1.binance.org:443',
-        },
-        chainId: 56,
-        connector: connector,
-        qrcode: false,
-      });
-        await provider.enable();
-      const ethers_provider = new ethers.providers.Web3Provider(provider);
-      const signer = ethers_provider.getSigner();
-      console.log("Signer ", signer)
-
+      //   const connector = useWalletConnect();
+      //   const provider = new WalletConnectProvider({
+      //   // rpc: {
+      //   //     56: 'https://bsc-dataseed1.binance.org:443',
+      //   // },
+      //   // chainId: 56,
+      //   // connector: connector,
+      //   // qrcode: false,
+      // });
+      //   await provider.enable();
+      // const ethers_provider = new ethers.providers.Web3Provider(provider);
+      // const signer = ethers_provider.getSigner();
+      // console.log("Signer ", signer)
+      //   try {
+      //     await provider?.request({ method: 'eth_requestAccounts'})
+      //   } catch(e) {
+      //     console.error(e)
+      //   }
+      // } else {
+      //   console.error('Please install MetaMask')
+      // }
+    
 
       } 
       catch (err) {
@@ -123,7 +161,7 @@ const CardItem = () => {
       </View>
       <View style={styles.footerContainer}>
         <Text color={colors.white} bold mt={0}>1550 FIT</Text>
-        <Button style={styles.button}>
+        <Button style={styles.button} onPress={fetchAllSneakers}>
           <Text color={colors.white} bold fontSize="sm">SHOW</Text>
         </Button>
       </View>
