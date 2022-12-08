@@ -66,7 +66,7 @@ const CardItem = () => {
       </View>
       <View style={styles.footerContainer}>
         <Text color={colors.white} bold mt={0}>1550 FIT</Text>
-        <Button style={styles.button} onPress={fetchAllSneakers}>
+        <Button style={styles.button}>
           <Text color={colors.white} bold fontSize="sm">SHOW</Text>
         </Button>
       </View>
