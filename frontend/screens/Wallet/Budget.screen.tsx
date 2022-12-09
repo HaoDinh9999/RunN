@@ -6,13 +6,16 @@ import { colors } from "../../constant/themes";
 import { useNavigation } from "@react-navigation/native";
 import SpendingScreen from "./Spending/Spending.screen";
 import { useWalletConnect } from "@walletconnect/react-native-dapp";
-import Web3 from "web3";
+// import Web3 from "web3";
 import imagePath from "../../constant/imagePath";
-// import WalletConnectProvider from "@walletconnect/web3-provider";
-import { Contract, ethers } from "ethers";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { Contract, ethers, providers } from "ethers";
 import { RunnSneakerABI } from "../../constant/RunnSneakerABI";
 import { RunnMarketplaceABI } from "../../constant/RunnMarketplaceABI";
 import { mapTokenDataToSneakerInDetail } from "../../utils/formatTokenData";
+import detectEthereumProvider from '@metamask/detect-provider';
+import SignClient from "@walletconnect/sign-client";
+import "@walletconnect/react-native-compat";
 
 const BudgetScreen = () => {
     const navigation = useNavigation();
@@ -20,7 +23,9 @@ const BudgetScreen = () => {
     const [isShowModal, setIsShowModal] = useState(false);
     const [addressWallet, setAddressWallet] = useState("0x0e23qwreqwrqqwrwrqwrqwrqwrwqr12123");
     const [sneakers, setSneakers] = useState([]);
-    var web3 = new Web3();
+    const Web3 = require('web3');
+
+
     const connector = useWalletConnect();
     const handleActionShow = () => {
         setIsShowModal(true);
@@ -36,108 +41,88 @@ const BudgetScreen = () => {
         setTabActive(1);
         setIsShowModal(true);
     }
+    const signTransaction = React.useCallback(async () => {
+        try {
+          const signTransaction = await connector.signTransaction({
+            data: '0x',
+            from: connector.accounts[0],
+            gas: '0x9c40',
+            gasPrice: '0x02540be400',
+            nonce: '0x0114',
+            to: '0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359',
+            value: '0x00',
+          });
+          console.log("signTransaction", signTransaction)
+        } catch (e) {
+          console.error(e);
+        }
+      }, [connector]);
+      const killSession = React.useCallback(() => {
+        return connector.killSession();
+      }, [connector]);
     const fetchAllSneakers = async () => {
 
-        const provider = new Web3(web3.currentProvider);
-        console.log("Provider", provider);
-        
+        try {
+            const session = await connector.connect();
+
+            const provider = new WalletConnectProvider({
+                rpc: {
+                    11155111: "https://rpc.sepolia.dev",
+                },
+                chainId: 11155111,
+                connector: connector,
+                qrcode: true,
+            });
+            console.log("Result1: ", provider)
+
+            // await ethereumProvider.enable();
 
 
-        // try {
-        //     // const ethereum  = this.provider.ethereum;
-        //     // const provider = new WalletConnectProvider({
-        //     //   infuraId: "27e484dcd9e3efcfd25a83a78777cdf1",
-        //     // });
-        //     //   const ethereumProvider = new WalletConnectProvider({
-        //     //     rpc: {
-        //     //         56: 'https://bsc-dataseed1.binance.org:443',
-        //     //     },
-        //     //     chainId: 56,
-        //     //     connector: connector,
-        //     //     qrcode: false,
-        //     // });
-        //     // const ethereumProvider = new WalletConnectProvider({
-        //     //   rpc: {
-        //     //     11155111: "https://rpc.sepolia.dev",
-        //     //     3: "https://ropsten.mycustomnode.com",
-        //     //     100: "https://dai.poa.network",
-        //     //     // ...
-        //     //   },
-        //     // });
-        //     const ethereumProvider = new WalletConnectProvider({
-        //         rpc: {
-        //             11155111: "https://rpc.sepolia.dev",
-        //         },
-        //         chainId: 11155111,
-        //         connector: connector,
-        //         qrcode: false,
-        //     });
-        //     const provider = new ethers.providers.Web3Provider(ethereumProvider);
+            const etherProvider = new providers.Web3Provider(provider);
+            console.log("Provider1: ", etherProvider);
 
 
-        //     const signer = provider.getSigner();
-        //     // console.log("Signer", signer);
+            const signer = etherProvider.getSigner();
+            console.log("Signer1", signer);
          
 
-        //     const marketplaceContract = new Contract(
-        //         '0xb8f25b2ed468d2144B2Dcf75D5db7400728AE4e2',
-        //         RunnMarketplaceABI,
-        //         signer
-        //     );
-        //     const nftContract = new Contract(
-        //         '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998',
-        //         RunnSneakerABI,
-        //         signer
-        //     );
+            const marketplaceContract = new Contract(
+                '0xb8f25b2ed468d2144B2Dcf75D5db7400728AE4e2',
+                RunnMarketplaceABI,
+                signer
+            );
+            const nftContract = new Contract(
+                '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998',
+                RunnSneakerABI,
+                signer
+            );
+            
 
-        //     const res =await marketplaceContract.functions.sellInfoActiveByContract(
-        //             '0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998'
-        //         ).then(result => console.log("Result: ",result)).catch(err => console.log("Error: ",err));
-        //     // const allSellInfos = res[0];
-
-        //     // const formattedSneakers = allSellInfos.map(async (sellInfo) => {
-        //     //     const { price, tokenId, saleId, seller } = sellInfo;
-
-        //     //     const tokenData = await nftContract.tokenData(tokenId);
-        //     //     return {
-        //     //         ...mapTokenDataToSneakerInDetail(tokenData),
-        //     //         id: tokenId,
-        //     //         saleId,
-        //     //         seller,
-        //     //         price,
-        //     //     };
-        //     // });
-        //     // const resultSneakers = await Promise.all(formattedSneakers);
-        //     // setSneakers(resultSneakers);
-        //     // console.log("resultSneakers", resultSneakers)
-
-        //     //   const connector = useWalletConnect();
-        //     //   const provider = new WalletConnectProvider({
-        //     //   // rpc: {
-        //     //   //     56: 'https://bsc-dataseed1.binance.org:443',
-        //     //   // },
-        //     //   // chainId: 56,
-        //     //   // connector: connector,
-        //     //   // qrcode: false,
-        //     // });
-        //     //   await provider.enable();
-        //     // const ethers_provider = new ethers.providers.Web3Provider(provider);
-        //     // const signer = ethers_provider.getSigner();
-        //     // console.log("Signer ", signer)
-        //     //   try {
-        //     //     await provider?.request({ method: 'eth_requestAccounts'})
-        //     //   } catch(e) {
-        //     //     console.error(e)
-        //     //   }
-        //     // } else {
-        //     //   console.error('Please install MetaMask')
-        //     // }
+            // const res =await marketplaceContract.functions.sellInfoActiveByContract('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998');
+            // const allSellInfos = res[0];
+            const result =   marketplaceContract.functions.sellInfoActiveByContract('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998');
+            console.log("marketplaceContract: ", result)
+            console.log("nftContract", await nftContract.functions.balanceOf('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998'))
+            // const formattedSneakers = allSellInfos.map(async (sellInfo) => {
+            //     const { price, tokenId, saleId, seller } = sellInfo;
+      
+            //     const tokenData = await nftContract.tokenData(tokenId);
+            //     return {
+            //       ...mapTokenDataToSneakerInDetail(tokenData),
+            //       id: tokenId,
+            //       saleId,
+            //       seller,
+            //       price,
+            //     };
+            //   });
+            //   const resultSneakers = await Promise.all(formattedSneakers);
+            //   setSneakers(resultSneakers);
 
 
-        // }
-        // catch (err) {
-        //     console.log(err);
-        // }
+        }
+        catch (err) {
+            console.log("Err: ",err);
+        }
     };
     return (
         <View style={styles.container}>
