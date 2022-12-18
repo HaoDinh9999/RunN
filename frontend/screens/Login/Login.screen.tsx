@@ -10,42 +10,121 @@ import {
   withWalletConnect,
 } from '@walletconnect/react-native-dapp';
 import * as React from 'react';
-import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox, Image, View } from 'native-base';
+import { Box, Button, Input, NativeBaseProvider, useToast, Text, Checkbox, Image, View, Alert, VStack, HStack, IconButton, CloseIcon } from 'native-base';
 import colors from '../../constant/themes/colors';
 import { useLoginMutation } from '../../services/modules/users';
 import { authActions } from './authSlice';
 import { useDispatch } from 'react-redux';
 import LoadingComponent from '../../components/Loading/Loading';
+import { info } from 'console';
+const ToastDetails = [
+  {
+  title: "Login successfully",
+  variant: "solid",
+  isClosable: true,
+  status: "success",
+  },
+  {
+    title: "Login successfully",
+    variant: "solid",
+    isClosable: true,
+    status: "error",
+  }
+];
 
 function Login(props) {
   const [isVertify, setIsVertify] = React.useState(true);
   const [username, setUsername] = React.useState<string>();
   const [password, setPassword] = React.useState<string>();
   const [show, setShow] = React.useState<boolean>(false);
-  const [login, { isLoading, data, error }] = useLoginMutation();
+  const [login, { isLoading, data, error  }] = useLoginMutation();
   const dispatch = useDispatch();
+  const toast = useToast();
   const handleNavigate = (route: string) => {
     props?.navigation.navigate(route);
   }
   const handleLogin = () => {
     if (username && password) {
-      console.log("Dang login")
+      console.log("Dang login", username, password)
       login({ email: username, password: password });
     }
   }
   const handleShowPassword = () => {
     setShow(!show);
   }
+  const resetField = () =>{
+    setUsername("");
+    setPassword("");
+  }
   React.useEffect(() => {
     if (data) {
+      console.log("data", data.status)
       if (data?.status === "success") {
+        toast.show({
+          render: ({
+            id
+          }) => {
+            return <ToastAlert id={0}  {...ToastDetails[0]} />
+          }
+        })
         dispatch(authActions.loginSuccess(data.data.user));
-
+        resetField();
         handleNavigate('home');
       }
     }
   }, [data])
+  React.useEffect(() => {
+    if(error as any){
+      console.log(error)
+      const toastError =   {
+        title: "Login failed " + error?.data?.error,
+        variant: "solid",
+        isClosable: true,
+        status: "error",
+      }
+      toast.show({
+        render: ({
+          id
+        }) => {
+          return <ToastAlert id={1}  {...toastError} />
+        }
+      })
+      resetField();
 
+    }
+  }, [error])
+  const ToastAlert = ({
+    id,
+    status,
+    variant,
+    title,
+    isClosable,
+    ...rest
+  }) => <Alert maxWidth="100%" alignSelf="center" flexDirection="row" status={status ? status : "info"} variant={variant} {...rest}>
+      <VStack space={1} flexShrink={1} w="100%">
+        <HStack flexShrink={1} alignItems="center" justifyContent="space-between">
+          <HStack space={2} flexShrink={1} alignItems="center">
+            <Alert.Icon />
+            <Text fontSize="md" fontWeight="medium" flexShrink={1} color={variant === "solid" ? "lightText" : variant !== "outline" ? "darkText" : null}>
+              {title}
+            </Text>
+          </HStack>
+          {isClosable ? <IconButton variant="unstyled" icon={<CloseIcon size="3" />} _icon={{
+            color: variant === "solid" ? "lightText" : "darkText"
+          }} onPress={() => toast.close(id)} /> : null}
+        </HStack>
+
+      </VStack>
+    </Alert>;
+  // if(data?.status === "success"){
+  //   toast.show({
+  //     render: ({
+  //       id
+  //     }) => {
+  //       return <ToastAlert id={1}  {...ToastDetails[0]} />
+  //     }
+  //   })
+  // }
   return (
     <NativeBaseProvider>
       <View style={styles.container}>

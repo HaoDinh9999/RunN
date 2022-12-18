@@ -1,7 +1,7 @@
 const config = {
   // API_URL: 'https://63808c838efcfcedac08017b.mockapi.io/api/v1/',
-  // API_URL: 'http://localhost:3000/',
-    API_URL: 'https://amazyrun.herokuapp.com/',
+  // API_URL: 'https://localhost:3000/',
+    API_URL: 'https://runn-server-0b3j.onrender.com/',
 
 
 };

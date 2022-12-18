@@ -11,6 +11,7 @@ import BudgetScreen from '../screens/Wallet/Budget.screen';
 import MoveScreen from '../screens/Move/Move.screen';
 import StartRunningScreen from '../screens/Move/StartRunning/StartRunning.screen'
 import RegisterScreen from '../screens/Register/Register.screen';
+import DetailProfileScreen from '../screens/Profile/DetailProfile/DetailProfile.screen';
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
@@ -30,6 +31,8 @@ const MainNavigation = () => {
         <Stack.Screen name="budget" component={BudgetScreen}/>
         <Stack.Screen name="move" component={MoveScreen}/>
         <Stack.Screen name="startRunning" component={StartRunningScreen}/>
+        <Stack.Screen name="detailProfile" component={DetailProfileScreen}/>
+
       </Stack.Navigator>
 
     </NavigationContainer>

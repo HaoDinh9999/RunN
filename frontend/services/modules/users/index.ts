@@ -7,7 +7,14 @@ export const userApi = api.injectEndpoints({
     fetchOne: fetchOne(builder),
     login: builder.mutation({
       query: (credentials) => ({
-        url:'/users/login',
+        url:'users/login',
+        method:'POST',
+        body: credentials
+      })
+    }),
+    signup:builder.mutation({
+      query: (credentials) => ({
+        url:'users/signup',
         method:'POST',
         body: credentials
       })
@@ -18,4 +25,4 @@ export const userApi = api.injectEndpoints({
 });
 // Export ra ngoài thành các hooks để sử dụng theo cú pháp use + endpoints (login) + endpoints type (mutation)
 
-export const { useLazyFetchOneQuery, useLoginMutation } = userApi;
+export const { useLazyFetchOneQuery, useLoginMutation,useSignupMutation } = userApi;

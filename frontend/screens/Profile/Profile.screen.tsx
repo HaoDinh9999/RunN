@@ -1,19 +1,29 @@
 import React from "react";
-import { TouchableHighlight, View } from "react-native";
-import { Heading, Text, Image, Avatar, Button } from "native-base";
+import { TouchableHighlight } from "react-native";
+import { Heading, Text, Image, Avatar, Button, View } from "native-base";
 import styles from './Profile.style';
 import { useNavigation } from "@react-navigation/native";
 import { colors } from "../../constant/themes";
+import { useDispatch, useSelector } from "react-redux";
+import { User } from "../../@core/model/user";
+import imagePath from '../../constant/imagePath';
+import { authActions } from "../Login/authSlice";
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
+    const dispatch = useDispatch();
+
+    var currentUserReducer: User = useSelector((state: any) => state.auth.currentUser);
+    const handleLogout = () => {
+        dispatch(authActions.logout());
+
+        navigation.navigate('login');
+    }
     return (
         <View style={styles.container}>
             <View style={styles.header}>
                 <TouchableHighlight onPress={() => navigation.goBack()}>
-                    <Image size={5} borderRadius={100} source={{
-                        uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="Alternate Text" />
+                    <Image size={7} borderRadius={100} source={imagePath.backWhiteCircle} alt="Alternate Text" />
                 </TouchableHighlight>
                 <Heading color={colors.white} style={styles.heading}>Accout</Heading>
             </View>
@@ -24,12 +34,15 @@ const ProfileScreen = () => {
                     }} zIndex={1} size="lg" />
                     <View style={styles.infoItem}>
                         <Text color={colors.white} bold fontSize="lg" >Runner</Text>
-                        <Text color={colors.text.thirdText} bold>vhao1509@gmail.com</Text>
+                        <Text color={colors.text.thirdText} bold>{currentUserReducer.email}</Text>
                     </View>
                 </View>
-                <Image size={7} borderRadius={100} source={{
-                    uri: "https://wallpaperaccess.com/full/317501.jpg"
-                }} alt="Alternate Text" />
+
+                <TouchableHighlight onPress={() => navigation.navigate('detailProfile')}>
+                    <Image size={7} borderRadius={100} source={{
+                        uri: "https://wallpaperaccess.com/full/317501.jpg"
+                    }} alt="Alternate Text" />
+                </TouchableHighlight>
             </View>
             <View style={styles.bodyContainer}>
                 <View style={styles.buttonInfor}>
@@ -61,8 +74,8 @@ const ProfileScreen = () => {
                     </View>
                 </View>
             </View>
-            <View style={{justifyContent:'flex-end', flex:1, paddingHorizontal:80, paddingBottom:10}}>
-                <Button style={styles.button} onPress={()=>navigation.navigate('login')}>LOG OUT</Button>
+            <View style={{ justifyContent: 'flex-end', flex: 1, paddingHorizontal: 80, paddingBottom: 10 }}>
+                <Button style={styles.button} onPress={handleLogout}>LOG OUT</Button>
             </View>
         </View>
     )
