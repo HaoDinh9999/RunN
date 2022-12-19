@@ -1,4 +1,4 @@
-import { combineReducers, configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, ThunkAction, Action, getDefaultMiddleware } from '@reduxjs/toolkit';
 import authReducer from '../screens/Login/authSlice';
 import moveReducer from '../screens/Move/moveSlice';
 
@@ -14,6 +14,9 @@ const reducers = combineReducers({
 
 export const store = configureStore({
   reducer: reducers,
+  middleware:getDefaultMiddleware({
+    serializableCheck: false
+  })
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

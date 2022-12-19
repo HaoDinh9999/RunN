@@ -23,14 +23,13 @@ import WalletConnectProvider from '@walletconnect/web3-provider';
 // import { providers } from "ethers";
 // import { useWalletConnect } from '@walletconnect/react-native-dapp';
 
-const CardItem = () => {
+const CardItem = ({sneaker}) => {
     const navigation = useNavigation();
-    const [sneakers, setSneakers] = useState([]);
+    // const [sneakers, setSneakers] = useState([]);
     // const web3 = React.useMemo(
     //   () => new Web3(new Web3.providers.HttpProvider(`http://${localhost}:${HARDHAT_PORT}`)),
     //   [HARDHAT_PORT]
     // );
-    const connector = useWalletConnect();
   
   return (
     <Box
@@ -55,7 +54,7 @@ const CardItem = () => {
         <View style={{marginTop:-10,  alignItems:'center'}}>
 
           <Text color={colors.text.secondaryText} bold mt={0}>#682645412</Text>
-          <Text color={colors.lightGray} bold mt={0}>Mint 4 | Level 1</Text>
+          <Text color={colors.lightGray} bold mt={0}>Mint {sneaker.Mint} | Level 1</Text>
           <View style={styles.progressContainer}>
             <Box w="83%">
               <Progress value={75} mx="2" bg={colors.background.progress} _filledTrack={{ bg: colors.progress }} size='xs' />

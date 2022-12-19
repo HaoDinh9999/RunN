@@ -17,6 +17,8 @@ import detectEthereumProvider from '@metamask/detect-provider';
 import SignClient from '@walletconnect/sign-client';
 import '@walletconnect/react-native-compat';
 import { RunnMoveTokenABI } from '../../constant/RunnMoveTokenABI';
+import { useDispatch, useSelector } from 'react-redux';
+import { authActions } from '../Login/authSlice';
 
 const BudgetScreen = () => {
   const navigation = useNavigation();
@@ -24,7 +26,8 @@ const BudgetScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [addressWallet, setAddressWallet] = useState('0x0e23qwreqwrqqwrwrqwrqwrqwrwqr12123');
   const [sneakers, setSneakers] = useState([]);
-  const Web3 = require('web3');
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state:any) => state.auth.currentUser)
 
   const connector = useWalletConnect();
   const handleActionShow = () => {
@@ -69,8 +72,11 @@ const BudgetScreen = () => {
         connector: connector,
       });
       await provider.enable();
+
       const web3Provider = new providers.Web3Provider(provider);
       const signer = web3Provider.getSigner();
+      dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
+
       const ercContract = new Contract(
         '0x07B5C829Db4B925dDDA85A14079553443b1857b9',
         RunnMoveTokenABI,
@@ -97,14 +103,16 @@ const BudgetScreen = () => {
         RunnSneakerABI,
         signer
       );
-      //   console.log(nftContract)
+        // console.log("nftContract",nftContract)
       const res = await nftContract.functions.tokenInfosByOwner(connector.accounts[0]);
       //   const res = await nftContract.functions.currentId();
       const allTokensData = res[0];
-      //   const formattedSneakers = allTokensData?.map((tokenData) => {
-      //     return mapTokenDataToSneaker(tokenData);
-      //   });
-      console.log(allTokensData);
+        // const formattedSneakers = allTokensData?.map((tokenData) => {
+        //   return mapTokenDataToSneaker(tokenData);
+        // });
+      console.log("allTokensData",allTokensData);
+    //   console.log("formattedSneakers",formattedSneakers);
+
     } catch (err) {
       console.log(err);
     }
@@ -145,8 +153,8 @@ const BudgetScreen = () => {
         signer
       );
 
-      // const res =await marketplaceContract.functions.sellInfoActiveByContract('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998');
-      // const allSellInfos = res[0];
+    //   const res =await marketplaceContract.functions.sellInfoActiveByContract('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998');
+    //   const allSellInfos = res[0];
       // const result =  await  marketplaceContract.functions.sellInfoActiveByContract('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998');
       // console.log("marketplaceContract: ", result)
       // console.log("nftContract", await nftContract.functions.balanceOf('0x4a30Cf2843f8075e6aa92e867c38E8308bA7b998'))
