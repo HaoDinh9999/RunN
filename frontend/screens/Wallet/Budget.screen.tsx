@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { TouchableHighlight } from 'react-native';
 import { Text, Image, Button, Divider, Modal, View } from 'native-base';
 import styles from './Budget.style';
@@ -26,6 +26,7 @@ const BudgetScreen = () => {
   const [isShowModal, setIsShowModal] = useState(false);
   const [addressWallet, setAddressWallet] = useState('0x0e23qwreqwrqqwrwrqwrqwrqwrwqr12123');
   const [sneakers, setSneakers] = useState([]);
+  const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector((state:any) => state.auth.currentUser)
 
@@ -33,7 +34,7 @@ const BudgetScreen = () => {
   const handleActionShow = () => {
     setIsShowModal(true);
   };
-  const handleBtnConnect = () => {
+  const handleBtnConnect = async() => {
     connector.connect();
   };
   const handleKillWallet = async () => {
@@ -45,25 +46,39 @@ const BudgetScreen = () => {
     setTabActive(1);
     setIsShowModal(true);
   };
-  const signTransaction = React.useCallback(async () => {
-    try {
-      const signTransaction = await connector.signTransaction({
-        data: '0x',
-        from: connector.accounts[0],
-        gas: '0x9c40',
-        gasPrice: '0x02540be400',
-        nonce: '0x0114',
-        to: '0x89D24A7b4cCB1b6fAA2625Fe562bDd9A23260359',
-        value: '0x00',
-      });
-      console.log('signTransaction', signTransaction);
-    } catch (e) {
-      console.error(e);
-    }
-  }, [connector]);
+
   const killSession = React.useCallback(() => {
     return connector.killSession();
   }, [connector]);
+
+  const loadConnector = async () => {
+      try{
+        const provider = new WalletConnectProvider({
+          infuraId: '6507b4b41a0c450ba0fe748e96881466',
+          connector: connector,
+        });
+        await provider.enable();
+        console.log("A du chua vo day")
+        const web3Provider = new providers.Web3Provider(provider);
+        const signer = web3Provider.getSigner();
+        dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
+      }
+      catch(err){
+        console.log("Err: ",err)
+      }
+    
+
+
+    
+  }
+  useEffect(()=>{
+    // loadConnector();
+    console.log("M co chiu thay doi ko v", connector.connected);
+    if(connector.connected){
+      loadConnector();
+    }
+  }, [connector])
+
 
   const fetchRMTBalance = async () => {
     try {
@@ -178,6 +193,7 @@ const BudgetScreen = () => {
   };
   return (
     <View style={styles.container}>
+      {/* {connector.connected ? setConnected(true):setConnected(false)} */}
       <View style={styles.header}>
         <TouchableHighlight onPress={() => navigation.goBack()}>
           <Image size={7} borderRadius={100} source={imagePath.back} alt="Alternate Text" />
@@ -221,8 +237,8 @@ const BudgetScreen = () => {
           0
         </Text>
       </View>
-      <Button onPress={fetchSneakers}>Click here</Button>
-      <Button onPress={fetchRMTBalance}>Fetch RMT</Button>
+      {/* <Button onPress={fetchSneakers}>Click here</Button>
+      <Button onPress={fetchRMTBalance}>Fetch RMT</Button> */}
       {/* <Divider my="2" _light={{
                 bg: colors.background.progress
             }} _dark={{

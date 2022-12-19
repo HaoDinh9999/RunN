@@ -12,6 +12,7 @@ import { providers, Contract } from "ethers";
 import { RunnSneakerABI } from "../../constant/RunnSneakerABI";
 import { authActions } from "../Login/authSlice";
 import { PropSneaker } from "../../@core/model/sneaker";
+import { mapTokenDataToSneaker, mapTokenDataToSneakerInDetail } from "../../utils/formatTokenData";
 
 const MarketScreen = () => {
     const navigation = useNavigation();
@@ -23,7 +24,6 @@ const MarketScreen = () => {
 
     useEffect(() => {
         if(addressReducer){
-            console.log("addressReducer",addressReducer)
             fetchSneakers();
         }
         else{
@@ -38,29 +38,34 @@ const MarketScreen = () => {
             RunnSneakerABI,
             signerReducer          
         );
-            // console.log("nftContract",nftContract)
           const res = await nftContract.functions.tokenInfosByOwner(addressReducer);
-          //   const res = await nftContract.functions.currentId();
           const allTokensData = res[0];
-            // const formattedSneakers = allTokensData?.map((tokenData) => {
-            //   return mapTokenDataToSneaker(tokenData);
-            // });
-          console.log("allTokensDataMarket",allTokensData);
-          if(allTokensData.length > 0)
-            dispatch(authActions.updateCurrentUser({...currentUser,sneakers:allTokensData}))
+           const formattedSneakers = allTokensData?.map(async(sneakerInfo) => {
+            const { price, tokenId, saleId, seller } = sneakerInfo;
+            const  tokenData  = await nftContract.tokenData(tokenId);
+            return {
+                ...mapTokenDataToSneakerInDetail(tokenData),
+                id: tokenId,
+                saleId,
+                seller,
+                price,
+              };
 
-        //   console.log("formattedSneakers",formattedSneakers);
+            });
+            const resultSneakers = await Promise.all(formattedSneakers);          
+          if(resultSneakers.length > 0)
+            dispatch(authActions.updateCurrentUser({...currentUser,sneakers:resultSneakers}))
     
         } catch (err) {
-          console.log(err);
+          console.log("Err: ",err);
         }
       };
 
     const _renderItem = ({ item }) => {
-        // console.log("Item", item[1]["Joy"])
+        console.log(item)
         return (
             <View style={styles.spacing}>
-                <CardItem sneaker = {item[1] as PropSneaker}/>
+                <CardItem sneaker = {item as PropSneaker}/>
 
             </View>
         );

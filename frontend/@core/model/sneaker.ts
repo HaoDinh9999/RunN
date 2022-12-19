@@ -1,11 +1,14 @@
 export  interface PropSneaker {
-    Rarity: string;
-    Type:string;
-    Performance:number;
-    Joy: number;
+    Condition: number;
     Durability: number;
-    Condition:number;
-    Mint:number;
-    Skin:number;
-    Parents?:any[];
+    Joy: number;
+    Level:{hex: string, type:string};
+    Mint: number;
+    Performance: number;
+    Rarity: string;
+    Type: string;
+    id:{hex:string, type:string},
+    price?: number;
+    saleId?: string;
+    seller?: string;
 }

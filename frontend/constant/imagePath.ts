@@ -18,5 +18,12 @@ export default {
     sneakers: require("../../assets/image/sneakers_100px.png"),
     back: require("../../assets/image/back_24px.png"),
     runningWhite: require("../../assets/image/runningWhite_52px.png"),
-    sneakersWhite: require("../../assets/image/sneakersWhite_100px.png")
+    sneakersWhite: require("../../assets/image/sneakersWhite_100px.png"),
+    next:  require("../../assets/image/next_page_48px.png"),
+    protect:  require("../../assets/image/protect_52px.png"),
+    perform: require("../../assets/image/perform_100px.png"),
+    joy: require("../../assets/image/joy_100px.png"),
+    durability: require("../../assets/image/durability_48px.png"),
+
+
 }
