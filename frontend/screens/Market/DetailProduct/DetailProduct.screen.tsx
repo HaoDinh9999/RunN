@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View } from 'react-native';
 import styles from './DetailProduct.style';
 import { Text, Box, AspectRatio, Image, Progress, Button } from 'native-base';
@@ -6,9 +6,13 @@ import Header from '../../../navigation/header';
 import { colors } from '../../../constant/themes';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useNavigation } from '@react-navigation/native';
+import { PropSneaker } from '../../../@core/model/sneaker';
+import imagePath from '../../../constant/imagePath';
 
-const DetailProductScreen = () => {
+const DetailProductScreen = (props) => {
   const navigation = useNavigation();
+  const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params.sneaker);
+  console.log('sneaker', sneaker);
   return (
     <>
       <View style={styles.container}>
@@ -48,7 +52,7 @@ const DetailProductScreen = () => {
 
               <View style={styles.shoesBackground}>
                 <Text color="#C7D5F7" bold style={{ fontSize: 14, textAlign: 'center' }}>
-                  {'#923478729'}
+                  #{`${sneaker.id}`}
                 </Text>
                 <View style={styles.barShoes}>
                   <Text
@@ -61,15 +65,16 @@ const DetailProductScreen = () => {
                       borderBottomLeftRadius: 20,
                     }}
                   >
-                    LV 5
+                    LV {`${sneaker.Level}`}
                   </Text>
                   <Text
                     color="#C7D5F7"
                     bold
                     style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
                   >
-                    {'>> Runner'}
+                    {'>>'} {sneaker.Type}
                   </Text>
+
                   <Text
                     color="#2C053B"
                     style={{
@@ -77,9 +82,14 @@ const DetailProductScreen = () => {
                       textAlign: 'center',
                       backgroundColor: '#CFDDFF',
                       borderTopRightRadius: 20,
+                      alignItems:'center'
                     }}
+                    bold
                   >
-                    100 / 100
+                    <View style={{alignItems:'center'}}>
+                    <Image size={4} source={imagePath.protect} alt="Condition" />
+                    </View>
+                    {' '}{sneaker.Condition} / 100
                   </Text>
                 </View>
               </View>
@@ -88,7 +98,8 @@ const DetailProductScreen = () => {
         </View>
         <View style={styles.lifeTime}>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+          >
             <Text bold color={colors.white}>
               Lifetime
             </Text>
@@ -101,71 +112,124 @@ const DetailProductScreen = () => {
           </View>
           <Box w="100%" marginTop={1}>
             <Progress
-              value={45} bg={colors.background.progress} _filledTrack={{ bg: colors.progress, }}
+              value={45}
+              bg={colors.background.progress}
+              _filledTrack={{ bg: colors.progress }}
             />
           </Box>
         </View>
         <View style={styles.mint}>
           <View
-            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+            style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
+          >
             <Text bold color={colors.white}>
-              Mint 2/7
+              Mint {`${sneaker.Mint}`}
             </Text>
           </View>
           <Box w="100%" marginTop={1}>
-            <Progress
-              value={15} bg={colors.background.progress} _filledTrack={{ bg: "#CFDDFF", }}
-            />
+            <Progress value={15} bg={colors.background.progress} _filledTrack={{ bg: '#CFDDFF' }} />
           </Box>
         </View>
-        <Text fontSize="lg" bold color={colors.white} style={styles.mint}>Attribute</Text>
+        <Text fontSize="lg" bold color={colors.white} style={styles.mint}>
+          Attribute
+        </Text>
         <View style={styles.containAttribute}>
           <View style={styles.attributeItem}>
-            <Image size={5} borderRadius={100} source={{
-              uri: "https://wallpaperaccess.com/full/317501.jpg"
-            }} alt="Alternate Text" marginTop={5} />
+            <Image
+              size={6}
+              borderRadius={100}
+              backgroundColor="#f99"
+              source={imagePath.perform}
+              alt="perform"
+              marginTop={5}
+              borderWidth={3}
+              borderColor="#f99"
+              resizeMode="contain"
+            />
+
             <View style={{ width: '85%' }}>
-              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Performance</Text>
+              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>
+                Performance
+              </Text>
               <Box w="100%" marginTop={1}>
                 <Progress
-                  size="sm" value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.progress2, }}
+                  size="sm"
+                  value={sneaker.Performance * 10}
+                  bg={colors.background.progress}
+                  _filledTrack={{ bg: '#f99' }}
                 />
               </Box>
             </View>
-            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>5.0</Text>
+            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
+              {sneaker.Performance}
+            </Text>
           </View>
           <View style={styles.attributeItem}>
-            <Image size={5} borderRadius={100} source={{
-              uri: "https://wallpaperaccess.com/full/317501.jpg"
-            }} alt="Alternate Text" marginTop={5} />
+            <Image
+              size={6}
+              borderRadius={100}
+              backgroundColor="#36706D"
+              source={imagePath.joy}
+              alt="Joy"
+              marginTop={5}
+              borderWidth={3}
+              borderColor="#36706D"
+              resizeMode="contain"
+            />
+
             <View style={{ width: '85%' }}>
-              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Joy</Text>
+              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>
+                Joy
+              </Text>
               <Box w="100%" marginTop={1}>
                 <Progress
-                  size="sm" value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.progress2, }}
+                  size="sm"
+                  value={sneaker.Joy *10}
+                  bg={colors.background.progress}
+                  _filledTrack={{ bg: '#36706D' }}
                 />
               </Box>
             </View>
-            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>5.0</Text>
+            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
+              {sneaker.Joy}
+            </Text>
           </View>
           <View style={styles.attributeItem}>
-            <Image size={5} borderRadius={100} source={{
-              uri: "https://wallpaperaccess.com/full/317501.jpg"
-            }} alt="Alternate Text" marginTop={5} />
+            <Image
+              size={6}
+              borderRadius={100}
+              backgroundColor="#123783"
+              source={imagePath.durability}
+              alt="Joy"
+              marginTop={5}
+              borderWidth={3}
+              borderColor="#123783"
+              resizeMode="contain"
+            />
+
             <View style={{ width: '85%' }}>
-              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>Durability</Text>
+              <Text fontSize="sm" bold color={colors.white} style={styles.mint}>
+                Durability
+              </Text>
               <Box w="100%" marginTop={1}>
                 <Progress
-                  size="sm" value={15} bg={colors.background.progress} _filledTrack={{ bg: colors.progress2, }}
+                  size="sm"
+                  value={sneaker.Durability *10}
+                  bg={colors.background.progress}
+                  _filledTrack={{ bg: '#123783' }}
                 />
               </Box>
             </View>
-            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>5.0</Text>
+            <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
+              {sneaker.Durability}
+            </Text>
           </View>
         </View>
       </View>
       <View style={styles.bottom}>
-        <Text fontSize={"xl"} bold color={colors.white} marginLeft={2}>334 FIT</Text>
+        <Text fontSize={'xl'} bold color={colors.white} marginLeft={2}>
+          334 FIT
+        </Text>
         {/* <Button style={styles.button}>
           <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>BUY NOW</Text>
         </Button> */}

@@ -1,5 +1,6 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
 import {EnergyProps} from "../../@core/model/move"
+import { PropSneaker } from "../../@core/model/sneaker";
 
 
 //Create the thunk
@@ -42,9 +43,15 @@ const moveSlice = createSlice({
             // state.logging = true;
         },
     
-        updateEnergy(state, action:PayloadAction<EnergyProps>){
-            state.energy = action.payload;
-            console.log("updateEnergy",state.energy)
+        updateCurrentEnergy(state, action:PayloadAction<number>){
+            state.energy.currentEnergy = action.payload;
+            console.log("updateCurrentEnergy",state.energy.currentEnergy)
+            checkFillEnergy(state);
+        },
+
+        updateMaxEnergy(state, action:PayloadAction<PropSneaker>){
+            const sneakers = action.payload;
+            console.log("updateMaxEnergy",state.energy.maxEnergy)
             checkFillEnergy(state);
         },
 

@@ -28,7 +28,9 @@ const BudgetScreen = () => {
   const [sneakers, setSneakers] = useState([]);
   const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
-  const currentUser = useSelector((state:any) => state.auth.currentUser)
+  const currentUser = useSelector((state:any) => state.auth.currentUser);
+  const sneakersUser = useSelector((state: any) => state.auth.currentUser.sneakers);
+
 
   const connector = useWalletConnect();
   const handleActionShow = () => {
@@ -51,33 +53,33 @@ const BudgetScreen = () => {
     return connector.killSession();
   }, [connector]);
 
-  const loadConnector = async () => {
-      try{
-        const provider = new WalletConnectProvider({
-          infuraId: '6507b4b41a0c450ba0fe748e96881466',
-          connector: connector,
-        });
-        await provider.enable();
-        console.log("A du chua vo day")
-        const web3Provider = new providers.Web3Provider(provider);
-        const signer = web3Provider.getSigner();
-        dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
-      }
-      catch(err){
-        console.log("Err: ",err)
-      }
+  // const loadConnector = async () => {
+  //     try{
+  //       const provider = new WalletConnectProvider({
+  //         infuraId: '6507b4b41a0c450ba0fe748e96881466',
+  //         connector: connector,
+  //       });
+  //       await provider.enable();
+  //       console.log("A du chua vo day")
+  //       const web3Provider = new providers.Web3Provider(provider);
+  //       const signer = web3Provider.getSigner();
+  //       // dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
+  //     }
+  //     catch(err){
+  //       console.log("Err: ",err)
+  //     }
     
 
 
     
-  }
-  useEffect(()=>{
-    // loadConnector();
-    console.log("M co chiu thay doi ko v", connector.connected);
-    if(connector.connected){
-      loadConnector();
-    }
-  }, [connector])
+  // }
+  // useEffect(()=>{
+  //   // loadConnector();
+  //   console.log("M co chiu thay doi ko v", connector.connected);
+  //   if(connector.connected){
+  //     loadConnector();
+  //   }
+  // }, [connector])
 
 
   const fetchRMTBalance = async () => {
@@ -234,7 +236,7 @@ const BudgetScreen = () => {
           </Text>
         </View>
         <Text color={colors.white} bold fontSize="lg">
-          0
+          {sneakersUser.length}
         </Text>
       </View>
       {/* <Button onPress={fetchSneakers}>Click here</Button>

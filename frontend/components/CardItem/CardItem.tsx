@@ -56,7 +56,7 @@ const CardItem = (props) => {
       <View
         style={styles.productContainer}
         onTouchStart={() => {
-          navigation.navigate('detailProduct');
+          navigation.navigate('detailProduct', { sneaker });
         }}
       >
         <Image
@@ -72,7 +72,7 @@ const CardItem = (props) => {
             #{`${sneaker.id}`}
           </Text>
           <Text color={colors.lightGray} bold mt={0}>
-            Mint {`${sneaker.Mint}`} | Level {`${sneaker.Level}`}
+            Mint {`${sneaker.Mint}`} | {`${sneaker.Rarity}`}
           </Text>
           <View style={styles.progressContainer}>
             <Box w="83%">
