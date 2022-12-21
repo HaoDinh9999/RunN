@@ -8,6 +8,18 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12
   },
+  wrapper: {},
+  slide1: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  text: {
+    color: '#fff',
+    fontSize: 30,
+    fontWeight: 'bold'
+  },
   shoesContainer:{
     borderWidth:3,
     borderRadius:12,

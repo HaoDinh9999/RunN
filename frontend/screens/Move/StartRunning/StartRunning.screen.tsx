@@ -23,6 +23,7 @@ import ProgressCircle from 'react-native-progress-circle';
 import { useDispatch, useSelector } from 'react-redux';
 import { EnergyProps } from '../../../@core/model/move';
 import { moveActions, selectEnergy } from '../moveSlice';
+import { PropSneaker } from '../../../@core/model/sneaker';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -48,19 +49,20 @@ const StartRunningScreen = (props) => {
   const [showMap, setShowMap] = useState(false);
   const [timeReward, setTimeReward] = useState<number>(120);// seconds
   const [coinReward, setCoinReward] = useState<number>(0);
+  const [sneaker,setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
 
   const [state, setState] = useState({
     curLoc: {
-      latitude: 30.7046,
-      longitude: 77.1025,
+      latitude: 10.78853,
+      longitude: 106.77058,
     },
     destinationCords: {},
     isLoading: false,
     coordinate: new AnimatedRegion({
-      latitude: 30.7046,
-      longitude: 77.1025,
+      latitude: 10.78853,
+      longitude: 106.77058,
       latitudeDelta: LATITUDE_DELTA,
       longitudeDelta: LONGITUDE_DELTA,
     }),
@@ -72,11 +74,17 @@ const StartRunningScreen = (props) => {
   const { curLoc, time, distance, destinationCords, isLoading, coordinate, heading } = state;
   const updateState = (data) => setState((state) => ({ ...state, ...data }));
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      getLiveLocation();
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
   const getLiveLocation = async () => {
     const locPermissionDenied = await locationPermission();
     if (locPermissionDenied) {
       const result: CurrentLocation = await getCurrentLocation();
-      console.log('get live location after 3 second', heading);
+      console.log('get live location after 4 second', result);
       animate(result?.latitude, result?.longitude);
       updateState({
         heading: heading,
@@ -91,12 +99,6 @@ const StartRunningScreen = (props) => {
     }
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      getLiveLocation();
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
   var timer = 0;
 
   useEffect(() => {
@@ -114,7 +116,15 @@ const StartRunningScreen = (props) => {
       var countUp = setInterval(function () {
         ++timer;
         if (timer % timeReward === 0 && energyReducer.currentEnergy > 0) {
-          dispatch(moveActions.updateEnergy({ ...energyReducer, currentEnergy: energyReducer.currentEnergy - 1 }))
+          dispatch(moveActions.updateCurrentEnergy( energyReducer.currentEnergy - 1 ));
+          //AMT = En * P ^ kP1 * kP2 * kP3 * kD
+          //En=1
+          //P= tong 3 thong so cua giay
+          //kp1=performance
+          //kp2= Ranger–1 Hiker-1.1 Sprinter–1.15 Coacher–1.05
+          //kp3= van toc trungbinh/ van toc that
+          //kD = he so durability
+          
           dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
         }
       }, 1000);
@@ -122,6 +132,8 @@ const StartRunningScreen = (props) => {
     }
 
   }, [timeout, energyReducer,coinRewardReducer]);
+
+
   useEffect(() => {
     var tiktak: number = 0;
     var timeUp = setInterval(function () {
@@ -132,19 +144,6 @@ const StartRunningScreen = (props) => {
     return () => clearInterval(timeUp);
 
   }, []);
-  useEffect(() => {
-
-  }, [energyReducer]);
-
-
-  const fetchValue = (data) => {
-    updateState({
-      destinationCords: {
-        latitude: data.destinationCords.latitude,
-        longitude: data.destinationCords.longitude,
-      },
-    });
-  };
 
   const animate = (latitude, longitude) => {
     const newCoordinate = { latitude, longitude };
@@ -168,7 +167,6 @@ const StartRunningScreen = (props) => {
 
   // This function will show your current location
   const showLoc = (pos) => {
-    console.log('vo chua24232222222', start);
 
     setSpeed(pos?.coords?.speed.toFixed(2));
 
@@ -222,33 +220,13 @@ const StartRunningScreen = (props) => {
   };
   const onPressStart = () => {
     setStart((start) => (start = true));
-    // startTimer(minutes * 60 + seconds);
   };
-  // function startTimer(duration) {
-  //   (timer = duration), minutes, seconds;
-  //   var countDown = setInterval(function () {
-  //     setMinutes(Math.floor(Number(timer / 60)));
-  //     setSeconds(Number(timer % 60));
-  //     if (--timer < 0) {
-  //       clearInterval(countDown);
-  //       setTimeout(true);
-  //     }
-  //   }, 1000);
-  // }
+
 
   const checkTimeOut = () => {
     if (start) {
-      // console.log('minutes-- ' + minutes + '-seconds -- ' + seconds);
       getlocation(true);
-      // if (timeout) {
-      //   console.log('Dung lai cho bo may, lam on');
-      //   getlocation(false);
-      //   setStart(false);
-      //   setSpeed(0);
-      // } else {
-      //   console.log('dang chay bo');
-      //   getlocation(true);
-      // }
+
     }
   };
 
@@ -262,7 +240,7 @@ const StartRunningScreen = (props) => {
     navigation.goBack();
     setIsShowModal(false);
   }
-
+  console.log("Co sneaker dang chay roi nha", sneaker)
   return (
     <View style={styles.container}>
       {
@@ -383,15 +361,6 @@ const StartRunningScreen = (props) => {
                   </Text>
                 </View>
               </View>
-              {/* <TouchableOpacity onPress={onPressStart} style={styles.inpuStyle}>
-              <Text>Start</Text>
-            </TouchableOpacity> */}
-              {/* <TouchableOpacity
-                    onPress={onPressLocation}
-                    style={styles.inpuStyle}
-                >
-                    <Text>Choose your location</Text>
-                </TouchableOpacity> */}
             </View>
           </View>
         </>

@@ -11,7 +11,7 @@ import {
   VStack,
   Heading,
   ScrollView,
-  Image
+  Image,
 } from 'native-base';
 import ComboBoxComponent from '../../components/Combobox/Combobox';
 import styles from './Market.style';
@@ -34,52 +34,50 @@ const MarketScreen = () => {
   const dispatch = useDispatch();
   const connector = useWalletConnect();
 
-  useEffect(() => {
-    if (connector.connected === true) {
-      fetchSneakers();
-    } else {
-      console.log('Vui long dang nhap vi');
-    }
-  }, [connector.connected]);
+//   useEffect(() => {
+//     if (connector.connected === true) {
+//       fetchSneakers();
+//     } else {
+//       console.log('Vui long dang nhap vi');
+//     }
+//   }, [connector.connected]);
 
-  const fetchSneakers = async () => {
-    try {
-      const provider = new WalletConnectProvider({
-        infuraId: '6507b4b41a0c450ba0fe748e96881466',
-        connector: connector,
-      });
-      await provider.enable();
-      const web3Provider = new providers.Web3Provider(provider);
-      const signer = web3Provider.getSigner();
-      const nftContract = new Contract(
-        '0xeeDf9047Fd589F23aE19f597628bc96cB100f30a',
-        RunnSneakerABI,
-        signer
-      );
-      const res = await nftContract.functions.tokenInfosByOwner(connector.accounts[0]);
-      const allTokensData = res[0];
-      const formattedSneakers = allTokensData?.map(async (sneakerInfo) => {
-        const { price, tokenId, saleId, seller } = sneakerInfo;
-        const tokenData = await nftContract.tokenData(tokenId);
-        return {
-          ...mapTokenDataToSneakerInDetail(tokenData),
-          id: tokenId,
-          saleId,
-          seller,
-          price,
-        };
-      });
-      const resultSneakers:PropSneaker[] = await Promise.all(formattedSneakers);
-      if (resultSneakers.length > 0){
-
-          dispatch(authActions.updateCurrentUser({ ...currentUser, sneakers: resultSneakers }));
-        //   dispatch(moveActions.updateMaxEnergy(resultSneakers))
-
-      }
-    } catch (err) {
-      console.log('Err: ', err);
-    }
-  };
+//   const fetchSneakers = async () => {
+//     try {
+//       const provider = new WalletConnectProvider({
+//         infuraId: '6507b4b41a0c450ba0fe748e96881466',
+//         connector: connector,
+//       });
+//       await provider.enable();
+//       const web3Provider = new providers.Web3Provider(provider);
+//       const signer = web3Provider.getSigner();
+//       const nftContract = new Contract(
+//         '0xeeDf9047Fd589F23aE19f597628bc96cB100f30a',
+//         RunnSneakerABI,
+//         signer
+//       );
+//       const res = await nftContract.functions.tokenInfosByOwner(connector.accounts[0]);
+//       const allTokensData = res[0];
+//       const formattedSneakers = allTokensData?.map(async (sneakerInfo) => {
+//         const { price, tokenId, saleId, seller } = sneakerInfo;
+//         const tokenData = await nftContract.tokenData(tokenId);
+//         return {
+//           ...mapTokenDataToSneakerInDetail(tokenData),
+//           id: tokenId,
+//           saleId,
+//           seller,
+//           price,
+//         };
+//       });
+//       const resultSneakers: PropSneaker[] = await Promise.all(formattedSneakers);
+//       if (resultSneakers.length > 0) {
+//         dispatch(authActions.updateCurrentUser({ ...currentUser, sneakers: resultSneakers }));
+//         dispatch(moveActions.updateMaxEnergy(resultSneakers));
+//       }
+//     } catch (err) {
+//       console.log('Err: ', err);
+//     }
+//   };
 
   const _renderItem = ({ item }) => {
     console.log(connector.connected);
@@ -111,26 +109,24 @@ const MarketScreen = () => {
       </View>
       {/* <ScrollView> */}
       {currentUser?.sneakers?.length < 1 ? (
-        <View style={{width:'100%', flex:1, justifyContent:'center', alignItems:'center'}}>
-<Image
-          source={{
-            uri: 'https://www.godinein.com/assets/frontend/default/images/empty-cart.png',
-          }}
-          alt="Alternate Text"
-          size={220}
-          resizeMode="contain"
-        />
+        <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+          <Image
+            source={{
+              uri: 'https://www.godinein.com/assets/frontend/default/images/empty-cart.png',
+            }}
+            alt="Alternate Text"
+            size={220}
+            resizeMode="contain"
+          />
         </View>
-          
-      ): (
+      ) : (
         <FlatList
-        data={currentUser.sneakers}
-        numColumns={2}
-        renderItem={_renderItem}
-        style={{ flex: 1 }}
-      />
+          data={currentUser.sneakers}
+          numColumns={2}
+          renderItem={_renderItem}
+          style={{ flex: 1 }}
+        />
       )}
- 
 
       {/* </ScrollView> */}
     </View>

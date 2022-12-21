@@ -49,9 +49,40 @@ const moveSlice = createSlice({
             checkFillEnergy(state);
         },
 
-        updateMaxEnergy(state, action:PayloadAction<PropSneaker>){
+        updateMaxEnergy(state, action:PayloadAction<PropSneaker[]>){
             const sneakers = action.payload;
-            console.log("updateMaxEnergy",state.energy.maxEnergy)
+            let totalEnerygy:number = 0;
+            if(sneakers.length < 3 && sneakers.length > 0)  totalEnerygy=2;
+            else if( sneakers.length < 6 && sneakers.length >=3) totalEnerygy=4;
+            else if(sneakers.length < 10 && sneakers.length >=6) totalEnerygy=6;
+            else if(sneakers.length < 15 && sneakers.length >=10) totalEnerygy = 9;
+            else if(sneakers.length <25 && sneakers.length >=15) totalEnerygy = 12;
+            else if(sneakers.length >=25) totalEnerygy=18;
+
+            sneakers.forEach((sneaker:PropSneaker)=>{
+                switch(sneaker.Type){
+                    case "Common":
+                        totalEnerygy+=0;
+                        break;
+                    case "Uncommon":
+                        totalEnerygy+=1;
+                        break;
+                    case "Rare":
+                        totalEnerygy+=2;
+                        break;
+                    case "Epic":
+                        totalEnerygy+=3;
+                        break;
+                    case "Legendary":
+                        totalEnerygy+=4;
+                        break;
+                    default:
+                        break;
+                }
+                
+            })
+            state.energy.maxEnergy = totalEnerygy;
+            console.log("updateMaxEnergy", state.energy.maxEnergy)
             checkFillEnergy(state);
         },
 

@@ -1,70 +1,5 @@
-// import React from "react";
-// import {
-//     View,
-//     Image,
-//     TouchableOpacity,
-//     Text,
-//     StyleSheet
-// } from "react-native";
-// import { createBottomTabNavigator, BottomTabBar } from "@react-navigation/bottom-tabs"
-// import HomeScreen from "../screens/Home/Home.screen";
-// import { colors, fonts } from "../themes";
-
-// const Tab = createBottomTabNavigator()
-
-// const Tabs = () => {
-//     return (
-//         <Tab.Navigator
-//         screenOptions={{
-//             tabBarShowLabel: false,
-//             headerShown: false,
-//             tabBarStyle: {
-//                 position: 'absolute',
-//                 bottom:0,
-//                 left:0,
-//                 right:0,
-//                 elevation:0,
-//                 backgroundColor: colors.white,
-//                 height:100,
-//                 borderTopColor: "transparent",
-//                 borderTopRightRadius: 50,
-//                 borderTopLeftRadius: 50
-//             },
-
-//           }}
-//         >
-//             <Tab.Screen
-//                 name="Home"
-//                 component={HomeScreen}
-//                 options={{
-//                     tabBarIcon: ({ focused }) => (
-//                         <View style= {{ alignItems: 'center',
-//                         justifyContent: 'center'}} >
-//                             {/* <Image
-//                                 // source={icons.pizza_tab}
-//                                 resizeMode="contain"
-//                                 style={{
-//                                     width: 30,
-//                                     height: 30,
-//                                     // tintColor: focused ? COLORS.primary : COLORS.black
-//                                 }}
-//                             /> */}
-//                             <Text style={{ color: focused ? colors.primary : colors.black,
-//                             ...fonts.body5
-//                             }} >Home</Text>
-//                         </View>
-//                     )
-//                 }}
-//             />
-
-//         </Tab.Navigator>
-//     )
-// }
-
-// export default Tabs;
-
-import React, { useEffect, useReducer, useRef } from 'react';
-import { Pressable, StatusBar, StyleSheet, View, Text, LayoutChangeEvent } from 'react-native';
+import React, { useEffect, useReducer, useRef, useState } from 'react';
+import { Pressable, StatusBar, StyleSheet, LayoutChangeEvent } from 'react-native';
 // navigation
 import { NavigationContainer } from '@react-navigation/native';
 import {
@@ -89,7 +24,16 @@ import ChallengeScreen from '../screens/Challenge/Challenge.screen';
 import MarketScreen from '../screens/Market/Market.screen';
 import Header from './header';
 import imagePath from '../constant/imagePath';
-import { Image } from 'native-base';
+import { Button, Image, Modal, View, Text } from 'native-base';
+import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { Contract, providers } from 'ethers';
+import { RunnSneakerABI } from '../constant/RunnSneakerABI';
+import { mapTokenDataToSneakerInDetail } from '../utils/formatTokenData';
+import { PropSneaker } from '../@core/model/sneaker';
+import { authActions } from '../screens/Login/authSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { moveActions } from '../screens/Move/moveSlice';
 
 // ------------------------------------------------------------------
 
@@ -100,10 +44,71 @@ const AnimatedSvg = Animated.createAnimatedComponent(Svg);
 // ------------------------------------------------------------------
 
 const Tabs = () => {
+  const connector = useWalletConnect();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((state: any) => state.auth.currentUser);
+  const [isShowModal,setIsShowModal] = useState(false);
+  const fetchSneakers = async () => {
+    try {
+      const provider = new WalletConnectProvider({
+        infuraId: '6507b4b41a0c450ba0fe748e96881466',
+        connector: connector,
+      });
+      await provider.enable();
+      const web3Provider = new providers.Web3Provider(provider);
+      const signer = web3Provider.getSigner();
+      const nftContract = new Contract(
+        '0xeeDf9047Fd589F23aE19f597628bc96cB100f30a',
+        RunnSneakerABI,
+        signer
+      );
+      const res = await nftContract.functions.tokenInfosByOwner(connector.accounts[0]);
+      const allTokensData = res[0];
+      const formattedSneakers = allTokensData?.map(async (sneakerInfo) => {
+        const { price, tokenId, saleId, seller } = sneakerInfo;
+        const tokenData = await nftContract.tokenData(tokenId);
+        return {
+          ...mapTokenDataToSneakerInDetail(tokenData),
+          id: tokenId,
+          saleId,
+          seller,
+          price,
+        };
+      });
+      const resultSneakers: PropSneaker[] = await Promise.all(formattedSneakers);
+      if (resultSneakers.length > 0) {
+        dispatch(authActions.updateCurrentUser({ ...currentUser, sneakers: resultSneakers }));
+        dispatch(moveActions.updateMaxEnergy(resultSneakers));
+      }
+    } catch (err) {
+      console.log('Err: ', err);
+    }
+  };
+  useEffect(() => {
+    if (connector.connected === true) {
+      fetchSneakers();
+    } else {
+      setIsShowModal(true)
+      console.log('Vui long dang nhap vi');
+    }
+  }, [connector.connected]);
   return (
     <>
       <StatusBar barStyle="light-content" />
       <Header/>
+      <Modal isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' , color:'#f99'}}>
+            Warning
+          </Modal.Header>
+          <Modal.Body>
+              <Text color={colors.black}  fontSize="sm" style={{ paddingHorizontal: 15 }}>
+                Please connect your wallet
+              </Text>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
       <Tab.Navigator
         tabBar={(props) => <AnimatedTabBar {...props} />}
         initialRouteName="Move"

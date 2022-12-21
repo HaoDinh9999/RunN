@@ -9,14 +9,18 @@ import { useDispatch, useSelector } from 'react-redux';
 import { moveActions, selectEnergy } from './moveSlice';
 import { EnergyProps } from '../../@core/model/move';
 import CardSneakersRun from '../../components/CardSneakersRun/CardSneakersRun';
+import Slick from 'react-native-slick';
+import { PropSneaker } from '../../@core/model/sneaker';
+import CardSneakerEmpty from '../../components/CardSneakerEmpty/CardSneakerEmpty.screen';
 
 const MoveScreen = () => {
   const navigation = useNavigation();
-  var energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
-  var timingReducer: boolean = useSelector((state: any) => state.move.timing);
+  let energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
+  let timingReducer: boolean = useSelector((state: any) => state.move.timing);
+  let sneakerReducers: PropSneaker[] = useSelector(
+    (state: any) => state.auth.currentUser.sneakers
+  );
 
-  // const currentEnergy = useSelector((state:any) => state.move.energy.currentEnergy);
-  // const maxEnergy = useSelector((state:any) => state.move.energy.maxEnergy);
   const dispatch = useDispatch();
 
   const [seconds, setSeconds] = useState<number>(0);
@@ -25,79 +29,86 @@ const MoveScreen = () => {
   const [isfillEnergy, setIsFillEnergy] = useState<boolean>(true);
   const [timeRefill, setTimeRefill] = useState<number>(180);
   const [timeCount, setTimeCount] = useState<number>(0);
-  const [timeout,setTimeout] = useState<boolean>(false);
-  // const [currentEnergy, setCurrentEnergy] = useState<number>(energyReducer.currentEnergy);
-  // const [maxEnergy, setMaxEnergy] = useState<number>(energyReducer.maxEnergy);
+  const [timeout, setTimeout] = useState<boolean>(false);
+  const [sneaker,setSneaker] = useState<PropSneaker>();
 
   var timer: number;
 
   const handleCalEnergy = (): number => {
-    return Number((energyReducer.currentEnergy / energyReducer.maxEnergy) * 100);
+    return Number((energyReducer?.currentEnergy / energyReducer?.maxEnergy) * 100);
   };
   useEffect(() => {
-    if (energyReducer.currentEnergy < energyReducer.maxEnergy) {
-      dispatch(moveActions.updateTiming(true))
-    }
-    else if (energyReducer.currentEnergy = energyReducer.maxEnergy) {
+    if (energyReducer?.currentEnergy < energyReducer?.maxEnergy) {
+      dispatch(moveActions.updateTiming(true));
+    } else if ((energyReducer?.currentEnergy === energyReducer.maxEnergy)) {
       dispatch(moveActions.updateTiming(false));
     }
-    if (timingReducer === true && energyReducer.currentEnergy < energyReducer.maxEnergy)
-      startTimer(timeRefill)
+    if (timingReducer === true && energyReducer?.currentEnergy < energyReducer?.maxEnergy)
+      startTimer(timeRefill);
   }, [timingReducer]);
- 
-  useEffect(()=>{
-    if(timeout === true){
+
+  useEffect(() => {
+    if (timeout === true) {
       handleTimeOut();
     }
-},[timeout]);
+  }, [timeout]);
 
-  // useEffect(() => {
-  //   energyRef.current = energy;
-  // });
   const handleTimeOut = () => {
-    console.log("handleTimeout",energyReducer);
+    console.log('handleTimeout', energyReducer);
     dispatch(moveActions.updateTiming(false));
-    if (energyReducer.currentEnergy >= energyReducer.maxEnergy) {
-      console.log("Vao roi thi phai dung chu");
+    if (energyReducer?.currentEnergy >= energyReducer?.maxEnergy) {
+      console.log('Vao roi thi phai dung chu');
       dispatch(moveActions.updateTiming(false));
       return;
-
-    }
-    else {
-      dispatch(moveActions.updateEnergy({ ...energyReducer, currentEnergy: energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25 }))
-      if ( energyReducer.currentEnergy + energyReducer.maxEnergy * 0.25  < energyReducer.maxEnergy)
-      dispatch(moveActions.updateTiming(true));
-      else
-      dispatch(moveActions.updateTiming(false));
-
+    } else {
+      dispatch(
+        moveActions.updateCurrentEnergy(
+          energyReducer?.currentEnergy + energyReducer?.maxEnergy * 0.25
+        )
+      );
+      if (energyReducer?.currentEnergy + energyReducer?.maxEnergy * 0.25 < energyReducer.maxEnergy)
+        dispatch(moveActions.updateTiming(true));
+      else dispatch(moveActions.updateTiming(false));
     }
     setTimeout(false);
-  }
+  };
   var countDown: any;
   function startTimer(duration) {
-    console.log("Tai sao 1");
-      (timer = duration), minutes, seconds;
-      countDown = setInterval(function () {
-        setHours(Math.floor(timer / (60 * 60)));
-        setMinutes(Math.floor((timer / 60) % 60));
-        setSeconds(Number(timer % 60));
-        setTimeout(false);
-        if (--timer < 0) {
-          // console.log("Result", energyReducer);
-          dispatch(moveActions.updateTiming(false));
-          setTimeout(true);
-          clearInterval(countDown);
-  
-        }
-      }, 1000);
-      return () => clearInterval(countDown);
-  
-   
+    console.log('Tai sao 1');
+    (timer = duration), minutes, seconds;
+    countDown = setInterval(function () {
+      setHours(Math.floor(timer / (60 * 60)));
+      setMinutes(Math.floor((timer / 60) % 60));
+      setSeconds(Number(timer % 60));
+      setTimeout(false);
+      if (--timer < 0) {
+        // console.log("Result", energyReducer);
+        dispatch(moveActions.updateTiming(false));
+        setTimeout(true);
+        clearInterval(countDown);
+      }
+    }, 1000);
+    return () => clearInterval(countDown);
   }
+  let chooseSneaker ;
   return (
     <>
       <View style={styles.container}>
-        <CardSneakersRun />
+        {sneakerReducers?.length > 0 ? (
+          <Slick style={styles.wrapper} showsButtons loop={false}>
+            {sneakerReducers?.map((sneaker: PropSneaker) => {
+              chooseSneaker=sneaker;
+              return (
+                <View style={styles.slide1}>
+                  <CardSneakersRun sneaker={sneaker}/>
+                </View>
+              );
+            })}
+          </Slick>
+        ): (
+          <CardSneakerEmpty/>
+        )}
+
         <View style={styles.containerBody}>
           <Text
             fontSize="2xl"
@@ -136,9 +147,9 @@ const MoveScreen = () => {
             >
               <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />
               <Text fontSize={'sm'} bold color={colors.white}>
-                {energyReducer.currentEnergy}{' '}
+                {energyReducer?.currentEnergy}{' '}
                 <Text bold color={colors.gray}>
-                  / {energyReducer.maxEnergy}.0
+                  / {energyReducer?.maxEnergy}.0
                 </Text>
               </Text>
             </View>
@@ -166,11 +177,13 @@ const MoveScreen = () => {
           <Button
             style={styles.button}
             onPress={() =>
-              energyReducer.currentEnergy >= 1 &&  navigation.navigate('startRunning', {
+              energyReducer?.currentEnergy >= 1 &&
+              navigation.navigate('startRunning', {
                 start: true,
                 minutes: 0,
                 seconds: 120,
                 limitSpeed: 100,
+                chooseSneaker
               })
             }
           >

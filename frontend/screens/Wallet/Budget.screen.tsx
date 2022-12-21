@@ -236,7 +236,7 @@ const BudgetScreen = () => {
           </Text>
         </View>
         <Text color={colors.white} bold fontSize="lg">
-          {sneakersUser.length}
+          {sneakersUser?.length}
         </Text>
       </View>
       {/* <Button onPress={fetchSneakers}>Click here</Button>
