@@ -51,6 +51,11 @@ const authSlice = createSlice({
         updateCurrentUser(state, action: PayloadAction<User>){
             state.currentUser = action.payload;
             console.log("updateCurrentUser: ",state.currentUser );
+        },
+
+        updateRMToken(state, action: PayloadAction<{hex:string, type:string}>){
+            state.currentUser.RMToken = action.payload;
+            console.log("updateRMToken: ",state.currentUser.RMToken );
 
         }
 

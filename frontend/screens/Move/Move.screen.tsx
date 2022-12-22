@@ -18,7 +18,7 @@ const MoveScreen = () => {
   let energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
   let timingReducer: boolean = useSelector((state: any) => state.move.timing);
   let sneakerReducers: PropSneaker[] = useSelector(
-    (state: any) => state.auth.currentUser.sneakers
+    (state: any) => state.auth.currentUser?.sneakers
   );
 
   const dispatch = useDispatch();

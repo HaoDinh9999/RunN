@@ -19,6 +19,7 @@ import '@walletconnect/react-native-compat';
 import { RunnMoveTokenABI } from '../../constant/RunnMoveTokenABI';
 import { useDispatch, useSelector } from 'react-redux';
 import { authActions } from '../Login/authSlice';
+import { log } from 'console';
 
 const BudgetScreen = () => {
   const navigation = useNavigation();
@@ -33,6 +34,7 @@ const BudgetScreen = () => {
 
 
   const connector = useWalletConnect();
+  
   const handleActionShow = () => {
     setIsShowModal(true);
   };

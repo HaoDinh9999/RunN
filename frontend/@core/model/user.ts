@@ -7,4 +7,5 @@ export interface User {
     addressWallet ?: string;
     signer ?:any;
     sneakers?:PropSneaker[];
+    RMToken?:{hex:string, type:string};
 }

@@ -34,6 +34,7 @@ import { PropSneaker } from '../@core/model/sneaker';
 import { authActions } from '../screens/Login/authSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { moveActions } from '../screens/Move/moveSlice';
+import { RunnMoveTokenABI } from '../constant/RunnMoveTokenABI';
 
 // ------------------------------------------------------------------
 
@@ -56,12 +57,15 @@ const Tabs = () => {
       });
       await provider.enable();
       const web3Provider = new providers.Web3Provider(provider);
+      console.log("Web3Provider", web3Provider.getBalance(connector.accounts[0]));
       const signer = web3Provider.getSigner();
+
       const nftContract = new Contract(
         '0xeeDf9047Fd589F23aE19f597628bc96cB100f30a',
         RunnSneakerABI,
         signer
       );
+      
       const res = await nftContract.functions.tokenInfosByOwner(connector.accounts[0]);
       const allTokensData = res[0];
       const formattedSneakers = allTokensData?.map(async (sneakerInfo) => {
@@ -84,6 +88,7 @@ const Tabs = () => {
       console.log('Err: ', err);
     }
   };
+
   useEffect(() => {
     if (connector.connected === true) {
       fetchSneakers();
@@ -103,7 +108,7 @@ const Tabs = () => {
             Warning
           </Modal.Header>
           <Modal.Body>
-              <Text color={colors.black}  fontSize="sm" style={{ paddingHorizontal: 15 }}>
+              <Text color={colors.black}  fontSize="sm" style={{ paddingHorizontal: 15, textAlign:'center', color:'red' }}>
                 Please connect your wallet
               </Text>
           </Modal.Body>

@@ -1,17 +1,58 @@
 import { View, Text, Avatar, Image, Badge, Button } from "native-base";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { colors } from "../constant/themes";
 import { StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import ProfileScreen from "../screens/Profile/Profile.screen";
 import imagePath from "../constant/imagePath";
 import { EnergyProps } from "../@core/model/move";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import WalletConnectProvider from "@walletconnect/web3-provider";
+import { Contract, providers } from "ethers";
+import { RunnMoveTokenABI } from "../constant/RunnMoveTokenABI";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
+import { authActions } from "../screens/Login/authSlice";
 
 const Header = (props) => {
     const navigation = useNavigation();
-    const energyReducer: EnergyProps= useSelector((state:any) => state.move.energy);
-
+    const energyReducer: EnergyProps= useSelector((state:any) => state.move?.energy);
+    const RMTokenReducer: boolean = useSelector((state: any) => state.auth?.currentUser?.RMToken);
+    const connector = useWalletConnect();
+    const dispatch = useDispatch();
+    const [rmToken, setRMToken] = useState();
+    console.log("RMTokenReducer", RMTokenReducer);
+    const fetchRMTBalance = async () => {
+        try {
+          const provider = new WalletConnectProvider({
+            infuraId: '6507b4b41a0c450ba0fe748e96881466',
+            connector: connector,
+          });
+          await provider.enable();
+    
+          const web3Provider = new providers.Web3Provider(provider);
+          const signer = web3Provider.getSigner();
+    
+          const ercContract = new Contract(
+            '0x07B5C829Db4B925dDDA85A14079553443b1857b9',
+            RunnMoveTokenABI,
+            signer
+          );
+          const res = await ercContract.functions.balanceOf(connector.accounts[0]);
+          if(res?.length > 0){
+            setRMToken( res[0])  
+            dispatch(authActions.updateRMToken(res[0]));
+          }
+        } catch (err) {
+          console.log(err);
+        }
+      };
+      useEffect(() => {
+        if (connector.connected === true) {
+            fetchRMTBalance();
+        } else {
+          console.log('Vui long dang nhap vi');
+        }
+      }, [connector.connected]);
     return (
         <View style={styles.headerContainer}>
             <View style={styles.avatarContainer} onTouchStart={()=>{navigation.navigate('profile')}}>
@@ -24,7 +65,7 @@ const Header = (props) => {
                 <View style={styles.tokenContainer}>
                     <View style={styles.mainToken}>
                         <Image size={6} borderRadius={100} source={imagePath.coin} alt="Coin" />
-                        <Text color={colors.white} bold ml={1}>100</Text>
+                        <Text color={colors.white} bold ml={1}>{`${rmToken}`}</Text>
                     </View>
                     <View style={styles.secondToken}>
                     <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />

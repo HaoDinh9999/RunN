@@ -79,10 +79,11 @@ const MarketScreen = () => {
 //     }
 //   };
 
-  const _renderItem = ({ item }) => {
+  const _renderItem = ({ item, index }) => {
     console.log(connector.connected);
+    const lastItem = index === currentUser?.sneakers?.length -1
     return (
-      <View style={styles.spacing}>
+      <View style={{    flex:1, paddingVertical:4,paddingHorizontal:4, maxWidth: lastItem ? '50%' : '100%'}}>
         <CardItem sneaker={item as PropSneaker} />
       </View>
     );
@@ -108,7 +109,14 @@ const MarketScreen = () => {
         </Text>
       </View>
       {/* <ScrollView> */}
-      {currentUser?.sneakers?.length < 1 ? (
+      {currentUser?.sneakers?.length >0 ? (
+        
+          <FlatList
+            data={currentUser.sneakers}
+            numColumns={2}
+            renderItem={_renderItem}
+          />
+      ) : (
         <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image
             source={{
@@ -119,13 +127,6 @@ const MarketScreen = () => {
             resizeMode="contain"
           />
         </View>
-      ) : (
-        <FlatList
-          data={currentUser.sneakers}
-          numColumns={2}
-          renderItem={_renderItem}
-          style={{ flex: 1 }}
-        />
       )}
 
       {/* </ScrollView> */}

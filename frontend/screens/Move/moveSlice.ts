@@ -86,6 +86,10 @@ const moveSlice = createSlice({
             checkFillEnergy(state);
         },
 
+        resetMaxEnergy(state){
+            state.energy.maxEnergy = 0;
+        },
+
         updateTiming(state, action:PayloadAction<boolean>){
             state.timing = action.payload;
             console.log("updateTiming",state.timing)

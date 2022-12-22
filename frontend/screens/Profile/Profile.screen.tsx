@@ -8,14 +8,19 @@ import { useDispatch, useSelector } from "react-redux";
 import { User } from "../../@core/model/user";
 import imagePath from '../../constant/imagePath';
 import { authActions } from "../Login/authSlice";
+import { moveActions } from "../Move/moveSlice";
+import { useWalletConnect } from "@walletconnect/react-native-dapp";
 
 const ProfileScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
+    const connector = useWalletConnect();
 
     var currentUserReducer: User = useSelector((state: any) => state.auth.currentUser);
-    const handleLogout = () => {
+    const handleLogout =async () => {
         dispatch(authActions.logout());
+        dispatch(moveActions.resetMaxEnergy())
+        await connector.killSession();
 
         navigation.navigate('login');
     }
@@ -39,9 +44,7 @@ const ProfileScreen = () => {
                 </View>
 
                 <TouchableHighlight onPress={() => navigation.navigate('detailProfile')}>
-                    <Image size={7} borderRadius={100} source={{
-                        uri: "https://wallpaperaccess.com/full/317501.jpg"
-                    }} alt="Alternate Text" />
+                    <Image size={7} borderRadius={100} source={imagePath.next} alt="Alternate Text" />
                 </TouchableHighlight>
             </View>
             <View style={styles.bodyContainer}>
@@ -50,9 +53,7 @@ const ProfileScreen = () => {
                     <View style={styles.textIcon}>
                         <Text color={colors.white} fontSize="sm" mr={2} bold>0</Text>
                         <TouchableHighlight onPress={() => { }}>
-                            <Image size={3} borderRadius={100} source={{
-                                uri: "https://wallpaperaccess.com/full/317501.jpg"
-                            }} alt="Alternate Text" />
+                            <Image size={3} borderRadius={100} source={imagePath.next} alt="Alternate Text" />
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -61,9 +62,7 @@ const ProfileScreen = () => {
                     <View style={styles.textIcon}>
                         <Text color={colors.white} fontSize="sm" mr={2} bold>0</Text>
                         <TouchableHighlight onPress={() => { }}>
-                            <Image size={3} borderRadius={100} source={{
-                                uri: "https://wallpaperaccess.com/full/317501.jpg"
-                            }} alt="Alternate Text" />
+                            <Image size={3} borderRadius={100} source={imagePath.next} alt="Alternate Text" />
                         </TouchableHighlight>
                     </View>
                 </View>
