@@ -9,6 +9,7 @@ import { ColorSpace } from 'react-native-reanimated';
 // import Ionicons from '@expo/vector-icons/Ionicons';
 import { useNavigation } from '@react-navigation/native';
 import { PropSneaker } from '../../@core/model/sneaker';
+import imagePath from '../../constant/imagePath';
 
 const CardSneakerEmpty = () => {
   const navigation = useNavigation();
@@ -36,9 +37,7 @@ const CardSneakerEmpty = () => {
             />
           </AspectRatio>
           <Image
-            source={{
-              uri: 'https://www.godinein.com/assets/frontend/default/images/empty-cart.png',
-            }}
+            source={imagePath.empty}
             alt="Alternate Text"
             width={200}
             height={100}

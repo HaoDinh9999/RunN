@@ -12,6 +12,7 @@ import MoveScreen from '../screens/Move/Move.screen';
 import StartRunningScreen from '../screens/Move/StartRunning/StartRunning.screen'
 import RegisterScreen from '../screens/Register/Register.screen';
 import DetailProfileScreen from '../screens/Profile/DetailProfile/DetailProfile.screen';
+import EditDetailProfileScreen from '../screens/Profile/DetailProfile/EditProfile/EditProfile.screen';
 const Stack = createNativeStackNavigator();
 
 const MainNavigation = () => {
@@ -32,7 +33,7 @@ const MainNavigation = () => {
         <Stack.Screen name="move" component={MoveScreen}/>
         <Stack.Screen name="startRunning" component={StartRunningScreen}/>
         <Stack.Screen name="detailProfile" component={DetailProfileScreen}/>
-
+        <Stack.Screen name="editProfile" component={EditDetailProfileScreen}/>
       </Stack.Navigator>
 
     </NavigationContainer>

@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { colors } from '../../../constant/themes';
+import { colors } from '../../../../constant/themes';
 
 
 const styles = StyleSheet.create({
@@ -26,10 +26,10 @@ const styles = StyleSheet.create({
   bodyContainer:{
     marginTop:30,
     // backgroundColor:'#f99',
-    // height:'100%',
     padding:15,
     borderTopLeftRadius:20,
     borderTopRightRadius:20,
+    alignItems:'center'
   },
   fieldContainer:{
     
@@ -50,6 +50,14 @@ const styles = StyleSheet.create({
     // padding: 10,
     // backgroundColor: colors.background.primary
   },
+  button:{
+    backgroundColor:colors.primary,
+    color:colors.white,
+    borderColor:colors.lightGray,
+    borderWidth:1,
+    borderRadius:25,
+    fontWeight:'bold',
+  }
  
 });
 

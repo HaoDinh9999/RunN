@@ -15,8 +15,8 @@ const ProfileScreen = () => {
     const navigation = useNavigation();
     const dispatch = useDispatch();
     const connector = useWalletConnect();
+    const currentUserReducer: User = useSelector((state: any) => state.auth.currentUser);
 
-    var currentUserReducer: User = useSelector((state: any) => state.auth.currentUser);
     const handleLogout =async () => {
         dispatch(authActions.logout());
         dispatch(moveActions.resetMaxEnergy())
@@ -49,32 +49,33 @@ const ProfileScreen = () => {
             </View>
             <View style={styles.bodyContainer}>
                 <View style={styles.buttonInfor}>
-                    <Text bold color={colors.white} fontSize="sm">Activation Code</Text>
+                    <Text bold color={colors.white} fontSize={14}>Activation Code</Text>
                     <View style={styles.textIcon}>
-                        <Text color={colors.white} fontSize="sm" mr={2} bold>0</Text>
+                        <Text color={colors.white} fontSize={14} mr={2} bold>0</Text>
                         <TouchableHighlight onPress={() => { }}>
                             <Image size={3} borderRadius={100} source={imagePath.next} alt="Alternate Text" />
                         </TouchableHighlight>
                     </View>
                 </View>
                 <View style={styles.buttonInfor}>
-                    <Text bold color={colors.white} fontSize="sm">Credit point</Text>
+                    <Text bold color={colors.white} fontSize={14}>Credit point</Text>
                     <View style={styles.textIcon}>
-                        <Text color={colors.white} fontSize="sm" mr={2} bold>0</Text>
+                        <Text color={colors.white} fontSize={14} mr={2} bold>0</Text>
                         <TouchableHighlight onPress={() => { }}>
                             <Image size={3} borderRadius={100} source={imagePath.next} alt="Alternate Text" />
                         </TouchableHighlight>
                     </View>
                 </View>
                 <View style={styles.buttonInfor}>
-                    <Text bold color={colors.white} fontSize="sm">Version</Text>
+                    <Text bold color={colors.white} fontSize={14}>Version</Text>
                     <View style={styles.textIcon}>
-                        <Text color={colors.white} fontSize="sm" bold >1.0.0</Text>
+                        <Text color={colors.white} fontSize={14} bold >0.1.0</Text>
                     </View>
                 </View>
             </View>
             <View style={{ justifyContent: 'flex-end', flex: 1, paddingHorizontal: 80, paddingBottom: 10 }}>
                 <Button style={styles.button} onPress={handleLogout}>LOG OUT</Button>
+                <Text style={{textAlign:'center', marginTop:30}} color="#fff">© Copyright 2022 RunN.</Text>
             </View>
         </View>
     )

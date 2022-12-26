@@ -19,8 +19,8 @@ export interface MoveState {
 
 const initialState : MoveState = {
     energy:{
-        currentEnergy: 1,
-        maxEnergy:2
+        currentEnergy: 0,
+        maxEnergy:0
     },
     isFillEnergy: false,
     timing: false,

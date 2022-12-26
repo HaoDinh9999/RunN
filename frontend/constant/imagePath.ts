@@ -24,6 +24,9 @@ export default {
     perform: require("../../assets/image/perform_100px.png"),
     joy: require("../../assets/image/joy_100px.png"),
     durability: require("../../assets/image/durability_48px.png"),
-
-
+    empty: require("../../assets/image/empty-cart.png"),
+    edit: require("../../assets/image/edit_profile_48px.png"),
+    email: require("../../assets/image/email_send_60px.png"),
+    password: require("../../assets/image/password_100px.png"),
+    name:require("../../assets/image/profile_52px.png"),
 }

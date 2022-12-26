@@ -20,6 +20,7 @@ const MoveScreen = () => {
   let sneakerReducers: PropSneaker[] = useSelector(
     (state: any) => state.auth.currentUser?.sneakers
   );
+  let movingReducer : any = useSelector((state:any) => state.move);
 
   const dispatch = useDispatch();
 
@@ -37,6 +38,13 @@ const MoveScreen = () => {
   const handleCalEnergy = (): number => {
     return Number((energyReducer?.currentEnergy / energyReducer?.maxEnergy) * 100);
   };
+
+  useEffect(() => {
+    if(energyReducer?.currentEnergy < energyReducer?.maxEnergy && timingReducer === false)
+    dispatch(moveActions.updateTiming(true));
+
+  },[movingReducer])
+
   useEffect(() => {
     if (energyReducer?.currentEnergy < energyReducer?.maxEnergy) {
       dispatch(moveActions.updateTiming(true));

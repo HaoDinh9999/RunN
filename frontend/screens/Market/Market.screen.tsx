@@ -27,6 +27,7 @@ import { PropSneaker } from '../../@core/model/sneaker';
 import { mapTokenDataToSneaker, mapTokenDataToSneakerInDetail } from '../../utils/formatTokenData';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import { moveActions } from '../Move/moveSlice';
+import imagePath from '../../constant/imagePath';
 
 const MarketScreen = () => {
   const navigation = useNavigation();
@@ -109,6 +110,7 @@ const MarketScreen = () => {
         </Text>
       </View>
       {/* <ScrollView> */}
+      {console.log(currentUser?.sneakers?.length >0)}
       {currentUser?.sneakers?.length >0 ? (
         
           <FlatList
@@ -119,9 +121,7 @@ const MarketScreen = () => {
       ) : (
         <View style={{ width: '100%', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
           <Image
-            source={{
-              uri: 'https://www.godinein.com/assets/frontend/default/images/empty-cart.png',
-            }}
+            source={imagePath.empty}
             alt="Alternate Text"
             size={220}
             resizeMode="contain"

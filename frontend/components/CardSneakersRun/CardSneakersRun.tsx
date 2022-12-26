@@ -92,13 +92,13 @@ const CardSneakersRun = (props) => {
                 </Text> */}
               <Box w="33.33%">
 
-                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', marginBottom:-24, zIndex:3}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', marginBottom:-22, zIndex:3}}>
 
                   <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
                   <Text
                     color={colors.white}
                     fontWeight="bold"
-                    fontSize={16}
+                    fontSize={14}
                     style={{
                       textAlign: 'center',
                       marginLeft: 5

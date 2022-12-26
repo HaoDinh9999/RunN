@@ -30,7 +30,7 @@ const BudgetScreen = () => {
   const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector((state:any) => state.auth.currentUser);
-  const sneakersUser = useSelector((state: any) => state.auth.currentUser?.sneakers);
+  const sneakersUser = useSelector((state: any) => state.auth?.currentUser?.sneakers);
   const RMTokenReducer: any = useSelector((state: any) => state.auth?.currentUser?.RMToken);
 
   const connector = useWalletConnect();
@@ -227,7 +227,7 @@ const BudgetScreen = () => {
           </Text>
         </View>
         <Text color={colors.coin} bold fontSize="lg">
-        {`${ethers.utils.formatEther(RMTokenReducer.toString()).toString()}`}
+        {RMTokenReducer && `${ethers.utils.formatEther(RMTokenReducer?.toString()).toString()}`}
         </Text>
       </View>
       <View style={styles.boxContain}>
