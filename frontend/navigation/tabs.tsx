@@ -81,7 +81,7 @@ const Tabs = () => {
       });
       const resultSneakers: PropSneaker[] = await Promise.all(formattedSneakers);
       if (resultSneakers.length > 0) {
-        dispatch(authActions.updateCurrentUser({ ...currentUser, sneakers: resultSneakers }));
+        dispatch(authActions.updateSneakers(resultSneakers ));
         dispatch(moveActions.updateMaxEnergy(resultSneakers));
       }
     } catch (err) {

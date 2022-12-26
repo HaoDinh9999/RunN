@@ -49,7 +49,7 @@ const CardSneakersRun = (props) => {
           />
 
           <View style={styles.shoesBackground}>
-            <Text color="#C7D5F7" bold style={{ fontSize: 14, textAlign: 'center' }}>
+            <Text color="#C7D5F7" bold style={{ fontSize: 16, textAlign: 'center' }}>
               #{`${sneaker?.id}`}
             </Text>
             <View style={styles.barShoes}>
@@ -61,6 +61,7 @@ const CardSneakersRun = (props) => {
                   textAlign: 'center',
                   backgroundColor: '#CFDDFF',
                   borderBottomLeftRadius: 20,
+                  padding: 2
                 }}
               >
                 LV {`${sneaker?.Level}`}
@@ -68,12 +69,13 @@ const CardSneakersRun = (props) => {
               <Text
                 color="#C7D5F7"
                 bold
+                fontSize={16}
                 style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
               >
                 {'>> '} {sneaker?.Type}
               </Text>
 
-                <Text
+              {/* <Text
                   color="#fff"
                   style={{
                     width: '33.33%',
@@ -87,7 +89,37 @@ const CardSneakersRun = (props) => {
                   bold
                 >
                   {sneaker?.Condition} / 100
-                </Text>
+                </Text> */}
+              <Box w="33.33%">
+
+                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', marginBottom:-24, zIndex:3}}>
+
+                  <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
+                  <Text
+                    color={colors.white}
+                    fontWeight="bold"
+                    fontSize={16}
+                    style={{
+                      textAlign: 'center',
+                      marginLeft: 5
+                    }}
+                  >
+                    {sneaker.Condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
+                  </Text>
+                </View>
+                <Progress
+                  value={sneaker?.Condition}
+                  bg={colors.background.progress}
+                  _filledTrack={{ bg: colors.primary, borderRadius: 0 }}
+                  size="2xl"
+                  style={{
+                    borderRadius: 0, borderTopRightRadius: 25,
+                  }}
+                >
+
+                </Progress>
+              </Box>
+
             </View>
           </View>
         </Box>

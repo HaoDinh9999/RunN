@@ -30,8 +30,8 @@ const BudgetScreen = () => {
   const [connected, setConnected] = useState(false);
   const dispatch = useDispatch();
   const currentUser = useSelector((state:any) => state.auth.currentUser);
-  const sneakersUser = useSelector((state: any) => state.auth.currentUser.sneakers);
-
+  const sneakersUser = useSelector((state: any) => state.auth.currentUser?.sneakers);
+  const RMTokenReducer: any = useSelector((state: any) => state.auth?.currentUser?.RMToken);
 
   const connector = useWalletConnect();
   
@@ -94,7 +94,7 @@ const BudgetScreen = () => {
 
       const web3Provider = new providers.Web3Provider(provider);
       const signer = web3Provider.getSigner();
-      dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
+      // dispatch(authActions.updateCurrentUser({...currentUser,addressWallet:connector.accounts[0],signer:signer}))
 
       const ercContract = new Contract(
         '0x07B5C829Db4B925dDDA85A14079553443b1857b9',
@@ -223,11 +223,11 @@ const BudgetScreen = () => {
         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
           <Image size={7} borderRadius={100} source={imagePath.coin} alt="Alternate Text" />
           <Text color={colors.coin} bold fontSize="md" marginLeft={4}>
-            Earned AMT
+            RMT
           </Text>
         </View>
         <Text color={colors.coin} bold fontSize="lg">
-          0.0000
+        {`${ethers.utils.formatEther(RMTokenReducer.toString()).toString()}`}
         </Text>
       </View>
       <View style={styles.boxContain}>

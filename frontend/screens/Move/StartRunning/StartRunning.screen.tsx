@@ -24,6 +24,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EnergyProps } from '../../../@core/model/move';
 import { moveActions, selectEnergy } from '../moveSlice';
 import { PropSneaker } from '../../../@core/model/sneaker';
+import { Contract, ethers,providers } from 'ethers';
+import { RunnMoveTokenABI } from '../../../constant/RunnMoveTokenABI';
+import { useWalletConnect } from '@walletconnect/react-native-dapp';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import HDWalletProvider from '@truffle/hdwallet-provider';
+import Web3 from 'web3';
+import { DEFAULT_SPEED_COACH, DEFAULT_SPEED_HIKER, DEFAULT_SPEED_SPRINTER } from '../../../constant/typeSneaker';
+import { authActions } from '../../Login/authSlice';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -34,7 +42,8 @@ const StartRunningScreen = (props) => {
   const navigation = useNavigation();
   const energyReducer: EnergyProps = useSelector((state: any) => state.move.energy);
   const timingReducer: boolean = useSelector((state: any) => state.move.timing);
-  const coinRewardReducer:number = useSelector((state: any) => state.move.coinReward);
+  const coinRewardReducer: number = useSelector((state: any) => state.move.coinReward);
+  const RMTokenReducer: number = useSelector((state: any) => state.auth?.currentUser?.RMToken);
 
   const dispatch = useDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
@@ -47,11 +56,12 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [timeReward, setTimeReward] = useState<number>(120);// seconds
+  const [timeReward, setTimeReward] = useState<number>(60);// seconds
   const [coinReward, setCoinReward] = useState<number>(0);
-  const [sneaker,setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
+  const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
+  const connector = useWalletConnect();
 
   const [state, setState] = useState({
     curLoc: {
@@ -85,6 +95,7 @@ const StartRunningScreen = (props) => {
     if (locPermissionDenied) {
       const result: CurrentLocation = await getCurrentLocation();
       console.log('get live location after 4 second', result);
+
       animate(result?.latitude, result?.longitude);
       updateState({
         heading: heading,
@@ -100,6 +111,44 @@ const StartRunningScreen = (props) => {
   };
 
   var timer = 0;
+  const handleSendTokenAward =async (toAddress:string, amoutRMT:number) => {
+    try{
+
+      const adminAccount = {
+        privateKey:
+          '517e2a7e05343c90f22c5384273ae81835aa5c274bd04bdbfc9aa08543ecaad6',
+        account: '0x71c738B1d24368DdcE9b1Ec14C8dA57F5E079175',
+      };
+      const RMTAddress = '0x07B5C829Db4B925dDDA85A14079553443b1857b9';
+      const web3 = new Web3(
+        'https://goerli.infura.io/v3/6507b4b41a0c450ba0fe748e96881466'
+      );
+      const contract = new web3.eth.Contract(RunnMoveTokenABI as any, RMTAddress);
+      const transaction = contract.methods.transfer(
+        toAddress,
+        amoutRMT
+      );
+      const options = {
+        to: RMTAddress,
+        data: transaction.encodeABI(),
+        gas: await transaction.estimateGas({ from: adminAccount.account }),
+        gasPrice: await web3.eth.getGasPrice(),
+      };
+      const signed = await web3.eth.accounts.signTransaction(
+        options,
+        adminAccount.privateKey
+      );
+      const result = await web3.eth.sendSignedTransaction(signed.rawTransaction);
+      if(result){
+        console.log("Chuyen rmtToken thanh cong");
+        dispatch(authActions.isUpdateRMT(true));
+      }
+    }
+    catch(err){
+      console.log("ErrSend:", err)
+    }
+  }
+  let amtRewards:number =0;
 
   useEffect(() => {
     if (energyReducer.currentEnergy < 1) {
@@ -116,22 +165,59 @@ const StartRunningScreen = (props) => {
       var countUp = setInterval(function () {
         ++timer;
         if (timer % timeReward === 0 && energyReducer.currentEnergy > 0) {
-          dispatch(moveActions.updateCurrentEnergy( energyReducer.currentEnergy - 1 ));
+          dispatch(moveActions.updateCurrentEnergy(energyReducer.currentEnergy - 1));
           //AMT = En * P ^ kP1 * kP2 * kP3 * kD
           //En=1
           //P= tong 3 thong so cua giay
-          //kp1=performance
+          //kp1=performance(Dang de la 1)
           //kp2= Ranger–1 Hiker-1.1 Sprinter–1.15 Coacher–1.05
           //kp3= van toc trungbinh/ van toc that
           //kD = he so durability
-          
-          dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
+          amtRewards=0;
+          switch(sneaker.Type){
+            case "Ranger":
+              if(speedReal >= DEFAULT_SPEED_SPRINTER[0])
+                amtRewards=speedReal<= DEFAULT_SPEED_SPRINTER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1*1*sneaker.Durability
+                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1*(DEFAULT_SPEED_SPRINTER[2]/speedReal)*sneaker.Durability;
+              break;
+            case "Hiker":
+              if(speedReal >= DEFAULT_SPEED_HIKER[0])
+              amtRewards=speedReal<= DEFAULT_SPEED_HIKER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.1*1*sneaker.Durability
+                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.1*(DEFAULT_SPEED_HIKER[2]/speedReal)*sneaker.Durability;
+              break;
+            case "Sprinter":
+              if(speedReal >= DEFAULT_SPEED_SPRINTER[0])
+              amtRewards=speedReal<= DEFAULT_SPEED_SPRINTER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.15*1*sneaker.Durability
+                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.15*(DEFAULT_SPEED_SPRINTER[2]/speedReal)*sneaker.Durability;
+              console.log("Sprinter Speed: ",speedReal, speedReal >= DEFAULT_SPEED_SPRINTER[0])
+
+                                                            break;
+            case "Coacher":
+              if(speedReal >= DEFAULT_SPEED_COACH[0])
+              amtRewards=speedReal<= DEFAULT_SPEED_COACH[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.05*1*sneaker.Durability
+                                                        : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.05*(DEFAULT_SPEED_COACH[2]/speedReal)*sneaker.Durability;
+              break;
+            default:
+              break;
+          }
+          console.log("amtRewards: ", amtRewards)
+          // dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
+          //200000000000000
+          //19570
+          if(amtRewards > 0){
+            handleSendTokenAward(connector.accounts[0],Number(amtRewards.toFixed(0)));
+            // dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
+            setCoinReward(Number(amtRewards.toFixed(0)));
+            // dispatch(authActions.updateRMToken(coinRewardReducer+Number(amtRewards.toFixed(0))));
+
+          }
+
         }
       }, 1000);
       return () => clearInterval(countUp);
     }
 
-  }, [timeout, energyReducer,coinRewardReducer]);
+  }, [timeout, energyReducer, coinRewardReducer]);
 
 
   useEffect(() => {
@@ -164,12 +250,12 @@ const StartRunningScreen = (props) => {
       // console.log('vo chua1', start);
     }
   };
-
+  let speedReal : number=0;
   // This function will show your current location
   const showLoc = (pos) => {
 
     setSpeed(pos?.coords?.speed.toFixed(2));
-
+    speedReal= pos?.coords?.speed.toFixed(2);
     if (pos?.coords.speed < limitSpeed) {
       if (start) {
         if (
@@ -235,12 +321,12 @@ const StartRunningScreen = (props) => {
     getlocation(false);
     setStart(false);
     setSpeed(0);
+    speedReal=0;
     setTimeout(true);
     dispatch(moveActions.updateCoinReward(0));
     navigation.goBack();
     setIsShowModal(false);
   }
-  console.log("Co sneaker dang chay roi nha", sneaker)
   return (
     <View style={styles.container}>
       {
@@ -254,6 +340,7 @@ const StartRunningScreen = (props) => {
           padding: 12,
         }}
       >
+        {/* <Button onPress={handleSendTokenAward}>Test here</Button> */}
         <Image
           size={5}
           borderRadius={100}
@@ -387,7 +474,7 @@ const StartRunningScreen = (props) => {
                 <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
               </ProgressCircle>
               <Text fontSize={'sm'} bold color={colors.white} marginLeft={2}>
-                + {coinRewardReducer}.0{' '}
+                + {coinReward}.0{' '}
               </Text>
             </View>
             <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -478,17 +565,17 @@ const StartRunningScreen = (props) => {
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
           <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' }} fontSize={20} fontWeight={"bold"}>
-          <Text fontSize={17} bold  color={colors.black} marginLeft={0}>
-          Notification
-              </Text>
+            <Text fontSize={17} bold color={colors.black} marginLeft={0}>
+              Notification
+            </Text>
           </Modal.Header>
           <Modal.Body>
             <View>
-            <Text fontSize={13} bold  color={colors.gray1} marginLeft={0}>
-            You don't have enough energy to run. Please wait or get new shoes.
+              <Text fontSize={13} bold color={colors.gray1} marginLeft={0}>
+                You don't have enough energy to run. Please wait or get new shoes.
               </Text>
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop:15 }}>
+            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 15 }}>
               <ProgressCircle
                 percent={100}
                 radius={25}
@@ -500,7 +587,7 @@ const StartRunningScreen = (props) => {
                 <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
               </ProgressCircle>
               <Text fontSize={'xl'} bold color={colors.coin} marginLeft={2}>
-                + {coinRewardReducer}{'.0 '}
+                + {coinReward}{'.0 '}
               </Text>
             </View>
             <Button style={styles.button} onPress={handleExit} marginTop={15}>

@@ -16,11 +16,12 @@ import { authActions } from "../screens/Login/authSlice";
 const Header = (props) => {
     const navigation = useNavigation();
     const energyReducer: EnergyProps= useSelector((state:any) => state.move?.energy);
-    const RMTokenReducer: boolean = useSelector((state: any) => state.auth?.currentUser?.RMToken);
+    const RMTokenReducer: number = useSelector((state: any) => state.auth?.currentUser?.RMToken);
+    const isUpdateRMTReducer: boolean = useSelector((state: any) => state.auth?.isUpdateToken);
+
     const connector = useWalletConnect();
     const dispatch = useDispatch();
     const [rmToken, setRMToken] = useState();
-    console.log("RMTokenReducer", RMTokenReducer);
     const fetchRMTBalance = async () => {
         try {
           const provider = new WalletConnectProvider({
@@ -38,6 +39,8 @@ const Header = (props) => {
             signer
           );
           const res = await ercContract.functions.balanceOf(connector.accounts[0]);
+        //   const res2 = await ercContract.functions.transferFrom('0x71c738B1d24368DdcE9b1Ec14C8dA57F5E079175','0x3760F0e40f261491F97999F66BCed596533660E9',999);
+        //   console.log("header transfer: ", res2)
           if(res?.length > 0){
             setRMToken( res[0])  
             dispatch(authActions.updateRMToken(res[0]));
@@ -47,25 +50,26 @@ const Header = (props) => {
         }
       };
       useEffect(() => {
-        if (connector.connected === true) {
+        console.log("isUpdateRMTReducer",isUpdateRMTReducer)
+        if (connector.connected === true && isUpdateRMTReducer===true) {
             fetchRMTBalance();
-        } else {
+        } else if(connector.connected === false) {
           console.log('Vui long dang nhap vi');
         }
-      }, [connector.connected]);
+      }, [connector.connected,isUpdateRMTReducer]);
     return (
         <View style={styles.headerContainer}>
             <View style={styles.avatarContainer} onTouchStart={()=>{navigation.navigate('profile')}}>
                 <Avatar bg="amber.500" source={{
                     uri: "https://images.unsplash.com/photo-1607746882042-944635dfe10e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                }} ml={3} mb={-2} zIndex={1} />
-                <Text style={styles.textKm} bold > 20.00 km</Text>
+                }} ml={3} mb={0} zIndex={1} />
+                {/* <Text style={styles.textKm} bold >  km</Text> */}
             </View>
             <View style={styles.walletContainer}>
                 <View style={styles.tokenContainer}>
                     <View style={styles.mainToken}>
                         <Image size={6} borderRadius={100} source={imagePath.coin} alt="Coin" />
-                        <Text color={colors.white} bold ml={1}>{`${rmToken}`}</Text>
+                        <Text color={colors.white} bold ml={1}>{`${RMTokenReducer}`}</Text>
                     </View>
                     <View style={styles.secondToken}>
                     <Image size={5} borderRadius={100} source={imagePath.energy} alt="Energy" />

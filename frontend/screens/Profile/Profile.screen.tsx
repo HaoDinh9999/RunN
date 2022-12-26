@@ -39,7 +39,7 @@ const ProfileScreen = () => {
                     }} zIndex={1} size="lg" />
                     <View style={styles.infoItem}>
                         <Text color={colors.white} bold fontSize="lg" >Runner</Text>
-                        <Text color={colors.text.thirdText} bold>{currentUserReducer.email}</Text>
+                        <Text color={colors.text.thirdText} bold>{currentUserReducer?.email}</Text>
                     </View>
                 </View>
 

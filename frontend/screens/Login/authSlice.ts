@@ -1,4 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from "@reduxjs/toolkit";
+import { PropSneaker } from "../../@core/model/sneaker";
 import { User } from "../../@core/model/user";
 import { api } from "../../services/api";
 import { userApi } from "../../services/modules/users";
@@ -12,13 +13,15 @@ export interface LoginPayload {
 }
 export interface AuthState {
     isLoggedIn: boolean;
-    logging?: Boolean;
+    logging?: boolean;
+    isUpdateToken?:boolean;
     currentUser ?: User;
 }
 
 const initialState : AuthState = {
     isLoggedIn:false,
     logging:false,
+    isUpdateToken:true,
     currentUser:undefined,
 }
 
@@ -34,7 +37,8 @@ const authSlice = createSlice({
             state.logging = false;
             state.isLoggedIn = true;
             state.currentUser = action.payload;
-            
+            state.isUpdateToken=true;
+
             console.log("loginSuccess: ",state );
 
         },
@@ -53,10 +57,21 @@ const authSlice = createSlice({
             console.log("updateCurrentUser: ",state.currentUser );
         },
 
+        updateSneakers(state, action: PayloadAction<PropSneaker[]>){
+            state.currentUser.sneakers = action.payload;
+            console.log("updateSneakers: ",state.currentUser.sneakers );
+
+        },
+
         updateRMToken(state, action: PayloadAction<{hex:string, type:string}>){
             state.currentUser.RMToken = action.payload;
             console.log("updateRMToken: ",state.currentUser.RMToken );
+            state.isUpdateToken=false;
+        },
 
+        isUpdateRMT(state, action: PayloadAction<boolean>){
+            state.isUpdateToken = action.payload;
+            console.log("isUpdateRMT: ",state.isUpdateToken );
         }
 
     },

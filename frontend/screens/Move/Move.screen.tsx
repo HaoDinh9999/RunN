@@ -173,7 +173,7 @@ const MoveScreen = () => {
             </Box>
           </View>
         </View>
-        <View style={{ marginTop: 30, paddingHorizontal: 80 }}>
+        <View style={{ marginTop: 30,marginBottom:30, paddingHorizontal: 80 }}>
           <Button
             style={styles.button}
             onPress={() =>

@@ -93,7 +93,7 @@ const MarketScreen = () => {
     <View style={styles.container}>
       <View style={styles.tabTop}>
         <Text style={styles.textTapTop} bold fontSize="sm">
-          Sneakers
+          My Sneakers
         </Text>
       </View>
       <View style={styles.filter}>

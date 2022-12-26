@@ -13,6 +13,7 @@
     "@react-navigation/native": "^6.0.13",
     "@react-navigation/native-stack": "^6.9.1",
     "@reduxjs/toolkit": "^1.8.6",
+    "@truffle/hdwallet-provider": "^2.1.4",
     "@walletconnect/jsonrpc-types": "^1.0.2",
     "@walletconnect/react-native-compat": "^2.1.4",
     "@walletconnect/react-native-dapp": "^1.8.0",

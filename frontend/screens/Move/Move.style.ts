@@ -42,8 +42,9 @@ const styles = StyleSheet.create({
     borderRadius:25,
   },
   containerBody:{
-    marginTop:40,
-    paddingHorizontal:40
+    marginTop:30,
+    paddingHorizontal:40,
+    marginBottom:0
   },
   mainTokenContainer:{
     marginTop:14,

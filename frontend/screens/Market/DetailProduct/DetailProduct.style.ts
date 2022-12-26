@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     borderWidth:3,
     borderRadius:12,
     borderColor:"#2C3C6F",
+    marginTop:12
   },
   modalBackground:{
     alignItems:'center'

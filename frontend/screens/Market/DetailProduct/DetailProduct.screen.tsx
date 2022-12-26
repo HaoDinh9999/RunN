@@ -58,6 +58,7 @@ const DetailProductScreen = (props) => {
                   <Text
                     color="#2C053B"
                     bold
+                    fontSize={16}
                     style={{
                       width: '33.33%',
                       textAlign: 'center',
@@ -75,22 +76,35 @@ const DetailProductScreen = (props) => {
                     {'>>'} {sneaker.Type}
                   </Text>
 
-                  <Text
-                    color="#2C053B"
-                    style={{
-                      width: '33.33%',
-                      textAlign: 'center',
-                      backgroundColor: '#CFDDFF',
-                      borderTopRightRadius: 20,
-                      alignItems:'center'
-                    }}
-                    bold
-                  >
-                    <View style={{alignItems:'center'}}>
-                    <Image size={4} source={imagePath.protect} alt="Condition" />
+                  <Box w="33.33%">
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: -24, zIndex: 3 }}>
+
+                      <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
+                      <Text
+                        color={colors.white}
+                        fontWeight="bold"
+                        fontSize={16}
+                        style={{
+                          textAlign: 'center',
+                          marginLeft: 5
+                        }}
+                      >
+                        {sneaker.Condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
+                      </Text>
                     </View>
-                    {' '}{sneaker.Condition} / 100
-                  </Text>
+                    <Progress
+                      value={sneaker?.Condition}
+                      bg={colors.background.progress}
+                      _filledTrack={{ bg: colors.primary, borderRadius: 0 }}
+                      size="2xl"
+                      style={{
+                        borderRadius: 0, borderTopRightRadius: 25,
+                      }}
+                    >
+
+                    </Progress>
+                  </Box>
                 </View>
               </View>
             </Box>
@@ -184,7 +198,7 @@ const DetailProductScreen = (props) => {
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm"
-                  value={sneaker.Joy *10}
+                  value={sneaker.Joy * 10}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: '#36706D' }}
                 />
@@ -214,7 +228,7 @@ const DetailProductScreen = (props) => {
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm"
-                  value={sneaker.Durability *10}
+                  value={sneaker.Durability * 10}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: '#123783' }}
                 />
@@ -226,9 +240,9 @@ const DetailProductScreen = (props) => {
           </View>
         </View>
       </View>
-      <View style={styles.bottom}>
-        <Text fontSize={'xl'} bold color={colors.white} marginLeft={2}>
-          334 FIT
+      <View style={styles.bottom} onTouchStart={()=>navigation.goBack()}>
+        <Text fontSize={'xl'} bold color={colors.white} style={{justifyContent:'center',alignItems:'center',textAlign:'center', width:'100%'}}>
+                      BACK
         </Text>
         {/* <Button style={styles.button}>
           <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>BUY NOW</Text>
