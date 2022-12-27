@@ -120,7 +120,7 @@ const DetailProfileScreen = () => {
           marginBottom: 15,
         }}
       >
-        <Text style={{ textAlign: 'center', marginTop: 30 }} color="#fff">
+        <Text style={{ textAlign: 'center', marginBottom: 15 }} color="#fff">
           © Copyright 2022 RunN.
         </Text>
       </View>

@@ -150,10 +150,10 @@ function RegisterScreen(props) {
                 <Input variant="rounded" placeholder="Email address" style={styles.input} onChangeText={newText => setEmail(newText)} />
               </View>
               <View style={styles.inputView}>
-                <Input variant="rounded" placeholder="Password" style={styles.input} onChangeText={newText => setPassword(newText)} InputRightElement={<Text style={styles.sendText} onPress={handleShowPassword}>Send code</Text>}  type={show ? "text" : "password"}/>
+                <Input variant="rounded" placeholder="Password" style={styles.input} onChangeText={newText => setPassword(newText)} InputRightElement={<Text style={styles.sendText} onPress={handleShowPassword}>Show</Text>}  type={show ? "text" : "password"}/>
               </View>
               <View style={styles.inputView}>
-              <Input variant="rounded" placeholder="Password Confirm" style={styles.input} onChangeText={newText => setPasswordConfirm(newText)} InputRightElement={<Text style={styles.sendText} onPress={handleShowPassword}>Send code</Text>}  type={show ? "text" : "password"}/>
+              <Input variant="rounded" placeholder="Password Confirm" style={styles.input} onChangeText={newText => setPasswordConfirm(newText)} InputRightElement={<Text style={styles.sendText} onPress={handleShowPassword}>Show</Text>}  type={show ? "text" : "password"}/>
               </View>
               <View style={styles.buttonView}>
                 <Button style={styles.button}>

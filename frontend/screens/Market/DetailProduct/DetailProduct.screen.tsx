@@ -115,18 +115,18 @@ const DetailProductScreen = (props) => {
             style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
           >
             <Text bold color={colors.white}>
-              Lifetime
+              {/* Lifetime */}
             </Text>
             <Text fontSize={'lg'} bold color={colors.white}>
-              1000
+              {/* 1000 */}
               <Text bold color="#CFDDFF">
-                /1000
+                {/* /1000 */}
               </Text>
             </Text>
           </View>
-          <Box w="100%" marginTop={1}>
+          <Box w="100%" marginTop={0}>
             <Progress
-              value={45}
+              value={100}
               bg={colors.background.progress}
               _filledTrack={{ bg: colors.progress }}
             />
@@ -141,7 +141,7 @@ const DetailProductScreen = (props) => {
             </Text>
           </View>
           <Box w="100%" marginTop={1}>
-            <Progress value={15} bg={colors.background.progress} _filledTrack={{ bg: '#CFDDFF' }} />
+            <Progress value={25} bg={colors.background.progress} _filledTrack={{ bg: '#CFDDFF' }} />
           </Box>
         </View>
         <Text fontSize="lg" bold color={colors.white} style={styles.mint}>
