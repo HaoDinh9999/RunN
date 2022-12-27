@@ -40,24 +40,26 @@ const EditDetailProfileScreen = (props) => {
           InputRightElement={
             <Image size={5} borderRadius={100} source={imagePath.name} alt="Alternate Text" style={{marginRight:10}} />
           }
-          placeholder="Name"
+          placeholder=    {props?.route?.params?.title}
           fontSize={15}
           color="#fff"
         />
       </View>
-      <Button style={styles.button}>SAVE</Button>
 
       <View
         style={{
-          flexDirection: 'row',
+          flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
           position: 'absolute',
           bottom: 0,
           width: '100%',
           marginBottom: 15,
+          paddingHorizontal:40
         }}
       >
+              <Button style={styles.button}>SAVE</Button>
+
         <Text style={{ textAlign: 'center', marginTop: 30 }} color="#fff">
           © Copyright 2022 RunN.
         </Text>

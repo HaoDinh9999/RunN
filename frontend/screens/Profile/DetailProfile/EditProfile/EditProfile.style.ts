@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     borderWidth:1,
     borderRadius:25,
     fontWeight:'bold',
+    width:'100%'
   }
  
 });
