@@ -31,6 +31,9 @@ const EditDetailProfileScreen = (props) => {
           <Image size={7} borderRadius={100} alt="" />
         </TouchableHighlight>
       </View>
+      <View>
+        
+      </View>
       <View style={styles.bodyContainer}>
         <Input
           w={{
@@ -38,7 +41,7 @@ const EditDetailProfileScreen = (props) => {
             md: '25%',
           }}
           InputRightElement={
-            <Image size={5} borderRadius={100} source={imagePath.name} alt="Alternate Text" style={{marginRight:10}} />
+            <Image size={5} borderRadius={100} source={imagePath.name} alt="Alternate Text" style={{ marginRight: 10 }} />
           }
           placeholder=    {props?.route?.params?.title}
           fontSize={15}
@@ -53,17 +56,23 @@ const EditDetailProfileScreen = (props) => {
           alignItems: 'center',
           position: 'absolute',
           bottom: 0,
-          width: '100%',
+          width:'100%'
+        }}>
+      <View
+        style={{
+          width: '50%',
           marginBottom: 15,
-          paddingHorizontal:40
+          paddingHorizontal: 15
         }}
       >
-              <Button style={styles.button}>SAVE</Button>
+        <Button style={styles.button}>SAVE</Button>
 
-        <Text style={{ textAlign: 'center', marginTop: 30 }} color="#fff">
+        <Text style={{ textAlign: 'center', marginBottom: 15 }} color="#fff">
           © Copyright 2022 RunN.
         </Text>
       </View>
+      </View>
+      
     </View>
   );
 };

@@ -135,9 +135,9 @@ const MoveScreen = () => {
               }}
             >
               <Text fontSize={'sm'} bold color={colors.white}>
-                1000
+                450
                 <Text bold color={colors.gray}>
-                  /1000 FIT
+                  /1000 RMT
                 </Text>
               </Text>
             </View>

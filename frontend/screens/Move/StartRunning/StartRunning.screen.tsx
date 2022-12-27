@@ -56,7 +56,7 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [timeReward, setTimeReward] = useState<number>(60);// seconds
+  const [timeReward, setTimeReward] = useState<number>(120);// seconds
   const [coinReward, setCoinReward] = useState<number>(0);
   const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
   const mapRef = useRef(null);
