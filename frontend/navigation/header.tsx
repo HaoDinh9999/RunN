@@ -125,9 +125,11 @@ const styles = StyleSheet.create({
     },
     mainToken: {
         flexDirection: 'row',
+        alignItems:'center'
     },
     secondToken: {
         flexDirection: 'row',
+        alignItems:'center',
         marginLeft: 15
     },
     notification: {

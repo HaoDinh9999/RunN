@@ -29,4 +29,5 @@ export default {
     email: require("../../assets/image/email_send_60px.png"),
     password: require("../../assets/image/password_100px.png"),
     name:require("../../assets/image/profile_52px.png"),
+    refuse: require("../../assets/image/refuse.png"),
 }

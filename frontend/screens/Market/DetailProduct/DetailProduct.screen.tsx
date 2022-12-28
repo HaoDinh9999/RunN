@@ -58,7 +58,7 @@ const DetailProductScreen = (props) => {
                   <Text
                     color="#2C053B"
                     bold
-                    fontSize={16}
+                    fontSize={13}
                     style={{
                       width: '33.33%',
                       textAlign: 'center',
@@ -78,16 +78,17 @@ const DetailProductScreen = (props) => {
 
                   <Box w="33.33%">
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: -24, zIndex: 3 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: -27, zIndex: 3 }}>
 
                       <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
                       <Text
                         color={colors.white}
                         fontWeight="bold"
-                        fontSize={16}
+                        fontSize={14}
                         style={{
                           textAlign: 'center',
-                          marginLeft: 5
+                          marginLeft: 5,
+                          marginBottom:1
                         }}
                       >
                         {sneaker.Condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
@@ -159,6 +160,7 @@ const DetailProductScreen = (props) => {
               borderWidth={3}
               borderColor="#f99"
               resizeMode="contain"
+              marginRight={1}
             />
 
             <View style={{ width: '85%' }}>
@@ -175,7 +177,7 @@ const DetailProductScreen = (props) => {
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-              {sneaker.Performance}
+              {Number.isInteger(sneaker?.Performance) ? sneaker?.Performance+".0" : sneaker?.Performance}
             </Text>
           </View>
           <View style={styles.attributeItem}>
@@ -189,6 +191,7 @@ const DetailProductScreen = (props) => {
               borderWidth={3}
               borderColor="#36706D"
               resizeMode="contain"
+              marginRight={1}
             />
 
             <View style={{ width: '85%' }}>
@@ -205,7 +208,7 @@ const DetailProductScreen = (props) => {
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-              {sneaker.Joy}
+            {Number.isInteger(sneaker?.Joy) ? sneaker?.Joy+".0" : sneaker?.Joy}
             </Text>
           </View>
           <View style={styles.attributeItem}>
@@ -219,6 +222,7 @@ const DetailProductScreen = (props) => {
               borderWidth={3}
               borderColor="#123783"
               resizeMode="contain"
+              marginRight={1}
             />
 
             <View style={{ width: '85%' }}>
@@ -235,7 +239,7 @@ const DetailProductScreen = (props) => {
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-              {sneaker.Durability}
+            {Number.isInteger(sneaker?.Durability) ? sneaker?.Durability+".0" : sneaker?.Durability}
             </Text>
           </View>
         </View>

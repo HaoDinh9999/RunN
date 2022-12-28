@@ -42,6 +42,7 @@
     "react-native-localhost": "1.0.0",
     "react-native-maps": "^0.27.1",
     "react-native-maps-directions": "^1.8.0",
+    "react-native-mock-location-detector": "^2.0.0",
     "react-native-progress-circle": "^2.1.0",
     "react-native-randombytes": "^3.6.1",
     "react-native-reanimated": "^2.12.0",

@@ -49,7 +49,7 @@ const CardSneakersRun = (props) => {
           />
 
           <View style={styles.shoesBackground}>
-            <Text color="#C7D5F7" bold style={{ fontSize: 16, textAlign: 'center' }}>
+            <Text color="#C7D5F7" bold style={{ fontSize: 15, textAlign: 'center' }}>
               #{`${sneaker?.id}`}
             </Text>
             <View style={styles.barShoes}>
@@ -61,7 +61,7 @@ const CardSneakersRun = (props) => {
                   textAlign: 'center',
                   backgroundColor: '#CFDDFF',
                   borderBottomLeftRadius: 20,
-                  padding: 2
+                  padding: 0
                 }}
               >
                 LV {`${sneaker?.Level}`}
@@ -69,7 +69,7 @@ const CardSneakersRun = (props) => {
               <Text
                 color="#C7D5F7"
                 bold
-                fontSize={16}
+                fontSize={13}
                 style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
               >
                 {'>> '} {sneaker?.Type}
@@ -92,7 +92,7 @@ const CardSneakersRun = (props) => {
                 </Text> */}
               <Box w="33.33%">
 
-                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', marginBottom:-22, zIndex:3}}>
+                <View style={{ flexDirection: 'row', alignItems: 'center',justifyContent:'center', marginBottom:-26, zIndex:3}}>
 
                   <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
                   <Text
@@ -113,7 +113,7 @@ const CardSneakersRun = (props) => {
                   _filledTrack={{ bg: colors.primary, borderRadius: 0 }}
                   size="2xl"
                   style={{
-                    borderRadius: 0, borderTopRightRadius: 25,
+                    borderRadius: 0, borderTopRightRadius: 25
                   }}
                 >
 

@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   attributeItem:{
     flexDirection: 'row',
     justifyContent:'space-between',
-    // alignItems:'center',
+    alignItems:'center',
     // textAlign:'center'
   },
   bottom:{

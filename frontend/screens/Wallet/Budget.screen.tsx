@@ -203,7 +203,7 @@ const BudgetScreen = () => {
           <Image size={7} borderRadius={100} source={imagePath.back} alt="Alternate Text" />
         </TouchableHighlight>
         <View style={styles.containTab}>
-          <Text color={colors.white} bold fontSize="xl" style={{ paddingHorizontal: 0 }}>
+          <Text color={colors.white} bold fontSize="xl" style={{ marginRight:30 }}>
             Wallet
           </Text>
         </View>
@@ -226,12 +226,12 @@ const BudgetScreen = () => {
             RMT
           </Text>
         </View>
-        <Text color={colors.coin} bold fontSize="lg">
+        <Text color={colors.coin} bold fontSize={15}>
         {RMTokenReducer && `${ethers.utils.formatEther(RMTokenReducer?.toString()).toString()}`}
         </Text>
       </View>
       <View style={styles.boxContain}>
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', alignItems:'center' }}>
           <Image size={5} borderRadius={100} source={imagePath.sneakers} alt="Alternate Text" />
           <Text color={colors.white} bold fontSize="md" marginLeft={4}>
             Sneakers

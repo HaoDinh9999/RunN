@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     flexDirection:'column'
   },
   button:{
-    backgroundColor: colors.background.mainColor,
+    backgroundColor: '#FF0000',
     borderRadius:30,  
     alignItems:'center',
   }

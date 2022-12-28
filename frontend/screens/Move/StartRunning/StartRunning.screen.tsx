@@ -32,6 +32,7 @@ import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
 import { DEFAULT_SPEED_COACH, DEFAULT_SPEED_HIKER, DEFAULT_SPEED_SPRINTER } from '../../../constant/typeSneaker';
 import { authActions } from '../../Login/authSlice';
+import RNMockLocationDetector from "react-native-mock-location-detector";
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -44,6 +45,7 @@ const StartRunningScreen = (props) => {
   const timingReducer: boolean = useSelector((state: any) => state.move.timing);
   const coinRewardReducer: number = useSelector((state: any) => state.move.coinReward);
   const RMTokenReducer: number = useSelector((state: any) => state.auth?.currentUser?.RMToken);
+
 
   const dispatch = useDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
@@ -59,6 +61,7 @@ const StartRunningScreen = (props) => {
   const [timeReward, setTimeReward] = useState<number>(120);// seconds
   const [coinReward, setCoinReward] = useState<number>(0);
   const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
+  const [isLocationNotFine, setIsLocationNotFine] = useState<boolean>(false);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const connector = useWalletConnect();
@@ -94,8 +97,8 @@ const StartRunningScreen = (props) => {
     const locPermissionDenied = await locationPermission();
     if (locPermissionDenied) {
       const result: CurrentLocation = await getCurrentLocation();
-      console.log('get live location after 4 second', result);
-
+      console.log('get live location after 4 second --', result);
+      handleCheckMock();
       animate(result?.latitude, result?.longitude);
       updateState({
         heading: heading,
@@ -327,6 +330,23 @@ const StartRunningScreen = (props) => {
     navigation.goBack();
     setIsShowModal(false);
   }
+
+  const handleCheckMock = async() => {
+    const isLocationMocked: boolean = await RNMockLocationDetector.checkMockLocationProvider();
+    if(isLocationMocked){
+      console.log("Location is fake");
+      setIsLocationNotFine(true);
+    }
+    else{
+      console.log("Location is fine");
+      setIsLocationNotFine(false);
+    }
+  }
+  const handleCloseWarningLocation = () => {
+    setIsLocationNotFine(false);
+    handleExit();
+
+  }
   return (
     <View style={styles.container}>
       {
@@ -379,7 +399,7 @@ const StartRunningScreen = (props) => {
                     alignItems: 'center',
                   }}
                   resizeMode="contain"
-                  alt="Alternate Text"
+                  alt="Running"
                 />
               </MarkerAnimated>
 
@@ -592,6 +612,28 @@ const StartRunningScreen = (props) => {
             </View>
             <Button style={styles.button} onPress={handleExit} marginTop={15}>
               <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>OK</Text>
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal isOpen={isLocationNotFine} onClose={handleCloseWarningLocation} size="lg">
+        <Modal.Content maxWidth="400px">
+          <Modal.CloseButton />
+          <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' }} fontSize={20} fontWeight={"bold"}>
+            <Text fontSize={15} bold color={colors.black} marginLeft={0}>
+              Warning
+            </Text>
+          </Modal.Header>
+          <Modal.Body>
+            <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
+              <Text fontSize={11}  color={colors.gray1} marginBottom={0} textAlign='center'>
+                  We detected you are using GPS cheating. Please check it and run again.
+              </Text>
+              <Image size={50} source={imagePath.refuse} alt="Refuse" />
+
+            </View>
+            <Button style={styles.button} onPress={handleCloseWarningLocation} marginTop={15}>
+              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15}}>OK</Text>
             </Button>
           </Modal.Body>
         </Modal.Content>
