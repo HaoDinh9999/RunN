@@ -61,7 +61,8 @@ const CardItem = (props) => {
       >
         <Image
           source={{
-            uri: 'https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png',
+            // uri: 'https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png',
+            uri:sneaker?.UrlImage
           }}
           alt="Alternate Text"
           size="xl"

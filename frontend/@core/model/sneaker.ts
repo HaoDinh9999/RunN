@@ -11,4 +11,5 @@ export  interface PropSneaker {
     price?: number;
     saleId?: string;
     seller?: string;
+    UrlImage?:string;
 }

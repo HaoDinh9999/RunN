@@ -210,7 +210,7 @@ const StartRunningScreen = (props) => {
           if(amtRewards > 0){
             handleSendTokenAward(connector.accounts[0],Number(amtRewards.toFixed(0)));
             // dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
-            setCoinReward(Number(amtRewards.toFixed(0)));
+            setCoinReward(coinReward+Number(amtRewards.toFixed(0)));
             // dispatch(authActions.updateRMToken(coinRewardReducer+Number(amtRewards.toFixed(0))));
 
           }
@@ -591,7 +591,7 @@ const StartRunningScreen = (props) => {
           </Modal.Header>
           <Modal.Body>
             <View>
-              <Text fontSize={13} bold color={colors.gray1} marginLeft={0}>
+              <Text fontSize={15}  color={colors.gray1} marginLeft={0} textAlign='center'>
                 You don't have enough energy to run. Please wait or get new shoes.
               </Text>
             </View>
@@ -610,7 +610,7 @@ const StartRunningScreen = (props) => {
                 + {coinReward}{'.0 '}
               </Text>
             </View>
-            <Button style={styles.button} onPress={handleExit} marginTop={15}>
+            <Button style={styles.buttonOK} onPress={handleExit} marginTop={15}>
               <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>OK</Text>
             </Button>
           </Modal.Body>

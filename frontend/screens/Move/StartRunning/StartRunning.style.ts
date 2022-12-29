@@ -78,6 +78,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FF0000',
     borderRadius:30,  
     alignItems:'center',
+  },
+  buttonOK:{
+    backgroundColor: colors.background.primary,
+    borderRadius:30,  
+    alignItems:'center',
   }
 });
 

@@ -41,7 +41,7 @@ const DetailProductScreen = (props) => {
               </AspectRatio>
               <Image
                 source={{
-                  uri: 'https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png',
+                  uri: sneaker?.UrlImage,
                 }}
                 alt="Alternate Text"
                 width={200}
@@ -58,12 +58,13 @@ const DetailProductScreen = (props) => {
                   <Text
                     color="#2C053B"
                     bold
-                    fontSize={13}
+                    fontSize={14}
                     style={{
                       width: '33.33%',
                       textAlign: 'center',
                       backgroundColor: '#CFDDFF',
                       borderBottomLeftRadius: 20,
+                      padding:1.5
                     }}
                   >
                     LV {`${sneaker.Level}`}
@@ -78,7 +79,7 @@ const DetailProductScreen = (props) => {
 
                   <Box w="33.33%">
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: -27, zIndex: 3 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', marginBottom: -23, zIndex: 3 }}>
 
                       <Image size={5} borderRadius={100} source={imagePath.protect} alt="Condition" />
                       <Text

@@ -39,6 +39,7 @@ export const mapTokenDataToSneakerInDetail = (tokenData) => {
     Durability,
     Condition,
     Mint,
+    UrlImage,
     Parents,
   } = isonInfo;
 
@@ -51,6 +52,7 @@ export const mapTokenDataToSneakerInDetail = (tokenData) => {
     Durability,
     Condition,
     Mint,
+    UrlImage,
     Parents,
   };
 };

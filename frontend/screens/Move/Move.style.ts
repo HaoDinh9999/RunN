@@ -6,7 +6,7 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.background.mainColor,
     flex: 1,
-    padding: 12
+    padding: 12,
   },
   wrapper: {},
   slide1: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     borderRadius:25,
   },
   containerBody:{
-    marginTop:30,
+    marginTop:10,
     paddingHorizontal:40,
     marginBottom:0
   },
