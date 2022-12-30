@@ -20,6 +20,8 @@ const MoveScreen = () => {
   let sneakerReducers: PropSneaker[] = useSelector(
     (state: any) => state.auth.currentUser?.sneakers
   );
+  const RMTokenReducer: number = useSelector((state: any) => state.auth?.currentUser?.RMToken);
+
   let movingReducer : any = useSelector((state:any) => state.move);
 
   const dispatch = useDispatch();
@@ -135,15 +137,15 @@ const MoveScreen = () => {
               }}
             >
               <Text fontSize={'sm'} bold color={colors.white}>
-                450
+              {`${RMTokenReducer}`}  
                 <Text bold color={colors.gray}>
-                  /1000 RMT
+                   {'-'}RMT
                 </Text>
               </Text>
             </View>
             <Box w="100%" marginTop={1}>
               <Progress
-                value={45}
+                value={100}
                 bg={colors.background.progress}
                 _filledTrack={{ bg: colors.coin }}
               />

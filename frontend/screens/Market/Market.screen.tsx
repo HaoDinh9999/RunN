@@ -99,8 +99,8 @@ const MarketScreen = () => {
       </View>
       <View style={styles.filter}>
         <ComboBoxComponent
-          label="Sort Price"
-          placeholder="Sort Price"
+          label="Sort"
+          placeholder="Sort"
           data={dataComboBox}
           borderWidth={0}
           style={{ marginLeft: -2, color: colors.white, marginTop: 1 }}
@@ -134,9 +134,9 @@ const MarketScreen = () => {
   );
 };
 const dataComboBox = [
-  { label: 'Lowest Price', value: 'Lowest' },
-  { label: 'Highest Price', value: 'Highest' },
-  { label: 'Lastest Price', value: 'Lastest' },
+  { label: 'Latest', value: 'Latest' },
+  { label: 'Oldest', value: 'Oldest' },
+  { label: 'Default', value: 'Default' },
 ];
 
 export default MarketScreen;

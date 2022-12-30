@@ -24,15 +24,20 @@ import { useDispatch, useSelector } from 'react-redux';
 import { EnergyProps } from '../../../@core/model/move';
 import { moveActions, selectEnergy } from '../moveSlice';
 import { PropSneaker } from '../../../@core/model/sneaker';
-import { Contract, ethers,providers } from 'ethers';
+import { Contract, ethers, providers } from 'ethers';
 import { RunnMoveTokenABI } from '../../../constant/RunnMoveTokenABI';
 import { useWalletConnect } from '@walletconnect/react-native-dapp';
 import WalletConnectProvider from '@walletconnect/web3-provider';
 import HDWalletProvider from '@truffle/hdwallet-provider';
 import Web3 from 'web3';
-import { DEFAULT_SPEED_COACH, DEFAULT_SPEED_HIKER, DEFAULT_SPEED_SPRINTER } from '../../../constant/typeSneaker';
+import {
+  DEFAULT_SPEED_COACH,
+  DEFAULT_SPEED_HIKER,
+  DEFAULT_SPEED_RANGER,
+  DEFAULT_SPEED_SPRINTER,
+} from '../../../constant/typeSneaker';
 import { authActions } from '../../Login/authSlice';
-import RNMockLocationDetector from "react-native-mock-location-detector";
+import RNMockLocationDetector from 'react-native-mock-location-detector';
 
 const screen = Dimensions.get('window');
 const ASPECT_RATIO = screen.width / screen.height;
@@ -46,7 +51,6 @@ const StartRunningScreen = (props) => {
   const coinRewardReducer: number = useSelector((state: any) => state.move.coinReward);
   const RMTokenReducer: number = useSelector((state: any) => state.auth?.currentUser?.RMToken);
 
-
   const dispatch = useDispatch();
   const [isShowModal, setIsShowModal] = useState(false);
   const [arrDistances, setArrDistances] = useState([]);
@@ -58,10 +62,12 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [timeReward, setTimeReward] = useState<number>(120);// seconds
+  const [timeReward, setTimeReward] = useState<number>(300); // seconds
   const [coinReward, setCoinReward] = useState<number>(0);
   const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
   const [isLocationNotFine, setIsLocationNotFine] = useState<boolean>(false);
+  const [speedText, setSpeedText] = useState<string>('');
+  const [speedLimit, setSpeedLimit] = useState<number[]>([]);
   const mapRef = useRef(null);
   const markerRef = useRef(null);
   const connector = useWalletConnect();
@@ -88,6 +94,7 @@ const StartRunningScreen = (props) => {
   const updateState = (data) => setState((state) => ({ ...state, ...data }));
 
   useEffect(() => {
+    handleSpeedLimitSneakers();
     const interval = setInterval(() => {
       getLiveLocation();
     }, 4000);
@@ -114,44 +121,33 @@ const StartRunningScreen = (props) => {
   };
 
   var timer = 0;
-  const handleSendTokenAward =async (toAddress:string, amoutRMT:number) => {
-    try{
-
+  const handleSendTokenAward = async (toAddress: string, amoutRMT: number) => {
+    try {
       const adminAccount = {
-        privateKey:
-          '517e2a7e05343c90f22c5384273ae81835aa5c274bd04bdbfc9aa08543ecaad6',
+        privateKey: '517e2a7e05343c90f22c5384273ae81835aa5c274bd04bdbfc9aa08543ecaad6',
         account: '0x71c738B1d24368DdcE9b1Ec14C8dA57F5E079175',
       };
       const RMTAddress = '0x07B5C829Db4B925dDDA85A14079553443b1857b9';
-      const web3 = new Web3(
-        'https://goerli.infura.io/v3/6507b4b41a0c450ba0fe748e96881466'
-      );
+      const web3 = new Web3('https://goerli.infura.io/v3/6507b4b41a0c450ba0fe748e96881466');
       const contract = new web3.eth.Contract(RunnMoveTokenABI as any, RMTAddress);
-      const transaction = contract.methods.transfer(
-        toAddress,
-        amoutRMT
-      );
+      const transaction = contract.methods.transfer(toAddress, amoutRMT);
       const options = {
         to: RMTAddress,
         data: transaction.encodeABI(),
         gas: await transaction.estimateGas({ from: adminAccount.account }),
         gasPrice: await web3.eth.getGasPrice(),
       };
-      const signed = await web3.eth.accounts.signTransaction(
-        options,
-        adminAccount.privateKey
-      );
+      const signed = await web3.eth.accounts.signTransaction(options, adminAccount.privateKey);
       const result = await web3.eth.sendSignedTransaction(signed.rawTransaction);
-      if(result){
-        console.log("Chuyen rmtToken thanh cong");
+      if (result) {
+        console.log('Chuyen rmtToken thanh cong');
         dispatch(authActions.isUpdateRMT(true));
       }
+    } catch (err) {
+      console.log('ErrSend:', err);
     }
-    catch(err){
-      console.log("ErrSend:", err)
-    }
-  }
-  let amtRewards:number =0;
+  };
+  let amtRewards: number = 0;
 
   useEffect(() => {
     if (energyReducer.currentEnergy < 1) {
@@ -176,53 +172,111 @@ const StartRunningScreen = (props) => {
           //kp2= Ranger–1 Hiker-1.1 Sprinter–1.15 Coacher–1.05
           //kp3= van toc trungbinh/ van toc that
           //kD = he so durability
-          amtRewards=0;
-          switch(sneaker.Type){
-            case "Ranger":
-              if(speedReal >= DEFAULT_SPEED_SPRINTER[0])
-                amtRewards=speedReal<= DEFAULT_SPEED_SPRINTER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1*1*sneaker.Durability
-                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1*(DEFAULT_SPEED_SPRINTER[2]/speedReal)*sneaker.Durability;
+          amtRewards = 0;
+          switch (sneaker.Type) {
+            case 'Ranger':
+              if (speedReal >= DEFAULT_SPEED_RANGER[0])
+                amtRewards =
+                  speedReal <= DEFAULT_SPEED_RANGER[1]
+                    ? 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1 *
+                      1 *
+                      sneaker.Durability
+                    : 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1 *
+                      (DEFAULT_SPEED_RANGER[2] / speedReal) *
+                      sneaker.Durability;
               break;
-            case "Hiker":
-              if(speedReal >= DEFAULT_SPEED_HIKER[0])
-              amtRewards=speedReal<= DEFAULT_SPEED_HIKER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.1*1*sneaker.Durability
-                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.1*(DEFAULT_SPEED_HIKER[2]/speedReal)*sneaker.Durability;
+            case 'Hiker':
+              if (speedReal >= DEFAULT_SPEED_HIKER[0])
+                amtRewards =
+                  speedReal <= DEFAULT_SPEED_HIKER[1]
+                    ? 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.1 *
+                      1 *
+                      sneaker.Durability
+                    : 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.1 *
+                      (DEFAULT_SPEED_HIKER[2] / speedReal) *
+                      sneaker.Durability;
               break;
-            case "Sprinter":
-              if(speedReal >= DEFAULT_SPEED_SPRINTER[0])
-              amtRewards=speedReal<= DEFAULT_SPEED_SPRINTER[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.15*1*sneaker.Durability
-                                                            : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.15*(DEFAULT_SPEED_SPRINTER[2]/speedReal)*sneaker.Durability;
-              console.log("Sprinter Speed: ",speedReal, speedReal >= DEFAULT_SPEED_SPRINTER[0])
+            case 'Sprinter':
+              if (speedReal >= DEFAULT_SPEED_SPRINTER[0])
+                amtRewards =
+                  speedReal <= DEFAULT_SPEED_SPRINTER[1]
+                    ? 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.15 *
+                      1 *
+                      sneaker.Durability
+                    : 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.15 *
+                      (DEFAULT_SPEED_SPRINTER[2] / speedReal) *
+                      sneaker.Durability;
+              console.log('Sprinter Speed: ', speedReal, speedReal >= DEFAULT_SPEED_SPRINTER[0]);
 
-                                                            break;
-            case "Coacher":
-              if(speedReal >= DEFAULT_SPEED_COACH[0])
-              amtRewards=speedReal<= DEFAULT_SPEED_COACH[1] ? 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.05*1*sneaker.Durability
-                                                        : 1*Math.pow((sneaker.Performance+sneaker.Durability+sneaker.Joy),1)*1.05*(DEFAULT_SPEED_COACH[2]/speedReal)*sneaker.Durability;
+              break;
+            case 'Coacher':
+              if (speedReal >= DEFAULT_SPEED_COACH[0])
+                amtRewards =
+                  speedReal <= DEFAULT_SPEED_COACH[1]
+                    ? 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.05 *
+                      1 *
+                      sneaker.Durability
+                    : 1 *
+                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      1.05 *
+                      (DEFAULT_SPEED_COACH[2] / speedReal) *
+                      sneaker.Durability;
               break;
             default:
               break;
           }
-          console.log("amtRewards: ", amtRewards)
+          console.log('amtRewards: ', amtRewards);
           // dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
           //200000000000000
           //19570
-          if(amtRewards > 0){
-            handleSendTokenAward(connector.accounts[0],Number(amtRewards.toFixed(0)));
+          if (amtRewards > 0) {
+            handleSendTokenAward(connector.accounts[0], Number(amtRewards.toFixed(0)));
             // dispatch(moveActions.updateCoinReward(coinRewardReducer + 50));
-            setCoinReward(coinReward+Number(amtRewards.toFixed(0)));
+            setCoinReward(coinReward + Number(amtRewards.toFixed(0)));
             // dispatch(authActions.updateRMToken(coinRewardReducer+Number(amtRewards.toFixed(0))));
-
           }
-
         }
       }, 1000);
       return () => clearInterval(countUp);
     }
-
   }, [timeout, energyReducer, coinRewardReducer]);
 
-
+  const handleSpeedLimitSneakers = () => {
+    switch (sneaker.Type) {
+      case 'Ranger':
+        setSpeedText( DEFAULT_SPEED_RANGER[0] + ' - ' + DEFAULT_SPEED_RANGER[1] + ' km/h');
+        setSpeedLimit([DEFAULT_SPEED_RANGER[0],DEFAULT_SPEED_RANGER[1]]);
+        return;
+      case 'Hiker':
+        setSpeedText (DEFAULT_SPEED_HIKER[0] + ' - ' + DEFAULT_SPEED_HIKER[1] + ' km/h');
+        setSpeedLimit([DEFAULT_SPEED_HIKER[0],DEFAULT_SPEED_HIKER[1]]);
+        return;
+      case 'Sprinter':
+        setSpeedText( DEFAULT_SPEED_SPRINTER[0] + ' - ' + DEFAULT_SPEED_SPRINTER[1] + ' km/h');
+        setSpeedLimit([DEFAULT_SPEED_SPRINTER[0],DEFAULT_SPEED_SPRINTER[1]]);
+        return;
+      case 'Coacher':
+        setSpeedText( DEFAULT_SPEED_COACH[0] + ' - ' + DEFAULT_SPEED_COACH[1] + ' km/h');
+        setSpeedLimit([DEFAULT_SPEED_COACH[0],DEFAULT_SPEED_COACH[1]]);
+        return;
+      default:
+        break;
+    }
+  };
   useEffect(() => {
     var tiktak: number = 0;
     var timeUp = setInterval(function () {
@@ -231,7 +285,6 @@ const StartRunningScreen = (props) => {
       setSeconds(Number(tiktak % 60));
     }, 1000);
     return () => clearInterval(timeUp);
-
   }, []);
 
   const animate = (latitude, longitude) => {
@@ -253,17 +306,16 @@ const StartRunningScreen = (props) => {
       // console.log('vo chua1', start);
     }
   };
-  let speedReal : number=0;
+  let speedReal: number = 0;
   // This function will show your current location
   const showLoc = (pos) => {
-
     setSpeed(pos?.coords?.speed.toFixed(2));
-    speedReal= pos?.coords?.speed.toFixed(2);
+    speedReal = pos?.coords?.speed.toFixed(2);
     if (pos?.coords.speed < limitSpeed) {
       if (start) {
         if (
           parseFloat(arrDistances[arrDistances.length - 1]?.latitude) !=
-          parseFloat(pos?.coords?.latitude) &&
+            parseFloat(pos?.coords?.latitude) &&
           start
         ) {
           arrDistances?.length > 1 &&
@@ -275,7 +327,7 @@ const StartRunningScreen = (props) => {
                     latitude: pos?.coords?.latitude,
                     longitude: pos?.coords?.longitude,
                   }) /
-                  1000
+                    1000
                 ).toFixed(2)
               )
             );
@@ -311,11 +363,9 @@ const StartRunningScreen = (props) => {
     setStart((start) => (start = true));
   };
 
-
   const checkTimeOut = () => {
     if (start) {
       getlocation(true);
-
     }
   };
 
@@ -324,34 +374,30 @@ const StartRunningScreen = (props) => {
     getlocation(false);
     setStart(false);
     setSpeed(0);
-    speedReal=0;
+    speedReal = 0;
     setTimeout(true);
     dispatch(moveActions.updateCoinReward(0));
     navigation.goBack();
     setIsShowModal(false);
-  }
+  };
 
-  const handleCheckMock = async() => {
+  const handleCheckMock = async () => {
     const isLocationMocked: boolean = await RNMockLocationDetector.checkMockLocationProvider();
-    if(isLocationMocked){
-      console.log("Location is fake");
+    if (isLocationMocked) {
+      console.log('Location is fake');
       setIsLocationNotFine(true);
-    }
-    else{
-      console.log("Location is fine");
+    } else {
+      console.log('Location is fine');
       setIsLocationNotFine(false);
     }
-  }
+  };
   const handleCloseWarningLocation = () => {
     setIsLocationNotFine(false);
     handleExit();
-
-  }
+  };
   return (
     <View style={styles.container}>
-      {
-        checkTimeOut()
-      }
+      {checkTimeOut()}
       <View
         style={{
           flexDirection: 'row',
@@ -479,7 +525,7 @@ const StartRunningScreen = (props) => {
               justifyContent: 'space-between',
               width: '100%',
               paddingHorizontal: 40,
-              paddingTop: 10
+              paddingTop: 10,
             }}
           >
             <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row' }}>
@@ -516,6 +562,9 @@ const StartRunningScreen = (props) => {
               </Text>
             </View>
           </View>
+          <Text bold color={speed >= speedLimit[0] && speed<= speedLimit[1] ? '#32CD32':'#DC143C'} marginTop={10} textAlign="center" fontSize={17}>
+            {speedText}
+          </Text>
           <View style={styles.bodyMainContainer}>
             {/* // Card nang luonggggggggggggggggggggggg */}
 
@@ -584,18 +633,29 @@ const StartRunningScreen = (props) => {
       <Modal isOpen={isShowModal} onClose={() => setIsShowModal(false)}>
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' }} fontSize={20} fontWeight={"bold"}>
+          <Modal.Header
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+            fontSize={20}
+            fontWeight={'bold'}
+          >
             <Text fontSize={17} bold color={colors.black} marginLeft={0}>
               Notification
             </Text>
           </Modal.Header>
           <Modal.Body>
             <View>
-              <Text fontSize={15}  color={colors.gray1} marginLeft={0} textAlign='center'>
+              <Text fontSize={15} color={colors.gray1} marginLeft={0} textAlign="center">
                 You don't have enough energy to run. Please wait or get new shoes.
               </Text>
             </View>
-            <View style={{ justifyContent: 'center', alignItems: 'center', flexDirection: 'row', marginTop: 15 }}>
+            <View
+              style={{
+                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'row',
+                marginTop: 15,
+              }}
+            >
               <ProgressCircle
                 percent={100}
                 radius={25}
@@ -607,11 +667,14 @@ const StartRunningScreen = (props) => {
                 <Image size={7} borderRadius={100} source={imagePath.coin} alt="Coin" />
               </ProgressCircle>
               <Text fontSize={'xl'} bold color={colors.coin} marginLeft={2}>
-                + {coinReward}{'.0 '}
+                + {coinReward}
+                {'.0 '}
               </Text>
             </View>
             <Button style={styles.buttonOK} onPress={handleExit} marginTop={15}>
-              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>OK</Text>
+              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>
+                OK
+              </Text>
             </Button>
           </Modal.Body>
         </Modal.Content>
@@ -619,21 +682,28 @@ const StartRunningScreen = (props) => {
       <Modal isOpen={isLocationNotFine} onClose={handleCloseWarningLocation} size="lg">
         <Modal.Content maxWidth="400px">
           <Modal.CloseButton />
-          <Modal.Header style={{ justifyContent: 'center', alignItems: 'center' }} fontSize={20} fontWeight={"bold"}>
+          <Modal.Header
+            style={{ justifyContent: 'center', alignItems: 'center' }}
+            fontSize={20}
+            fontWeight={'bold'}
+          >
             <Text fontSize={15} bold color={colors.black} marginLeft={0}>
               Warning
             </Text>
           </Modal.Header>
           <Modal.Body>
-            <View style={{flexDirection:'column', justifyContent:'center', alignItems:'center'}}>
-              <Text fontSize={11}  color={colors.gray1} marginBottom={0} textAlign='center'>
-                  We detected you are using GPS cheating. Please check it and run again.
+            <View
+              style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}
+            >
+              <Text fontSize={11} color={colors.gray1} marginBottom={0} textAlign="center">
+                We detected you are using GPS cheating. Please check it and run again.
               </Text>
               <Image size={50} source={imagePath.refuse} alt="Refuse" />
-
             </View>
             <Button style={styles.button} onPress={handleCloseWarningLocation} marginTop={15}>
-              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15}}>OK</Text>
+              <Text color={colors.white} bold fontSize="sm" style={{ paddingHorizontal: 15 }}>
+                OK
+              </Text>
             </Button>
           </Modal.Body>
         </Modal.Content>
