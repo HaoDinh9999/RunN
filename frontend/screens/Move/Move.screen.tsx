@@ -30,10 +30,10 @@ const MoveScreen = () => {
   const [minutes, setMinutes] = useState<number>(0);
   const [hours, setHours] = useState<number>(0);
   const [isfillEnergy, setIsFillEnergy] = useState<boolean>(true);
-  const [timeRefill, setTimeRefill] = useState<number>(180);
+  const [timeRefill, setTimeRefill] = useState<number>(300);
   const [timeCount, setTimeCount] = useState<number>(0);
   const [timeout, setTimeout] = useState<boolean>(false);
-  const [sneaker,setSneaker] = useState<PropSneaker>();
+  const [chooseSneaker,setChooseSneaker] = useState<PropSneaker>();
 
   var timer: number;
 
@@ -100,17 +100,24 @@ const MoveScreen = () => {
     }, 1000);
     return () => clearInterval(countDown);
   }
-  let chooseSneaker ;
+  const _onMomentumScrollEnd = (e, state,context) => {
+    sneakerReducers?.map((sneakerItem: PropSneaker, index)=>{
+      console.log(context?.state?.index)
+      if(index === context?.state?.index){
+        setChooseSneaker(sneakerItem);
+        console.log("sneakerItem",sneakerItem);     
+      }
+    })
+  }
   return (
     <>
       <View style={styles.container}>
         {sneakerReducers?.length > 0 ? (
-          <Slick style={styles.wrapper} showsButtons loop={false}>
-            {sneakerReducers?.map((sneaker: PropSneaker) => {
-              chooseSneaker=sneaker;
+          <Slick style={styles.wrapper} showsButtons loop={false}  onMomentumScrollEnd ={_onMomentumScrollEnd}>
+            {sneakerReducers?.map((sneakerItem: PropSneaker) => {
               return (
                 <View style={styles.slide1}>
-                  <CardSneakersRun sneaker={sneaker}/>
+                  <CardSneakersRun sneaker={sneakerItem}/>
                 </View>
               );
             })}

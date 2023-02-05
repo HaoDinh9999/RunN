@@ -20,7 +20,8 @@ const ProfileScreen = () => {
     const handleLogout =async () => {
         dispatch(authActions.logout());
         dispatch(moveActions.resetMaxEnergy())
-        await connector.killSession();
+
+        connector.connected && await connector.killSession();
 
         navigation.navigate('login');
     }

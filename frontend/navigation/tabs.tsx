@@ -57,7 +57,6 @@ const Tabs = () => {
       });
       await provider.enable();
       const web3Provider = new providers.Web3Provider(provider);
-      console.log("Web3Provider", web3Provider.getBalance(connector.accounts[0]));
       const signer = web3Provider.getSigner();
 
       const nftContract = new Contract(

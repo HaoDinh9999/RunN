@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, FlatList } from 'react-native';
+import {  FlatList } from 'react-native';
 import {
   Button,
   useToast,
@@ -12,6 +12,7 @@ import {
   Heading,
   ScrollView,
   Image,
+  View
 } from 'native-base';
 import ComboBoxComponent from '../../components/Combobox/Combobox';
 import styles from './Market.style';
@@ -105,7 +106,7 @@ const MarketScreen = () => {
           borderWidth={0}
           style={{ marginLeft: -2, color: colors.white, marginTop: 1 }}
         />
-        <Text fontSize="xs" color={colors.white} bold onPress={() => navigation.navigate('filter')}>
+        <Text fontSize="xs" color={colors.white} bold >
           Filter
         </Text>
       </View>

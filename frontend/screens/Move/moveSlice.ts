@@ -60,7 +60,7 @@ const moveSlice = createSlice({
             else if(sneakers.length >=25) totalEnerygy=18;
 
             sneakers.forEach((sneaker:PropSneaker)=>{
-                switch(sneaker.Type){
+                switch(sneaker?.type){
                     case "Common":
                         totalEnerygy+=0;
                         break;
@@ -88,6 +88,11 @@ const moveSlice = createSlice({
 
         resetMaxEnergy(state){
             state.energy.maxEnergy = 0;
+            state.energy.currentEnergy = 0;
+            state.energy.currentEnergy = 0;
+            state.isFillEnergy = false,
+            state.timing =  false,
+            state.coinReward = 0
         },
 
         updateTiming(state, action:PayloadAction<boolean>){

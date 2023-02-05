@@ -29,30 +29,31 @@ export const mapTokenDataToSneaker = (tokenData) => {
 export const mapTokenDataToSneakerInDetail = (tokenData) => {
   const _data = tokenData[3];
   const _level = tokenData[4];
-  const isonInfo = JSON.parse(String(_data).split("'").join('"').split(' ').join(', '));
-
+  console.log("data:", _data)
+  const isonInfo = JSON.parse(_data.split(' ').join(', '));
+  console.log("isonInfo", isonInfo)
   const {
-    Rarity,
-    Type,
-    Performance,
-    Joy,
-    Durability,
-    Condition,
-    Mint,
-    UrlImage,
-    Parents,
+    rarity,
+    type,
+    performance,
+    joy,
+    durability,
+    condition,
+    mint,
+    parents,
+    imgUrl,
   } = isonInfo;
 
   return {
-    Level: _level,
-    Rarity,
-    Type,
-    Performance,
-    Joy,
-    Durability,
-    Condition,
-    Mint,
-    UrlImage,
-    Parents,
+    level: _level,
+    rarity,
+    type,
+    performance,
+    joy,
+    durability,
+    condition,
+    mint,
+    parents,
+    imgUrl,
   };
 };

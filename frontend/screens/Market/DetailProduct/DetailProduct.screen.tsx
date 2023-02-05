@@ -41,7 +41,7 @@ const DetailProductScreen = (props) => {
               </AspectRatio>
               <Image
                 source={{
-                  uri: sneaker?.UrlImage,
+                  uri: sneaker?.imgUrl,
                 }}
                 alt="Alternate Text"
                 width={200}
@@ -67,14 +67,14 @@ const DetailProductScreen = (props) => {
                       padding:1.5
                     }}
                   >
-                    LV {`${sneaker.Level}`}
+                    LV {`${sneaker?.level}`}
                   </Text>
                   <Text
                     color="#C7D5F7"
                     bold
                     style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
                   >
-                    {'>>'} {sneaker.Type}
+                    {'>>'} {sneaker?.type}
                   </Text>
 
                   <Box w="33.33%">
@@ -92,11 +92,11 @@ const DetailProductScreen = (props) => {
                           marginBottom:1
                         }}
                       >
-                        {sneaker.Condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
+                        {sneaker?.condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
                       </Text>
                     </View>
                     <Progress
-                      value={sneaker?.Condition}
+                      value={sneaker?.condition}
                       bg={colors.background.progress}
                       _filledTrack={{ bg: colors.primary, borderRadius: 0 }}
                       size="2xl"
@@ -139,7 +139,7 @@ const DetailProductScreen = (props) => {
             style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}
           >
             <Text bold color={colors.white}>
-              Mint {`${sneaker.Mint}`}
+              Mint {`${sneaker?.mint}`}
             </Text>
           </View>
           <Box w="100%" marginTop={1}>
@@ -171,14 +171,14 @@ const DetailProductScreen = (props) => {
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm"
-                  value={sneaker.Performance * 10}
+                  value={sneaker?.performance * 10}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: '#f99' }}
                 />
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-              {Number.isInteger(sneaker?.Performance) ? sneaker?.Performance+".0" : sneaker?.Performance}
+              {Number.isInteger(sneaker?.performance) ? sneaker?.performance+".0" : sneaker?.performance}
             </Text>
           </View>
           <View style={styles.attributeItem}>
@@ -202,14 +202,14 @@ const DetailProductScreen = (props) => {
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm"
-                  value={sneaker.Joy * 10}
+                  value={sneaker?.joy * 10}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: '#36706D' }}
                 />
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-            {Number.isInteger(sneaker?.Joy) ? sneaker?.Joy+".0" : sneaker?.Joy}
+            {Number.isInteger(sneaker?.joy) ? sneaker?.joy+".0" : sneaker?.joy}
             </Text>
           </View>
           <View style={styles.attributeItem}>
@@ -233,14 +233,14 @@ const DetailProductScreen = (props) => {
               <Box w="100%" marginTop={1}>
                 <Progress
                   size="sm"
-                  value={sneaker.Durability * 10}
+                  value={sneaker.durability * 10}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: '#123783' }}
                 />
               </Box>
             </View>
             <Text fontSize="sm" bold color={colors.white} style={{ marginTop: 20 }}>
-            {Number.isInteger(sneaker?.Durability) ? sneaker?.Durability+".0" : sneaker?.Durability}
+            {Number.isInteger(sneaker?.durability) ? sneaker?.durability+".0" : sneaker?.durability}
             </Text>
           </View>
         </View>

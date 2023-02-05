@@ -50,7 +50,7 @@ const CardItem = (props) => {
           {'>>'}
         </Text>
         <Text fontSize="sm" color={colors.text.secondaryText} ml={2} bold>
-          {sneaker.Type}
+          {sneaker?.type}
         </Text>
       </View>
       <View
@@ -62,7 +62,7 @@ const CardItem = (props) => {
         <Image
           source={{
             // uri: 'https://d1mjtvp3d1g20r.cloudfront.net/2022/04/28122922/Asics-3-colour.png',
-            uri:sneaker?.UrlImage
+            uri:sneaker?.imgUrl
           }}
           alt="Alternate Text"
           size="xl"
@@ -73,7 +73,7 @@ const CardItem = (props) => {
             #{`${sneaker.id}`}
           </Text>
           <Text color={colors.lightGray} bold mt={0}>
-            Mint {`${sneaker.Mint}`} | {`${sneaker.Rarity}`}
+            Mint {`${sneaker?.mint}`} | {`${sneaker?.rarity}`}
           </Text>
           <View style={styles.progressContainer}>
             <Box w="83%">
@@ -93,7 +93,7 @@ const CardItem = (props) => {
       </View>
       <View style={styles.footerContainer}>
         <Text color={colors.white} bold fontSize="sm">
-            Lvl {`${sneaker.Level}`}
+            Lvl {`${sneaker?.level}`}
           </Text>
         <View style={styles.condition}>
           <Box w="100%">
@@ -108,11 +108,11 @@ const CardItem = (props) => {
                     marginLeft:5
                   }}
                 >
-                  {sneaker.Condition} <Text   color={"#B2B8BF"} fontWeight="bold" fontSize={12}>/ 100</Text>
+                  {sneaker?.condition} <Text   color={"#B2B8BF"} fontWeight="bold" fontSize={12}>/ 100</Text>
                 </Text>
               </View>
             <Progress
-              value={sneaker.Condition}
+              value={sneaker?.condition}
               bg={colors.background.progress}
               _filledTrack={{ bg: colors.primary }}
               size="2xl"

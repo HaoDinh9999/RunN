@@ -39,7 +39,7 @@ const CardSneakersRun = (props) => {
           </AspectRatio>
           <Image
             source={{
-              uri: sneaker?.UrlImage,
+              uri: sneaker?.imgUrl,
             }}
             alt="Alternate Text"
             width={200}
@@ -64,7 +64,7 @@ const CardSneakersRun = (props) => {
                   padding: 1.4
                 }}
               >
-                LV {`${sneaker?.Level}`}
+                LV {`${sneaker?.level}`}
               </Text>
               <Text
                 color="#C7D5F7"
@@ -72,7 +72,7 @@ const CardSneakersRun = (props) => {
                 fontSize={15}
                 style={{ width: '33.33%', textAlign: 'center', borderRightWidth: 1 }}
               >
-                {'>> '} {sneaker?.Type}
+                {'>> '} {sneaker?.type}
               </Text>
 
               {/* <Text
@@ -104,11 +104,11 @@ const CardSneakersRun = (props) => {
                       marginLeft: 5
                     }}
                   >
-                    {sneaker.Condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
+                    {sneaker?.condition} <Text color={"#B2B8BF"} fontWeight="bold" fontSize={14}>/ 100</Text>
                   </Text>
                 </View>
                 <Progress
-                  value={sneaker?.Condition}
+                  value={sneaker?.condition}
                   bg={colors.background.progress}
                   _filledTrack={{ bg: colors.primary, borderRadius: 0 }}
                   size="2xl"

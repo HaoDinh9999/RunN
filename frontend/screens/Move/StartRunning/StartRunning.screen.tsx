@@ -62,7 +62,7 @@ const StartRunningScreen = (props) => {
   const [limitSpeed, setLimitSpeed] = useState<number>(props.route.params?.limitSpeed);
   const [timeout, setTimeout] = useState(false);
   const [showMap, setShowMap] = useState(false);
-  const [timeReward, setTimeReward] = useState<number>(300); // seconds
+  const [timeReward, setTimeReward] = useState<number>(180); // seconds
   const [coinReward, setCoinReward] = useState<number>(0);
   const [sneaker, setSneaker] = useState<PropSneaker>(props.route.params?.chooseSneaker);
   const [isLocationNotFine, setIsLocationNotFine] = useState<boolean>(false);
@@ -173,51 +173,51 @@ const StartRunningScreen = (props) => {
           //kp3= van toc trungbinh/ van toc that
           //kD = he so durability
           amtRewards = 0;
-          switch (sneaker.Type) {
+          switch (sneaker?.type) {
             case 'Ranger':
               if (speedReal >= DEFAULT_SPEED_RANGER[0])
                 amtRewards =
                   speedReal <= DEFAULT_SPEED_RANGER[1]
                     ? 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1 *
                       1 *
-                      sneaker.Durability
+                      sneaker.durability
                     : 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1 *
                       (DEFAULT_SPEED_RANGER[2] / speedReal) *
-                      sneaker.Durability;
+                      sneaker.durability;
               break;
             case 'Hiker':
               if (speedReal >= DEFAULT_SPEED_HIKER[0])
                 amtRewards =
                   speedReal <= DEFAULT_SPEED_HIKER[1]
                     ? 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.1 *
                       1 *
-                      sneaker.Durability
+                      sneaker.durability
                     : 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.1 *
                       (DEFAULT_SPEED_HIKER[2] / speedReal) *
-                      sneaker.Durability;
+                      sneaker.durability;
               break;
             case 'Sprinter':
               if (speedReal >= DEFAULT_SPEED_SPRINTER[0])
                 amtRewards =
                   speedReal <= DEFAULT_SPEED_SPRINTER[1]
                     ? 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.15 *
                       1 *
-                      sneaker.Durability
+                      sneaker.durability
                     : 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.15 *
                       (DEFAULT_SPEED_SPRINTER[2] / speedReal) *
-                      sneaker.Durability;
+                      sneaker.durability;
               console.log('Sprinter Speed: ', speedReal, speedReal >= DEFAULT_SPEED_SPRINTER[0]);
 
               break;
@@ -226,15 +226,15 @@ const StartRunningScreen = (props) => {
                 amtRewards =
                   speedReal <= DEFAULT_SPEED_COACH[1]
                     ? 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.05 *
                       1 *
-                      sneaker.Durability
+                      sneaker.durability
                     : 1 *
-                      Math.pow(sneaker.Performance + sneaker.Durability + sneaker.Joy, 1) *
+                      Math.pow(sneaker.performance + sneaker.durability + sneaker.joy, 1) *
                       1.05 *
                       (DEFAULT_SPEED_COACH[2] / speedReal) *
-                      sneaker.Durability;
+                      sneaker.durability;
               break;
             default:
               break;
@@ -256,7 +256,7 @@ const StartRunningScreen = (props) => {
   }, [timeout, energyReducer, coinRewardReducer]);
 
   const handleSpeedLimitSneakers = () => {
-    switch (sneaker.Type) {
+    switch (sneaker?.type) {
       case 'Ranger':
         setSpeedText( DEFAULT_SPEED_RANGER[0] + ' - ' + DEFAULT_SPEED_RANGER[1] + ' km/h');
         setSpeedLimit([DEFAULT_SPEED_RANGER[0],DEFAULT_SPEED_RANGER[1]]);
@@ -279,6 +279,8 @@ const StartRunningScreen = (props) => {
   };
   useEffect(() => {
     var tiktak: number = 0;
+    console.log("sneaker", sneaker);
+    
     var timeUp = setInterval(function () {
       ++tiktak;
       setMinutes(Math.floor(Number(tiktak / 60)));
