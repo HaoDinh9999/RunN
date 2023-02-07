@@ -1,36 +1,82 @@
-# TypeScript Example
+# Rent Finder
 
-<p>
-  <!-- iOS -->
-  <img alt="Supports Expo iOS" longdesc="Supports Expo iOS" src="https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff" />
-  <!-- Android -->
-  <img alt="Supports Expo Android" longdesc="Supports Expo Android" src="https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff" />
-  <!-- Web -->
-  <img alt="Supports Expo Web" longdesc="Supports Expo Web" src="https://img.shields.io/badge/web-4630EB.svg?style=flat-square&logo=GOOGLE-CHROME&labelColor=4285F4&logoColor=fff" />
-</p>
+Xây dựng ứng dụng NFT theo trào lưu Move-to-Earn.
 
-```sh
-npx create-react-native-app -t with-typescript
-```
+## Nội dung
 
-TypeScript is a superset of JavaScript which gives you static types and powerful tooling in Visual Studio Code including autocompletion and useful inline warnings for type errors.
+1. [Chức năng](#Chức-năng)
+   1. [Đăng nhập, Đăng ký](#Đăng-nhập-Đăng-ký)
+   2. [Tái tạo năng lượng, chọn giày để chạy](#Tái-tạo-năng-lượng-chạy)
+   3. [Quản lý kho giày sở hữu](#Quản-lý-kho-giày)
+   4. [Quản lý ví ảo](#Quản-lý-ví-ảo)
+   5. [Quản lý hồ sơ người dùng](#Quản-lý-hồ-sơ)
+   6. [Hoạt động chạy kiếm tiền](#-Hoạt-động-chạy-kiếm-tiền)
+   7. [Phát hiện gian lận GPS](#-Phát-hiện-gian-lận)
 
-## 🚀 How to use
+2. [Yêu cầu thiết bị](#Yêu-cầu-thiết-bị)
+3. [Thư viện và công nghệ](#Thư-viện-và-công-nghệ)
+4. [Tác giả](#Tác-giả)
+5. [Giấy phép](#Giấy-phép)
 
-#### Creating a new project
+## Chức năng
 
-- Install the CLI: `npm i -g expo-cli`
-- Create a project: `npx create-react-native-app -t with-typescript`
-- `cd` into the project
+### Đăng nhập, Đăng ký
 
-### Adding TypeScript to existing projects
+<img src="assets/image/screenshots/dang_nhap.png" width="275" height="500"/> <img src="assets/image/screenshots/dang_ky.png" width="275" height="500"/>
 
-- Create a blank TypeScript config: `touch tsconfig.json`
-- Run `yarn start` or `npm run start` to automatically configure TypeScript
-- Rename files to TypeScript, `.tsx` for React components and `.ts` for plain typescript files
+### Tái tạo năng lượng chạy
 
-> 💡 You can disable the TypeScript setup in Expo CLI with the environment variable `EXPO_NO_TYPESCRIPT_SETUP=1 expo start`
+  <img src="assets/image/screenshots/trang_chu.png" width="275" height="500"/>  <img src="assets/image/screenshots/trang_chu_trong.png" width="275" height="500"/>
 
-## 📝 Notes
+### Quản lý kho giày
 
-- [Expo TypeScript guide](https://docs.expo.dev/versions/latest/guides/typescript/)
+  <img src="assets/image/screenshots/giay_cua_toi.png" width="275" height="500"/> <img src="assets/image/screenshots/chi_tiet_giay.png" width="275" height="500"/>
+
+### Quản lý ví ảo
+
+  <img src="assets/image/screenshots/vi_cua_toi.png" width="275" height="500"/>
+
+### Quản lý hồ sơ
+
+  <img src="assets/image/screenshots/hoso1.png" width="275" height="500"/>   <img src="assets/image/screenshots/hoso2.png" width="275" height="500"/>   <img src="assets/image/screenshots/hoso3.png" width="275" height="500"/>
+
+### Hoạt động chạy kiếm tiền
+
+<img src="assets/image/screenshots/chay1.png" width="275" height="500"/> <img src="assets/image/screenshots/chay2.png" width="275" height="500"/> <img src="assets/image/screenshots/chay3.png" width="275" height="500"/>
+
+
+
+## Yêu cầu thiết bị
+
+- Android:
+  - Minimum SDK version: 20
+  - Target SDK version: 30
+- iOS: version 8.0
+
+## Thư viện và công nghệ
+
+- Ngôn ngữ: [Javascript]
+- Framework: [React Native]
+- Backend: Nodejs, SmartContracts
+- Blockchain, Ethereum, ERC-20, NFT.
+
+## Tác giả
+
+- Đinh Việt Hào - 19521475@gm.uit.edu.vn (Mobile, Server)
+- Nguyễn Cao Cường - 19521298@gm.uit.edu.vn (Web, SmartContracts)
+
+## Giấy phép
+
+    Copyright 2022
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
